@@ -9,8 +9,12 @@ use App\Http\Controllers\Api\v1\TipoController;
 use App\Http\Controllers\Api\v1\UsuarioController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\LeituraController;
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
  Route::group(['prefix' => 'v1'], function() {
     Route::apiResource('usuario', UsuarioController::class);

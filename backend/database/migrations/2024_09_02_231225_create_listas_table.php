@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Definindo as chaves estrangeiras
-            $table->foreign('usuario_id')->references('id')->on('usuario')->onDelete('cascade');
+            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
             $table->foreign('obra_id')->references('id')->on('obras')->onDelete('cascade');
             $table->foreign('leitura_id')->references('id')->on('leituras')->onDelete('cascade'); // Se houver uma tabela de leituras
         });
