@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('paginas', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('capitulo_id');
+            $table->string('numero');
+            $table->string('imagem');
             $table->timestamps();
+
+            $table->foreign('capitulo_id')->references('id')->on('capitulos')->onDelete('cascade');
         });
     }
 
