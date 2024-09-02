@@ -19,4 +19,20 @@ class Obra extends Model
         'tipo_id',
         'estado_id',
     ];
+    public function tipo()
+    {
+        return $this->belongsTo(Tipo::class);
+    }
+    public function estado()
+    {
+        return $this->belongsTo(Estado::class);
+    }
+    public function comentarios()
+    {
+        return $this->hasMany(Comentario::class);
+    }
+    public function generos()
+    {
+        return $this->belongsToMany(Genero::class, 'obra_genero');
+    }
 }

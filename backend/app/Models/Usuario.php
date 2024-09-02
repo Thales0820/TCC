@@ -17,4 +17,12 @@ class Usuario extends Model
         'perfil_id'
 
     ];
+    public function perfil()
+    {
+        return $this->belongsTo(perfil::class);
+    }
+    public function comentarios()
+    {
+        return $this->hasMany(Comentario::class);
+    }
 }
