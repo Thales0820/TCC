@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Perfil;
 
 class PerfilController extends Controller
 {
@@ -12,15 +13,8 @@ class PerfilController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $perfils = Perfil::all();
+        return response()->json($perfils);
     }
 
     /**
@@ -28,7 +22,15 @@ class PerfilController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'tipo' => 'required|string|max:255',
+        ]);
+
+        $perfil = Perfil::create([
+            'tipo' => $request->tipo,
+        ]);
+
+        return response()->json($perfil, 201);
     }
 
     /**
@@ -36,15 +38,13 @@ class PerfilController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
+        $perfil = Perfil::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        if (!$perfil) {
+            return response()->json(['message' => 'Perfil não encontrado'], 404);
+        }
+
+        return response()->json($perfil);
     }
 
     /**
@@ -52,7 +52,21 @@ class PerfilController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $perfil = Perfil::find($id);
+
+        if (!$perfil) {
+            return response()->json(['message' => 'Perfil não encontrado'], 404);
+        }
+
+        $request->validate([
+            'tipo' => 'required|string|max:255',
+        ]);
+
+        $perfil->update([
+            'tipo' => $request->tipo,
+        ]);
+
+        return response()->json($perfil);
     }
 
     /**
@@ -60,6 +74,14 @@ class PerfilController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $perfil = Perfil::find($id);
+
+        if (!$perfil) {
+            return response()->json(['message' => 'Perfil não encontrado'], 404);
+        }
+
+        $perfil->delete();
+
+        return response()->json(['message' => 'Perfil deletado com sucesso']);
     }
 }

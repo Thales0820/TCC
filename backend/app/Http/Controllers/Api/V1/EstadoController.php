@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Estado;
 
 class EstadoController extends Controller
 {
@@ -12,15 +13,8 @@ class EstadoController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $estados = Estado::all();
+        return response()->json($estados);
     }
 
     /**
@@ -28,7 +22,15 @@ class EstadoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome' => 'required|string|max:255',
+        ]);
+
+        $estado = Estado::create([
+            'nome' => $request->nome,
+        ]);
+
+        return response()->json($estado, 201);
     }
 
     /**
@@ -36,15 +38,13 @@ class EstadoController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
+        $estado = Estado::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        if (!$estado) {
+            return response()->json(['message' => 'Estado não encontrado'], 404);
+        }
+
+        return response()->json($estado);
     }
 
     /**
@@ -52,7 +52,21 @@ class EstadoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $estado = Estado::find($id);
+
+        if (!$estado) {
+            return response()->json(['message' => 'Estado não encontrado'], 404);
+        }
+
+        $request->validate([
+            'nome' => 'required|string|max:255',
+        ]);
+
+        $estado->update([
+            'nome' => $request->nome,
+        ]);
+
+        return response()->json($estado);
     }
 
     /**
@@ -60,6 +74,14 @@ class EstadoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $estado = Estado::find($id);
+
+        if (!$estado) {
+            return response()->json(['message' => 'Estado não encontrado'], 404);
+        }
+
+        $estado->delete();
+
+        return response()->json(['message' => 'Estado deletado com sucesso']);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Comentario;
 
 class ComentarioController extends Controller
 {
@@ -12,15 +13,8 @@ class ComentarioController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $comentarios = Comentario::all();
+        return response()->json($comentarios);
     }
 
     /**
@@ -28,7 +22,19 @@ class ComentarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'texto' => 'required|string',
+            'usuario_id' => 'required|exists:usuarios,id',
+            'obra_id' => 'required|exists:obras,id',
+        ]);
+
+        $comentario = Comentario::create([
+            'texto' => $request->texto,
+            'usuario_id' => $request->usuario_id,
+            'obra_id' => $request->obra_id,
+        ]);
+
+        return response()->json($comentario, 201);
     }
 
     /**
@@ -36,15 +42,13 @@ class ComentarioController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
+        $comentario = Comentario::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        if (!$comentario) {
+            return response()->json(['message' => 'Comentário não encontrado'], 404);
+        }
+
+        return response()->json($comentario);
     }
 
     /**
@@ -52,7 +56,25 @@ class ComentarioController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $comentario = Comentario::find($id);
+
+        if (!$comentario) {
+            return response()->json(['message' => 'Comentário não encontrado'], 404);
+        }
+
+        $request->validate([
+            'texto' => 'required|string',
+            'usuario_id' => 'required|exists:usuarios,id',
+            'obra_id' => 'required|exists:obras,id',
+        ]);
+
+        $comentario->update([
+            'texto' => $request->texto,
+            'usuario_id' => $request->usuario_id,
+            'obra_id' => $request->obra_id,
+        ]);
+
+        return response()->json($comentario);
     }
 
     /**
@@ -60,6 +82,14 @@ class ComentarioController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $comentario = Comentario::find($id);
+
+        if (!$comentario) {
+            return response()->json(['message' => 'Comentário não encontrado'], 404);
+        }
+
+        $comentario->delete();
+
+        return response()->json(['message' => 'Comentário deletado com sucesso']);
     }
 }
