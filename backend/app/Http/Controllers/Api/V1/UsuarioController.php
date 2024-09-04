@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
+
     // Método para listar todos os usuários
     public function index()
     {

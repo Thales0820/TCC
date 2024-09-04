@@ -6,34 +6,32 @@
 
     <div class="card">
         <div class="card-header">
-            Estados
+            LIsta de Usuarios
         </div>
         <div class="card-body">
-            @if($estados->isEmpty())
-                <div class="alert alert-info" role="alert">
-                    Nenhum estado encontrado.
-                </div>
+            @if($usuarios->isEmpty())
+            <div class="alert alert-info" role="alert">
+                Nenhum Usuario encontrado.
+            </div>
             @else
-                <table class="table table-striped table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Data de Criação</th>
-                            <th>Última Atualização</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($estados as $estado)
-                        <tr>
-                            <td>{{ $estado->id }}</td>
-                            <td>{{ $estado->nome }}</td>
-                            <td>{{ $estado->created_at }}</td>
-                            <td>{{ $estado->updated_at }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Perfil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($usuarios as $usuario)
+                    <tr>
+                        <td>{{ $usuario->nome }}</td>
+                        <td>{{ $usuario->email }}</td>
+                        <td>{{ $usuario->perfil->tipo ?? 'Sem perfil' }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
             @endif
         </div>
     </div>

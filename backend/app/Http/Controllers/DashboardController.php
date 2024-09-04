@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Estado;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -13,10 +13,10 @@ class DashboardController extends Controller
     public function index()
     {
         // Recuperando todos os estados
-        $estados = Estado::all();
+        $usuarios = Usuario::all();
 
         // Passando os estados para a view
-        return view('dashboard.index', compact('estados'));
+        return view('dashboard.index', compact('usuarios'));
     }
 
     /**

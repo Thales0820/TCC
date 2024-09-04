@@ -25,4 +25,5 @@ class Usuario extends Model
     {
         return $this->hasMany(Comentario::class);
     }
+
 }
