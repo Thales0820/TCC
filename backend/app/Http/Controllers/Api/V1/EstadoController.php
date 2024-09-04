@@ -82,6 +82,6 @@ class EstadoController extends Controller
 
         $estado->delete();
 
-        return response()->json(['message' => 'Estado deletado com sucesso']);
+        return response()->json(null, 204);
     }
 }

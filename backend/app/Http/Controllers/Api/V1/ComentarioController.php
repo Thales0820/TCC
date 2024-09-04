@@ -90,6 +90,6 @@ class ComentarioController extends Controller
 
         $comentario->delete();
 
-        return response()->json(['message' => 'Comentário deletado com sucesso']);
+        return response()->json(null, 204);
     }
 }

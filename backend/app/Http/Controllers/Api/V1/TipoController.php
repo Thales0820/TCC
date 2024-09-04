@@ -54,6 +54,6 @@ class TipoController extends Controller
         $tipo = Tipo::findOrFail($id);
         $tipo->delete();
 
-        return response()->json(['message' => 'Tipo deletado com sucesso']);
+        return response()->json(null, 204);
     }
 }

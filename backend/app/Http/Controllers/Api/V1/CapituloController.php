@@ -94,6 +94,6 @@ class CapituloController extends Controller
 
         $capitulo->delete();
 
-        return response()->json(['message' => 'Capítulo deletado com sucesso']);
+        return response()->json(null, 204);
     }
 }

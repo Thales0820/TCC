@@ -82,6 +82,6 @@ class PerfilController extends Controller
 
         $perfil->delete();
 
-        return response()->json(['message' => 'Perfil deletado com sucesso']);
+        return response()->json(null, 204);
     }
 }

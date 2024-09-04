@@ -28,6 +28,13 @@
                         <td>{{ $usuario->nome }}</td>
                         <td>{{ $usuario->email }}</td>
                         <td>{{ $usuario->perfil->tipo ?? 'Sem perfil' }}</td>
+                        <td>
+                            <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza?')">Deletar</button>
+                            </form>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

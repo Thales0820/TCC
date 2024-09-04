@@ -90,6 +90,6 @@ class PaginaController extends Controller
 
         $pagina->delete();
 
-        return response()->json(['message' => 'Página deletada com sucesso']);
+        return response()->json(null, 204);
     }
 }

@@ -82,6 +82,6 @@ class LeituraController extends Controller
 
         $leitura->delete();
 
-        return response()->json(['message' => 'Leitura deletada com sucesso']);
+        return response()->json(null, 204);
     }
 }

@@ -114,6 +114,6 @@ class ObraController extends Controller
 
         $obra->delete();
 
-        return response()->json(['message' => 'Obra deletada com sucesso']);
+        return response()->json(null, 204);
     }
 }
