@@ -9,42 +9,76 @@ use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Método para listar todos os usuários
     public function index()
     {
-        return response()->json(Usuario::all(), 200);
+        $usuarios = Usuario::with('perfil')->get(); // Carrega os perfis relacionados
+        return response()->json($usuarios);
     }
 
-
+    // Método para criar um novo usuário
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'nome' => 'required|string|max:255',
+            'foto_perfil' => 'required|string|max:255',
+            'banner' => 'required|string|max:255',
+            'email' => 'required|email|unique:usuarios',
+            'senha' => 'required|string|min:6',
+            'perfil_id' => 'required|exists:perfils,id', // Valida que o perfil existe
+        ]);
 
+        $usuario = Usuario::create([
+            'nome' => $validatedData['nome'],
+            'foto_perfil' => $validatedData['foto_perfil'],
+            'banner' => $validatedData['banner'],
+            'email' => $validatedData['email'],
+            'senha' => bcrypt($validatedData['senha']),
+            'perfil_id' => $validatedData['perfil_id'],
+        ]);
+
+        return response()->json($usuario, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    // Método para mostrar um único usuário
+    public function show($id)
     {
-        //
+        $usuario = Usuario::with('perfil')->findOrFail($id);
+        return response()->json($usuario);
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // Método para atualizar um usuário existente
+    public function update(Request $request, $id)
     {
-        //
+        $usuario = Usuario::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'nome' => 'sometimes|required|string|max:255',
+            'foto_perfil' => 'sometimes|required|string|max:255',
+            'banner' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:usuarios,email,' . $id,
+            'senha' => 'sometimes|required|string|min:6',
+            'perfil_id' => 'sometimes|required|exists:perfils,id',
+        ]);
+
+        $usuario->update([
+            'nome' => $validatedData['nome'] ?? $usuario->nome,
+            'foto_perfil' => $validatedData['foto_perfil'] ?? $usuario->foto_perfil,
+            'banner' => $validatedData['banner'] ?? $usuario->banner,
+            'email' => $validatedData['email'] ?? $usuario->email,
+            'senha' => isset($validatedData['senha']) ? bcrypt($validatedData['senha']) : $usuario->senha,
+            'perfil_id' => $validatedData['perfil_id'] ?? $usuario->perfil_id,
+        ]);
+
+        return response()->json($usuario);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    // Método para deletar um usuário
+    public function destroy($id)
     {
-        //
+        $usuario = Usuario::findOrFail($id);
+        $usuario->delete();
+
+        return response()->json(['message' => 'Usuário deletado com sucesso']);
     }
 }

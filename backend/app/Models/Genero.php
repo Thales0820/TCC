@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Genero extends Model
 {
     use HasFactory;
-    protected $fillabe = [
+    protected $fillable = [
         'nome'
     ];
     public function obra()

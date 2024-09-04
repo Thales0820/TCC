@@ -3,63 +3,57 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tipo;
 use Illuminate\Http\Request;
 
 class TipoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Método para listar todos os tipos
     public function index()
     {
-        //
+        $tipos = Tipo::all();
+        return response()->json($tipos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Método para criar um novo tipo
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'nome' => 'required|string|max:255',
+        ]);
+
+        $tipo = Tipo::create($validatedData);
+
+        return response()->json($tipo, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    // Método para mostrar um único tipo
+    public function show($id)
     {
-        //
+        $tipo = Tipo::findOrFail($id);
+        return response()->json($tipo);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    // Método para atualizar um tipo existente
+    public function update(Request $request, $id)
     {
-        //
+        $tipo = Tipo::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'nome' => 'sometimes|required|string|max:255',
+        ]);
+
+        $tipo->update($validatedData);
+
+        return response()->json($tipo);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // Método para deletar um tipo
+    public function destroy($id)
     {
-        //
-    }
+        $tipo = Tipo::findOrFail($id);
+        $tipo->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(['message' => 'Tipo deletado com sucesso']);
     }
 }
