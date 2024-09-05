@@ -64,6 +64,10 @@ class DashboardController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $usuario = Usuario::findOrFail($id);
+        $usuario->delete();
+
+        // Redireciona de volta para o dashboard com uma mensagem de sucesso
+        return redirect()->route('dashboard.index');
     }
 }

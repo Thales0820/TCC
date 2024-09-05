@@ -28,11 +28,11 @@
                         <td>{{ $usuario->email }}</td>
                         <td>{{ $usuario->perfil->tipo ?? 'Sem perfil' }}</td>
                         <td>
-                            <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza?')">Deletar</button>
-                            </form>
+                        <form action="{{ route('dashboard.destroy', $usuario->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este usuário?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Deletar</button>
+                                </form>
                         </td>
                     </tr>
                     @endforeach
