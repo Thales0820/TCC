@@ -35,4 +35,8 @@ class Obra extends Model
     {
         return $this->belongsToMany(Genero::class, 'obra_genero');
     }
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'autor_id');
+    }
 }

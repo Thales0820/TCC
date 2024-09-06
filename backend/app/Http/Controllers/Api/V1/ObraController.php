@@ -13,7 +13,7 @@ class ObraController extends Controller
      */
     public function index()
     {
-        $obras = Obra::all();
+        $obras = Obra::with('usuario')->get();
         return response()->json($obras);
     }
 

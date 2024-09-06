@@ -1,11 +1,11 @@
 @extends('app')
 
 @section('content')
-    <h1 class="mb-4">Dashboard</h1>
+    <h1 class="mb-4">Usuários Cadastrados</h1>
 
     <div class="card">
         <div class="card-header">
-            LIsta de Usuarios
+            Lista de Usuarios
         </div>
         <div class="card-body">
             @if($usuarios->isEmpty())
@@ -19,6 +19,7 @@
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Perfil</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
