@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Obra;
+use App\Models\Genero;
 use Illuminate\Http\Request;
 
-class DashboardObraController extends Controller
+class DashboardGeneroController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $obras = Obra::all();
-        return view('dashboardObra.index', compact('obras'));
+        $generos = Genero::all();
+        return view('dashboardGenero.index', compact('generos'));
     }
 
     /**
@@ -61,9 +61,9 @@ class DashboardObraController extends Controller
      */
     public function destroy(string $id)
     {
-        $obra = Obra::findOrFail($id);
-        $obra->delete();
+        $genero = Genero::findOrFail($id);
+        $genero->delete();
 
-        return redirect()->route('dashboardObra.index');
+        return redirect()->route('dashboardGenero.index');
     }
 }

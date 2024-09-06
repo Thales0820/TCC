@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Obra;
+use App\Models\Tipo;
 use Illuminate\Http\Request;
 
-class DashboardObraController extends Controller
+class DashboardTipoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $obras = Obra::all();
-        return view('dashboardObra.index', compact('obras'));
+        $tipos = Tipo::all();
+        return view('dashboardTipo.index', compact('tipos'));
     }
 
     /**
@@ -61,9 +61,9 @@ class DashboardObraController extends Controller
      */
     public function destroy(string $id)
     {
-        $obra = Obra::findOrFail($id);
-        $obra->delete();
+        $tipo = Tipo::findOrFail($id);
+        $tipo->delete();
 
-        return redirect()->route('dashboardObra.index');
+        return redirect()->route('dashboardTipo.index');
     }
 }

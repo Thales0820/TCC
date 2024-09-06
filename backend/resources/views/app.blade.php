@@ -18,8 +18,8 @@
         <a href="{{route('dashboard.index')}}"><i class="bi bi-house-door-fill"></i> Home</a>
         <a href="#services"><i class="bi bi-journal-bookmark-fill"></i> Estados</a>
         <a href="#about"><i class="bi bi-bookmark-fill"></i> Leituras</a>
-        <a href="#contact"><i class="bi bi-book-half"></i> Tipos</a>
-        <a href="#about"><i class="bi bi-journal-medical"></i> Gêneros</a>
+        <a href="{{route('dashboardTipo.index')}}"><i class="bi bi-book-half"></i> Tipos</a>
+        <a href="{{route('dashboardGenero.index')}}"><i class="bi bi-journal-medical"></i> Gêneros</a>
         <a href="{{route('dashboardObra.index')}}"><i class="bi bi-chat-fill"></i> Obras</a>
         <a href="#about"><i class="bi bi-people-fill"></i> Perfil</a>
         <a href="#about"><i class="bi bi-person-fill"></i> Usuários</a>
