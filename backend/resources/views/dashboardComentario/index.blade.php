@@ -1,33 +1,35 @@
 @extends('app')
 
 @section('content')
-<h1 class="mb-4">Gêneros</h1>
+<h1 class="mb-4">Comentários</h1>
 
 <div class="card">
     <div class="card-header">
-        LIsta de Gêneros
+        Lista de comentários
     </div>
     <div class="card-body">
-        @if($generos->isEmpty())
+        @if($comentarios->isEmpty())
         <div class="alert alert-info" role="alert">
-            Nenhum gênero encontrado.
+            Nenhum comentário encontrado.
         </div>
         @else
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th>Genero</th>
-                    <th></th>
-
+                    <th>Usuário</th>
+                    <th>Obra</th>
+                    <th>Comentário</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($generos as $genero)
+                @foreach($comentarios as $comentario)
                 <tr>
-                    <td>{{ $genero->nome }}</td>
+                    <td>{{ $comentario->usuario->nome ?? 'Usuario nao encontrado' }}</td>
+                    <td>{{ $comentario->obra->titulo ?? 'Comentario nao encontrado' }}</td>
+                    <td>{{ $comentario->texto }}</td>
                     <td>
-                        <form action="{{ route('dashboardGenero.destroy', $genero->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar esta genero?');">
+                        <form action="{{ route('dashboardComentario.destroy', $comentario->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar esta comentario?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Deletar</button>

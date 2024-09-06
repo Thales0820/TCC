@@ -1,33 +1,33 @@
 @extends('app')
 
 @section('content')
-<h1 class="mb-4">Gêneros</h1>
+<h1 class="mb-4">Estados</h1>
 
 <div class="card">
     <div class="card-header">
-        LIsta de Gêneros
+        Lista de Estados
     </div>
     <div class="card-body">
-        @if($generos->isEmpty())
+        @if($estados->isEmpty())
         <div class="alert alert-info" role="alert">
-            Nenhum gênero encontrado.
+            Nenhum estado encontrado.
         </div>
         @else
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th>Genero</th>
+                    <th>Estado</th>
                     <th></th>
 
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($generos as $genero)
+                @foreach($estados as $estado)
                 <tr>
-                    <td>{{ $genero->nome }}</td>
+                    <td>{{ $estado->nome }}</td>
                     <td>
-                        <form action="{{ route('dashboardGenero.destroy', $genero->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar esta genero?');">
+                        <form action="{{ route('dashboardEstado.destroy', $estado->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar esta estado?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Deletar</button>

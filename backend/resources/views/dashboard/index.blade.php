@@ -5,12 +5,12 @@
 
     <div class="card">
         <div class="card-header">
-            Lista de Usuarios
+            Lista de Usuários
         </div>
         <div class="card-body">
             @if($usuarios->isEmpty())
             <div class="alert alert-info" role="alert">
-                Nenhum Usuario encontrado.
+                Nenhum Usuário encontrado.
             </div>
             @else
             <table class="table table-striped table-bordered">

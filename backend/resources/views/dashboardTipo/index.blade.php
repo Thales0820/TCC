@@ -16,7 +16,7 @@
             <table class="table table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>
-                        <th>tipo</th>
+                        <th>Tipo</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -25,7 +25,7 @@
                     <tr>
                         <td>{{ $tipo->nome }}</td>
                         <td>
-                        <form action="{{ route('dashboard.destroy', $tipo->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este usuário?');">
+                        <form action="{{ route('dashboardTipo.destroy', $tipo->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este usuário?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Deletar</button>

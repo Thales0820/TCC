@@ -16,14 +16,14 @@
     <div id="sidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()">×</a>
         <a href="{{route('dashboard.index')}}"><i class="bi bi-house-door-fill"></i> Home</a>
-        <a href="#services"><i class="bi bi-journal-bookmark-fill"></i> Estados</a>
-        <a href="#about"><i class="bi bi-bookmark-fill"></i> Leituras</a>
+        <a href="{{route('dashboardEstado.index')}}"><i class="bi bi-journal-bookmark-fill"></i> Estados</a>
+        <a href="{{route('dashboardLeitura.index')}}"><i class="bi bi-bookmark-fill"></i> Leituras</a>
         <a href="{{route('dashboardTipo.index')}}"><i class="bi bi-book-half"></i> Tipos</a>
         <a href="{{route('dashboardGenero.index')}}"><i class="bi bi-journal-medical"></i> Gêneros</a>
         <a href="{{route('dashboardObra.index')}}"><i class="bi bi-chat-fill"></i> Obras</a>
-        <a href="#about"><i class="bi bi-people-fill"></i> Perfil</a>
-        <a href="#about"><i class="bi bi-person-fill"></i> Usuários</a>
-        <a href="#about"><i class="bi bi-chat-left-text-fill"></i> Comentários</a>
+        <a href="{{route('dashboardPerfil.index')}}"><i class="bi bi-people-fill"></i> Perfil</a>
+        <a href="{{route('dashboard.index')}}"><i class="bi bi-person-fill"></i> Usuários</a>
+        <a href="{{route('dashboardComentario.index')}}"><i class="bi bi-chat-left-text-fill"></i> Comentários</a>
     </div>
     <div id="main" class="main-content">
         <br>
