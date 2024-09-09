@@ -33,12 +33,18 @@
                             <button type="submit" class="btn btn-danger">Deletar</button>
                         </form>
                     </td>
+                    <td> <a href="{{ route('dashboardEstado.edit', $estado) }}" class="btn btn-warning btn-sm">Editar</a></td>
                 </tr>
                 @endforeach
             </tbody>
-
         </table>
         @endif
     </div>
 </div>
+<br>
+<a href="{{ route('dashboardEstado.create')}}">
+    <button type="button" class="btn btn-dark">
+        Novo Estado
+    </button>
+</a>
 @endsection

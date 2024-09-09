@@ -21,7 +21,7 @@ class DashboardTipoController extends Controller
      */
     public function create()
     {
-        //
+       return view('dashboardTipo.create');
     }
 
     /**
@@ -29,7 +29,12 @@ class DashboardTipoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome' => 'required|string|max:255',
+        ]);
+        Tipo::create($request->all());
+
+        return redirect()->route('dashboardTipo.index');
     }
 
     /**
@@ -45,7 +50,8 @@ class DashboardTipoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $tipo = Tipo::findOrFail($id);
+        return view('dashboardTipo.edit', compact('tipo'));
     }
 
     /**
@@ -53,7 +59,14 @@ class DashboardTipoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'nome' => 'required|string|max:255',
+        ]);
+
+        $tipo = Tipo::findOrFail($id);
+        $tipo->update($request->all());
+
+        return redirect()->route('dashboardTipo.index');
     }
 
     /**

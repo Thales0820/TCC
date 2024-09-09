@@ -21,15 +21,22 @@ class DashboardPerfilController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboardPerfil.create');
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'tipo' => 'required|string|max:255',
+        ]);
+
+        Perfil::create($request->all());
+
+        return redirect()->route('dashboardPerfil.index');
     }
 
     /**
@@ -43,17 +50,24 @@ class DashboardPerfilController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $perfil = Perfil::findOrFail($id);
+        return view('dashboardPerfil.edit', compact('perfil'));
     }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'tipo' => 'required|string|max:255',
+        ]);
+
+        $perfil = Perfil::findOrFail($id);
+        $perfil->update($request->all());
+
+        return redirect()->route('dashboardPerfil.index');
     }
 
     /**

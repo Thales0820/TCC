@@ -33,6 +33,7 @@
                             <button type="submit" class="btn btn-danger">Deletar</button>
                         </form>
                     </td>
+                    <td> <a href="{{ route('dashboardGenero.edit', $genero) }}" class="btn btn-warning btn-sm">Editar</a></td>
                 </tr>
                 @endforeach
             </tbody>
@@ -41,4 +42,10 @@
         @endif
     </div>
 </div>
+<br>
+<a href="{{ route('dashboardGenero.create')}}">
+    <button type="button" class="btn btn-dark">
+        Novo gênero
+    </button>
+</a>
 @endsection

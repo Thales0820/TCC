@@ -18,6 +18,7 @@
                     <tr>
                         <th>Tipo</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,6 +32,7 @@
                                     <button type="submit" class="btn btn-danger">Deletar</button>
                                 </form>
                         </td>
+                        <td> <a href="{{ route('dashboardTipo.edit', $tipo) }}" class="btn btn-warning btn-sm">Editar</a></td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -38,4 +40,10 @@
             @endif
         </div>
     </div>
+    <br>
+<a href="{{ route('dashboardTipo.create')}}">
+    <button type="button" class="btn btn-dark">
+        Novo Tipo
+    </button>
+</a>
 @endsection

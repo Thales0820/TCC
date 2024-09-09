@@ -21,7 +21,7 @@ class DashboardGeneroController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboardGenero.create');
     }
 
     /**
@@ -29,7 +29,12 @@ class DashboardGeneroController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome' => 'required|string|max:255',
+        ]);
+        Genero::create($request->all());
+
+        return redirect()->route('dashboardGenero.index');
     }
 
     /**
@@ -45,7 +50,8 @@ class DashboardGeneroController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $genero = Genero::findOrFail($id);
+        return view('dashboardGenero.edit', compact('genero'));
     }
 
     /**
@@ -53,7 +59,14 @@ class DashboardGeneroController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'nome' => 'required|string|max:255',
+        ]);
+
+        $genero = Genero::findOrFail($id);
+        $genero->update($request->all());
+
+        return redirect()->route('dashboardGenero.index');
     }
 
     /**
