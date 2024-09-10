@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\v1\TipoController;
 use App\Http\Controllers\Api\v1\UsuarioController;
 use App\Http\Controllers\Api\v1\ComentarioController;
 use App\Http\Controllers\Api\v1\GeneroController;
+use App\Http\Controllers\Api\v1\historicoUsuarioController;
 use App\Http\Controllers\Api\v1\LeituraController;
 
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ Route::group(['prefix' => 'v1'], function() {
     Route::apiResource('comentarios', ComentarioController::class);
     Route::apiResource('obras', ObraController::class);
     Route::apiResource('generos', GeneroController::class);
+    Route::apiResource('historico',historicoUsuarioController::class);
 
     Route::post('usuario/login',[ UsuarioController::class, 'login']);
  });
