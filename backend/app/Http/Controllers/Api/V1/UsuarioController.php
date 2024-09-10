@@ -82,4 +82,22 @@ class UsuarioController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string',
+            'senha' => 'required|string'
+        ]);
+
+        $usuario = Usuario::where('nome', $request->nome)->first();
+
+        if (!$usuario || !Hash::check($request->senha, $usuario->senha)) {
+            return response()->json(['error' => 'Credenciais inválidas'], 401);
+        }
+
+        $token = $usuario->createToken('authToken')->plainTextToken;
+
+        return response()->json(['token' => $token], 200);
+    }
 }
