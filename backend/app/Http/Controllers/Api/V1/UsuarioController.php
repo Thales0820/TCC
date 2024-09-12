@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
-
-    // Método para listar todos os usuários
+    // Método para listar todos os usuários (não deletados)
     public function index()
     {
-        $usuarios = Usuario::with('perfil')->get(); // Carrega os perfis relacionados
+        $usuarios = Usuario::with('perfil')->get();
         return response()->json($usuarios);
     }
 
@@ -26,7 +25,7 @@ class UsuarioController extends Controller
             'banner' => 'required|string|max:255',
             'email' => 'required|email|unique:usuarios',
             'senha' => 'required|string|min:6',
-            'perfil_id' => 'required|exists:perfils,id', // Valida que o perfil existe
+            'perfil_id' => 'required|exists:perfils,id',
         ]);
 
         $usuario = Usuario::create([
@@ -41,7 +40,7 @@ class UsuarioController extends Controller
         return response()->json($usuario, 201);
     }
 
-    // Método para mostrar um único usuário
+    // Método para mostrar um único usuário (não deletado)
     public function show($id)
     {
         $usuario = Usuario::with('perfil')->findOrFail($id);
@@ -74,11 +73,11 @@ class UsuarioController extends Controller
         return response()->json($usuario);
     }
 
-    // Método para deletar um usuário
+    // Método para deletar um usuário (soft delete)
     public function destroy($id)
     {
         $usuario = Usuario::findOrFail($id);
-        $usuario->delete();
+        $usuario->delete(); // Executa o soft delete
 
         return response()->json(null, 204);
     }
@@ -90,7 +89,7 @@ class UsuarioController extends Controller
             'senha' => 'required|string'
         ]);
 
-        $usuario = Usuario::where('nome', $request->nome)->first();
+        $usuario = Usuario::where('email', $request->email)->first();
 
         if (!$usuario || !Hash::check($request->senha, $usuario->senha)) {
             return response()->json(['error' => 'Credenciais inválidas'], 401);

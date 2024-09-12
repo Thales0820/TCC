@@ -17,6 +17,9 @@ class Usuario extends Model
         'perfil_id'
 
     ];
+
+    protected $dates = ['deleted_at'];
+
     public function perfil()
     {
         return $this->belongsTo(perfil::class);
@@ -25,5 +28,4 @@ class Usuario extends Model
     {
         return $this->hasMany(Comentario::class);
     }
-
 }
