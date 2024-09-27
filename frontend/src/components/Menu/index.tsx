@@ -1,4 +1,5 @@
 "use client";
+import style from "./style.module.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { GrUpdate } from 'react-icons/gr';
 import { LuBookUp } from 'react-icons/lu';
@@ -7,22 +8,24 @@ import { SiBookstack } from 'react-icons/si';
 export const Menu = () => {
     return(
         <>
-            <nav>
+        <body className={style.body}>
+            <nav className={style.menu}>
                 <div>
-                    <div>
+                    <div className={style.divLogo}>
                         <img src="images/logoDark.png" alt="Logo" />
                     </div>
-                    <ul>
-                        <li><i className="bi bi-house-door-fill"></i> Home</li>
-                        <li><i className="bi bi-bookmark-fill"></i> Lista</li>
-                        <li><i className="bi bi-search"></i>Pesquisar</li>
-                        <li><GrUpdate /> Atualizações</li>
-                        <li><i className="bi bi-clock-history"></i> Histórico</li>
-                        <li><SiBookstack /> Quadrinhos</li>
-                        <li><LuBookUp />Lançar</li>
+                    <ul className={style.ul}>
+                        <li><i className="bi bi-house-door-fill"></i> <strong>Home</strong></li>
+                        <li><i className="bi bi-bookmark-fill"></i> <strong>Lista</strong></li>
+                        <li><i className="bi bi-search"></i> <strong>Pesquisar</strong></li>
+                        <li><GrUpdate /> <strong>Atualizações</strong></li>
+                        <li><i className="bi bi-clock-history"></i> <strong>Histórico</strong></li>
+                        <li><SiBookstack /> <strong>Quadrinhos</strong></li>
+                        <li><LuBookUp /> <strong>Lançar</strong></li>
                     </ul>
                 </div>
             </nav>
+        </body>
         </>
     );
 }

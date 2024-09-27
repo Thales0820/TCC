@@ -1,4 +1,5 @@
 "use client"
+import { Menu } from '@/components/Menu';
 import styles from './style.module.css';
 
 async function getObras() {
@@ -17,25 +18,28 @@ export default async function Home() {
   const obras = await getObras();
 
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
-        <h1 className={styles.title}>Bem-vindo à página Home</h1>
-        <ul className={styles.list}>
-          {obras.map((obra: any) => (
-            <li key={obra.id} className={styles.card}>
-              <h2 className={styles.cardTitle}>{obra.titulo}</h2>
-              <p className={styles.cardText}>
-                <strong>Autor:</strong>{" "}
-                {obra.usuario ? obra.usuario.nome : "Autor não encontrado"}
-              </p>
-              <p className={styles.cardText}>
-                <strong>Likes:</strong> {obra.likes}
-              </p>
-              <button className={styles.button}>Ver Detalhes</button>
-            </li>
-          ))}
-        </ul>
+    <>
+      <Menu />
+      <div className={styles.container}>
+        <div className={styles.wrapper}>
+          <h1 className={styles.title}>Bem-vindo à página Home</h1>
+          <ul className={styles.list}>
+            {obras.map((obra: any) => (
+              <li key={obra.id} className={styles.card}>
+                <h2 className={styles.cardTitle}>{obra.titulo}</h2>
+                <p className={styles.cardText}>
+                  <strong>Autor:</strong>{" "}
+                  {obra.usuario ? obra.usuario.nome : "Autor não encontrado"}
+                </p>
+                <p className={styles.cardText}>
+                  <strong>Likes:</strong> {obra.likes}
+                </p>
+                <button className={styles.button}>Ver Detalhes</button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
