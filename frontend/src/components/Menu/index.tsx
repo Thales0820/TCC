@@ -1,6 +1,5 @@
-"use client";
+"use client"
 import style from "./style.module.css";
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import { GrUpdate } from 'react-icons/gr';
 import { LuBookUp } from 'react-icons/lu';
 import { SiBookstack } from 'react-icons/si';
@@ -8,7 +7,7 @@ import { SiBookstack } from 'react-icons/si';
 export const Menu = () => {
     return(
         <>
-        <body className={style.body}>
+        <div className={style.body}>
             <nav className={style.menu}>
                 <div>
                     <div className={style.divLogo}>
@@ -25,7 +24,7 @@ export const Menu = () => {
                     </ul>
                 </div>
             </nav>
-        </body>
+        </div>
         </>
     );
 }
