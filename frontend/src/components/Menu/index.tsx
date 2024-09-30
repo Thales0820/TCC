@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link";
 import style from "./style.module.css";
 import { GrUpdate } from 'react-icons/gr';
 import { LuBookUp } from 'react-icons/lu';
@@ -11,16 +12,60 @@ export const Menu = () => {
             <nav className={style.menu}>
                 <div>
                     <div className={style.divLogo}>
-                        <img src="images/logoDark.png" alt="Logo" />
+                        <Link href="/home" legacyBehavior>
+                            <img src="images/logoDark.png" alt="Logo" title="Indie Comics"/>
+                        </Link>
                     </div>
                     <ul className={style.ul}>
-                        <li><i className="bi bi-house-door-fill"></i> <strong>Home</strong></li>
-                        <li><i className="bi bi-bookmark-fill"></i> <strong>Lista</strong></li>
-                        <li><i className="bi bi-search"></i> <strong>Pesquisar</strong></li>
-                        <li><GrUpdate /> <strong>Atualizações</strong></li>
-                        <li><i className="bi bi-clock-history"></i> <strong>Histórico</strong></li>
-                        <li><SiBookstack /> <strong>Quadrinhos</strong></li>
-                        <li><LuBookUp /> <strong>Lançar</strong></li>
+                        <li>
+                            <Link href="/home" legacyBehavior>
+                                <a className={style.link}>
+                                    <i className="bi bi-house-door-fill"></i> <span>Home</span>
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/lista" legacyBehavior>
+                                <a className={style.link}>
+                                    <i className="bi bi-bookmark-fill"></i> <span>Lista</span>
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/pesquisar" legacyBehavior>
+                                <a className={style.link}>
+                                    <i className="bi bi-search"></i> <span>Pesquisar</span>
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/atualizacoes" legacyBehavior>
+                                <a className={style.link}>
+                                    <GrUpdate /> <span>Atualizações</span>
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/historico" legacyBehavior>
+                                <a className={style.link}>
+                                    <i className="bi bi-clock-history"></i> <span>Histórico</span>
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/obras" legacyBehavior>
+                                <a className={style.link}>
+                                    <SiBookstack /> <span>Quadrinhos</span>
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/minhas-obras" legacyBehavior>
+                                <a className={style.link}   >
+                                    <LuBookUp /> <span>Lançar</span>
+                                </a>
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             </nav>

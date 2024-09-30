@@ -1,0 +1,25 @@
+.container {
+    margin-top: 132px;
+    min-height: 100vh;
+    background-color: #222831;
+    display: flex;
+    flex-direction: column;
+    padding-left: calc(180px + 60px);
+    font-family: "Comic Neue", system-ui;
+} 
+
+.titulo {
+    display: flex;
+    color: #ffffff;
+    align-items: center;
+}
+
+.icone {
+    cursor: pointer;
+    font-size: 40px; /* Ajuste conforme necessário */
+    margin-right: 20px;
+}
+
+.titulo h1 {
+    font-size: 40px;
+}

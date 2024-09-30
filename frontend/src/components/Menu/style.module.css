@@ -32,6 +32,7 @@
 .divLogo img {
     width: 150px;
     height: 150px;
+    cursor: pointer;
 }
 
 .ul {
@@ -51,8 +52,15 @@
     text-align: start;
     font-size: 20px;
     transition: 2s;
+    text-decoration: none;
 }
 
 .ul li:hover {
     background-color: black;
 } 
+
+.link {
+    text-decoration: none; /* Remove o sublinhado */
+    color: inherit; /* Herda a cor definida no li */
+    font-weight: bold;
+}
