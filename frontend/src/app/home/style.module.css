@@ -1,74 +1,45 @@
 .container {
-    min-height: 100vh;
-    background-color: #222831;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-left: calc(140px + 20px);
-    font-family: "Comic Neue", system-ui;
-  } 
+  min-height: 100vh;
+  background-color: #222831;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: calc(140px + 20px);
+  font-family: "Comic Neue", system-ui;
+} 
 
 .wrapper {
-    width: 100%;
-    max-width: 1024px;
+  width: 100%;
+  max-width: 1024px;
 }
   
-.title {
-  font-size: 2.5rem;
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 20px;
+  margin-left: 35px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column; /* Imagem na vertical com texto abaixo */
+  flex-basis: calc(25% - 40px);
+  align-items: center;
+  max-width: 200px; /* Ajuste conforme necessário */
+  padding: 10px;
+}
+
+.card img {
+  width: 100%; /* A imagem ocupa toda a largura do card */
+  height: 260px;
+}
+
+.card p {
+  color: #ffffff;
   font-weight: bold;
   text-align: center;
-  color: #ffffff;
-  margin-bottom: 40px;
+  margin-top: 10px;
+  font-size: 20px;
 }
-  
-.list {
-  display: grid;
-  grid-template-areas: none;
-  gap: 24px;
-}
-  
-@media (min-width: 768px) {
-  .list {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-  
-.card {
-  background-color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid #e5e7eb;
-  transition: box-shadow 0.3s ease;
-}
-  
-.card:hover {
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
-  
-.cardTitle {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 16px;
-}
-  
-.cardText {
-  color: #6b7280;
-}
-  
-.button {
-  border: none;
-  margin-top: 16px;
-  background-color: #3b82f6;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-  
-.button:hover {
-  background-color: #2563eb;
-}
-  
