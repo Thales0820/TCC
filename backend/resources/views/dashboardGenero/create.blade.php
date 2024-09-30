@@ -1,10 +1,10 @@
 @extends('app')
 @section('content')
-<h1>Novo Genero</h1>
+<h1>Novo Gênero</h1>
 <form action="{{ route('dashboardGenero.store') }}" method="POST">
     @csrf
     <div class="mb-3">
-        <label for="nome" class="form-label">Genero:</label>
+        <label for="nome" class="form-label">Gênero:</label>
         <input
         type="text"
         class="form-control"

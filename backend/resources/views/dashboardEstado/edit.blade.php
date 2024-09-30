@@ -1,6 +1,6 @@
 @extends('app')
 @section('content')
-<h1>Editar Tipo</h1>
+<h1>Editar Estado</h1>
 <form action="{{ route('dashboardEstado.update', $estado->id) }}" method="POST">
     @csrf
     @method('PUT')
