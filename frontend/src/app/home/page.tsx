@@ -52,7 +52,8 @@ export default function Home() {
                         </div>
                         {obras.map((obra: any) => (
                             <div key={obra.id} className={style.card}>
-                                <img src={`images/${obra.capa}`} alt={`Capa de ${obra.titulo}`} />
+                                {/* Verificação do caminho da capa */}
+                                <img src={`http://localhost:8000/${obra.capa}`} alt={`Capa de ${obra.titulo}`} />
                                 <p>{obra.titulo}</p>
                             </div>
                         ))}
