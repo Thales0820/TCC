@@ -23,3 +23,51 @@
 .titulo h1 {
     font-size: 40px;
 }
+
+.listaContainer {
+    width: 600px;
+    display: flex;
+    justify-content: center; /* Centraliza a div principal */
+    margin: 20px 230px 20px;;
+}
+
+.lista {
+    display: flex;
+    justify-content: space-between; /* Espaçamento entre os leituras */
+    width: 100%; /* Ajuste de largura conforme necessário */
+    border: 3px solid #000000;
+}
+
+.leitura {
+    flex: 1; /* Cada leitura ocupa espaço igual */
+    color: white;
+    text-align: center;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Necessário para o ::after */
+}
+
+.leitura.selecionado {
+    background-color: #000000; /* ou qualquer cor desejada */
+}
+
+.leitura:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background-color: #000000; /* Barra separadora */
+}
+
+.leitura:hover {
+    background-color: #000000; /* Cor ao passar o mouse */
+}
+
+.leitura p {
+    font-size: 25px;
+    font-weight: bold;
+}

@@ -18,8 +18,8 @@ export const Cards: React.FC<CardsProps> = ({ data }) => {
       <div className={style.cardsContainer}>
           {data.map((item, index) => (
             <div key={index} className={style.card}>
-              <img src={item.image || "default-image-url.jpg"} alt={`Capa de ${item.titulo} || "Desconhecido"`} />
-              <p>{item.titulo || "Título desconhecido"}</p>
+              <img src={item.image} alt={`Capa de ${item.titulo}`} />
+              <p>{item.titulo}</p>
             </div>
         ))}
       </div>
