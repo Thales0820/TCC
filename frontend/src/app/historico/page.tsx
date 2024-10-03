@@ -18,14 +18,14 @@ export default function Historico() {
         },
         {
           titulo: 'Mokushiroku no Yonkishi',
-          image: 'https://mangadex.org/covers/e52d9403-3356-403b-b7bb-d7d6a420dd50/d2e604e1-d49a-4f48-89f9-6d8f3d4b912f.jpg',
+          image: 'https://mangadex.org/covers/34019331-7377-4e2c-837e-f6e1ab2b5ef7/4340fc00-5f2c-45a6-942e-a47731aa670f.jpg.512.jpg',
           capitulos: [
             { numero: '128', titulo: ' O Dia em que Você Desapareceu' },
           ],
         },
         {
           titulo: 'Shuumatsu no Walküre',
-          image: 'https://mangadex.org/covers/c52b2ce3-7f95-469c-96b0-479524fb7a1a/a2091dbc-4171-41b1-b74a-40b70ae36eec.png',
+          image: 'https://mangadex.org/covers/b5b21ca1-bba5-4b9a-8cd1-6248f731650b/80929257-30e2-4651-8410-c7464a7f6deb.jpg.512.jpg',
           capitulos: [
             { numero: '91', titulo: 'Deus da Espada vs Demônio da Espada' },
             { numero: '90', titulo: ' Formas Variantes' },

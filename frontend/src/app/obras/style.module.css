@@ -6,7 +6,7 @@
     flex-direction: column;
     padding-left: calc(180px + 60px);
     font-family: "Comic Neue", system-ui;
-} 
+}
 
 .titulo {
     display: flex;
@@ -16,10 +16,91 @@
 
 .icone {
     cursor: pointer;
-    font-size: 40px; /* Ajuste conforme necessário */
+    font-size: 40px;
     margin-right: 20px;
 }
 
 .titulo h1 {
     font-size: 40px;
+}
+
+.listaContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    margin-left: -25px;
+    margin-bottom: 20px;
+}
+
+.lista {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border: 3px solid #000000;
+}
+
+.letra {
+    flex: 1;
+    color: white;
+    text-align: center;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    background-color: #424242;
+    transition: background-color 0.3s ease; /* Animação suave na mudança de cor */
+}
+
+.letraSelecionada {
+    flex: 1;
+    color: white;
+    text-align: center;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    background-color: #000000;
+    /* Garantir que padding, margin, etc. não sejam alterados */
+}
+
+.letra:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background-color: #000000;
+}
+
+.letra:hover {
+    background-color: #333333;
+}
+
+.letra p {
+    font-size: 20px;
+    font-weight: bold;
+    transition: none; /* Impede mudanças visuais ao clicar */
+}
+
+.letraSelecionada p {
+    font-size: 20px;
+    font-weight: bold;
+    transition: none; /* Impede mudanças visuais ao clicar */
+}
+
+@media (max-width: 768px) {
+    .letra p {
+        font-size: 16px;
+    }
+
+    .letra {
+        height: 40px;
+    }
 }

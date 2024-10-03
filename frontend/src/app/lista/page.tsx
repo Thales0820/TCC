@@ -34,6 +34,11 @@ export default function Lista() {
           titulo: "Nanatsu no Taizai",
           status: "Lido",
         },
+        {
+          image: 'https://mangadex.org/covers/296cbc31-af1a-4b5b-a34b-fee2b4cad542/ad60795c-b36f-46b8-8fd4-bff289fe9c4b.jpg.512.jpg',
+          titulo: '[Oshi no Ko]',
+          status: "Dropei",
+        },
       ];
 
     const router = useRouter();
