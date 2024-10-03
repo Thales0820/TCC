@@ -1,0 +1,83 @@
+.containerCard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    margin: auto;
+    margin-left: -42px;
+    margin-right: 10px;
+}
+  
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+  
+.card {
+    display: flex;
+    width: 48%;
+    background-color: transparent;
+    border: 5px solid #424242;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: relative;
+}
+  
+.image {
+    width: 35%;
+    height: auto; /* Mantém a proporção da imagem */
+}
+  
+.conteudo {
+    width: 70%;
+    padding: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+}
+  
+.nome {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff;
+    text-align: center;
+}
+  
+.barra {
+    width: calc(100% + 40px);
+    height: 5px;
+    background-color: #424242;
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+  
+.capitulos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+  
+.informacoes {
+    display: flex;
+    justify-content: space-between;
+    background-color: #424242;
+    border-radius: 15px;
+    padding: 10px;
+    color: #ffffff;
+    align-items: center;
+}
+  
+.capitulo {
+    text-align: left;
+}
+  
+.tituloCap {
+    text-align: left;
+    margin-left: 50px;
+    flex: 1;
+    word-wrap: break-word;
+}
