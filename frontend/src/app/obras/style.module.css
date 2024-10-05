@@ -38,7 +38,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    border: 3px solid #000000;
+    border: 3px solid #ffffff;
 }
 
 .letra {
@@ -76,7 +76,17 @@
     top: 0;
     height: 100%;
     width: 2px;
-    background-color: #000000;
+    background-color: #ffffff;
+}
+
+.letraSelecionada:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background-color: #ffffff;
 }
 
 .letra:hover {

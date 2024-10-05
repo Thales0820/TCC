@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import style from './style.module.css';
+import { useRouter } from "next/navigation";
+import { FaArrowLeft } from "react-icons/fa";
     
 export default function CriarObra() {
     const [titulo, setTitulo] = useState('');
@@ -16,7 +18,11 @@ export default function CriarObra() {
     const [tipos, setTipos] = useState([]); // Lista de tipos
     const [estados, setEstados] = useState([]); // Lista de estados
     const [error, setError] = useState('');
+    const router = useRouter();
 
+    const voltar = () => {
+        router.back();
+    }
     const handleCapaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setCapa(e.target.files[0]);
@@ -93,97 +99,124 @@ export default function CriarObra() {
     return(
         <>
             <div className={style.container}>
-            {error && <div className={style.error}>{error}</div>}
-                <form onSubmit={handleSubmit} className={style.form}>
-                    <div className={style.formGroup}>
-                        <label htmlFor="titulo">Título:</label>
-                        <input
-                            type="text"
-                            id="titulo"
-                            value={titulo}
-                            onChange={(e) => setTitulo(e.target.value)}
-                            required
-                        />
+                <div className={style.titulo}>
+                    <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
+                    <h1>Atualizações</h1>
+                </div>
+                <br />
+                {error && 
+                    <div role="alert" className="alert alert-error">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current"
+                        fill="none" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{error}</span>
                     </div>
-                    <div className={style.formGroup}>
-                        <label htmlFor="capa">Capa:</label>
-                        <input
-                            type="file"
-                            id="capa"
-                            accept="image/*"
-                            onChange={handleCapaChange}
-                            required
-                        />
+                }
+                <br />
+                <form onSubmit={handleSubmit} className={style.form}>
+                    <div className={style.formRow}>
+                        <div className={style.formGroup}>
+                            <label htmlFor="titulo">Título:</label>
+                            <input
+                                placeholder="Digite o Nome da Obra"
+                                type="text"
+                                id="titulo"
+                                value={titulo}
+                                onChange={(e) => setTitulo(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className={style.formGroup}>
+                            <label htmlFor="capa">Capa:</label>
+                            <div className={style.inputContainer}>
+                                <input
+                                    type="file"
+                                    id="capa"
+                                    accept="image/*"
+                                    onChange={handleCapaChange}
+                                    required
+                                    className={style.fileInputStyled}
+                                />
+                                <div className={style.verticalBar}></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={style.formRow}>
+                        <div className={style.formGroup}>
+                            <label htmlFor="dataPublicacao">Data de Publicação:</label>
+                            <input
+                                type="date"
+                                id="dataPublicacao"
+                                value={dataPublicacao}
+                                onChange={(e) => setDataPublicacao(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className={style.formGroup}>
+                            <label htmlFor="dataEncerramento">Data de Encerramento:</label>
+                            <input
+                                type="date"
+                                id="dataEncerramento"
+                                value={dataEncerramento}
+                                onChange={(e) => setDataEncerramento(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className={style.formRow}>
+                        <div className={style.formGroup}>
+                            <label htmlFor="autorId">Autor:</label>
+                            <select
+                                id="autorId"
+                                value={autorId}
+                                onChange={(e) => setAutorId(e.target.value)}
+                                required
+                            >
+                                <option value="">Selecione o autor</option>
+                                {autores.map((autor: any) => (
+                                    <option key={autor.id} value={autor.id}>{autor.nome}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className={style.formGroup}>
+                            <label htmlFor="tipoId">Tipo:</label>
+                            <select
+                                id="tipoId"
+                                value={tipoId}
+                                onChange={(e) => setTipoId(e.target.value)}
+                                required
+                            >
+                                <option value="">Selecione o tipo</option>
+                                {tipos.map((tipo: any) => (
+                                    <option key={tipo.id} value={tipo.id}>{tipo.nome}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className={style.formGroup}>
+                            <label htmlFor="estadoId">Estado:</label>
+                            <select
+                                id="estadoId"
+                                value={estadoId}
+                                onChange={(e) => setEstadoId(e.target.value)}
+                                required
+                            >
+                                <option value="">Selecione o estado</option>
+                                {estados.map((estado: any) => (
+                                    <option key={estado.id} value={estado.id}>{estado.nome}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                     <div className={style.formGroup}>
                         <label htmlFor="sinopse">Sinopse:</label>
                         <textarea
                             id="sinopse"
+                            placeholder="Digite a sinopse da história"
                             value={sinopse}
                             onChange={(e) => setSinopse(e.target.value)}
                             required
                         />
-                    </div>
-                    <div className={style.formGroup}>
-                        <label htmlFor="dataPublicacao">Data de Publicação:</label>
-                        <input
-                            type="date"
-                            id="dataPublicacao"
-                            value={dataPublicacao}
-                            onChange={(e) => setDataPublicacao(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className={style.formGroup}>
-                        <label htmlFor="dataEncerramento">Data de Encerramento (opcional):</label>
-                        <input
-                            type="date"
-                            id="dataEncerramento"
-                            value={dataEncerramento}
-                            onChange={(e) => setDataEncerramento(e.target.value)}
-                        />
-                    </div>
-                    <div className={style.formGroup}>
-                        <label htmlFor="autorId">Autor:</label>
-                        <select
-                            id="autorId"
-                            value={autorId}
-                            onChange={(e) => setAutorId(e.target.value)}
-                            required
-                        >
-                            <option value="">Selecione o autor</option>
-                            {autores.map((autor: any) => (
-                                <option key={autor.id} value={autor.id}>{autor.nome}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className={style.formGroup}>
-                        <label htmlFor="tipoId">Tipo:</label>
-                        <select
-                            id="tipoId"
-                            value={tipoId}
-                            onChange={(e) => setTipoId(e.target.value)}
-                            required
-                        >
-                            <option value="">Selecione o tipo</option>
-                            {tipos.map((tipo: any) => (
-                                <option key={tipo.id} value={tipo.id}>{tipo.nome}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className={style.formGroup}>
-                        <label htmlFor="estadoId">Estado:</label>
-                        <select
-                            id="estadoId"
-                            value={estadoId}
-                            onChange={(e) => setEstadoId(e.target.value)}
-                            required
-                        >
-                            <option value="">Selecione o estado</option>
-                            {estados.map((estado: any) => (
-                                <option key={estado.id} value={estado.id}>{estado.nome}</option>
-                            ))}
-                        </select>
                     </div>
                     <button type="submit" className={style.submitButton}>Criar Obra</button>
                 </form>
