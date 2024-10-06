@@ -60,7 +60,7 @@ export const Carrossel = () => {
         const intervalo = setInterval(() => {
             setproximo((anterior) =>  
                 (anterior + 1) % carrosselImages.length);
-        }, 7000);
+        }, 10000);
     
         return () => clearInterval(intervalo);
     }, [carrosselImages.length]);
