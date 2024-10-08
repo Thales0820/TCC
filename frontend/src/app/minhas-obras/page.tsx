@@ -6,6 +6,7 @@ import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 import { useState } from "react";
 import { Cards } from "@/components/Cards";
+import Pesquisar from "@/components/Pesquisar";
 
 export default function MinhasObras() {
 
@@ -48,6 +49,7 @@ export default function MinhasObras() {
     return (
         <>
             <Menu />
+            <Pesquisar />
             <div className={style.container}>
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />

@@ -5,6 +5,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import style from './style.module.css';
 import { useState } from "react";
 import { Cards } from "@/components/Cards";
+import Pesquisar from "@/components/Pesquisar";
 
 export default function Obras() {
 
@@ -133,6 +134,7 @@ export default function Obras() {
     return(
         <>
             <Menu />
+            <Pesquisar />
             <div className={style.container}>
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />

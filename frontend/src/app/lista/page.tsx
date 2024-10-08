@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Menu } from "@/components/Menu";
 import { Cards } from "@/components/Cards";
 import { useState } from "react";
+import Pesquisar from "@/components/Pesquisar";
 
 export default function Lista() {
 
@@ -58,6 +59,7 @@ export default function Lista() {
     return(
         <>
             <Menu />
+            <Pesquisar />
             <div className={style.container}>
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />

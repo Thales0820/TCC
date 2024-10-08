@@ -4,6 +4,7 @@ import style from './style.module.css';
 import { useRouter } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa";
 import { CardList } from "@/components/CardList";
+import Pesquisar from "@/components/Pesquisar";
 
 export default function Atualizacoes() {
 
@@ -52,6 +53,7 @@ export default function Atualizacoes() {
     return(
         <>
             <Menu />
+            <Pesquisar />
             <div className={style.container}>
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import style from './style.module.css';
 import { FaArrowLeft } from "react-icons/fa";
 import CardList from "@/components/CardList";
+import Pesquisar from "@/components/Pesquisar";
 
 export default function Historico() {
     const obrasData = [
@@ -51,6 +52,7 @@ export default function Historico() {
     return(
         <>
             <Menu />
+            <Pesquisar />
             <div className={style.container}>
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
