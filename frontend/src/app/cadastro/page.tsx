@@ -1,12 +1,98 @@
-"use client"
-import Link from 'next/link';
+"use client";
+import { useState, useEffect } from "react";
+import axios from 'axios';
 import style from './style.module.css';
-import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from "next/navigation";
 
-export default function Cadastro() {
-    const [tipoUsuario, setTipoUsuario] = useState("");
+export default function CadastroUsuario() {
+    // Definindo estados para os campos
+    const [nome, setNome] = useState('');
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
+    const [fotoPerfil, setFotoPerfil] = useState<File | null>(null); // Arquivo da foto
+    const [perfilId, setPerfilId] = useState(''); // ID do perfil
+    const [perfis, setPerfis] = useState([]); // Lista de perfis a serem carregados da API
+    const [error, setError] = useState(''); // Erros
+    const router = useRouter();
 
-    return(
+    // Manuseio de mudança de foto de perfil
+    const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setFotoPerfil(e.target.files[0]);
+        }
+    }
+
+    // Função de envio do formulário
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setError('');
+
+        // Verificação se as senhas coincidem
+        if (senha !== confirmarSenha) {
+            setError('As senhas não coincidem.');
+            return;
+        }
+
+        // Criando um FormData para enviar arquivos e dados juntos
+        const formData = new FormData();
+        formData.append('nome', nome);
+        formData.append('email', email);
+        formData.append('senha', senha);
+        if (fotoPerfil) {
+            formData.append('foto_perfil', fotoPerfil);
+        }
+        formData.append('perfil_id', perfilId);
+
+        try {
+            // Enviando os dados para o servidor Laravel
+            const response = await axios.post('http://127.0.0.1:8000/api/v1/usuarios', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            console.log('Usuário cadastrado com sucesso:', response.data);
+
+            // Limpar os campos do formulário após sucesso
+            setNome('');
+            setEmail('');
+            setSenha('');
+            setConfirmarSenha('');
+            setFotoPerfil(null);
+            setPerfilId('');
+
+            (e.target as HTMLFormElement).reset();
+        } catch (error: unknown) {
+            // Exibindo o erro detalhado da resposta do servidor
+            if (axios.isAxiosError(error) && error.response) {
+                const message = error.response?.data.message || 'Erro ao cadastrar usuário';
+                setError(message);
+            } else {
+                setError('Erro inesperado: ' + (error as Error).message);
+            }
+            console.error('Erro ao cadastrar usuário:', error);
+        }
+    };
+
+    // Buscar os perfis disponíveis na API
+    const fetchPerfis = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:8000/api/v1/perfils');
+            setPerfis(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar perfis:', error);
+            setError('Erro ao buscar perfis');
+        }
+    };
+
+    // Chamar a função de buscar perfis quando o componente for carregado
+    useEffect(() => {
+        fetchPerfis();
+    }, []);
+
+    return (
         <>
             <div className={style.loginContainer}>
                 <div className={style.logo}>
@@ -18,31 +104,84 @@ export default function Cadastro() {
                     </div>
                     <div className={style.loginForm}>
                         <h2>Cadastro</h2>
-                        <form>
-                            <label htmlFor="nome">Nome</label>
-                            <input type="text" id="nome" placeholder="Digite seu nome de Usúario" required/>
-                            <label htmlFor="email">E_mail</label>
-                            <input type="email" id="email" placeholder="exemplo@gmail.com" required/>
-                            <label htmlFor="password">Senha</label>
-                            <input type="password" id="password" placeholder="Digite sua Senha" required/>
-                            <div className={style.rememberMe}>
-                                <input type="checkbox" id="leitor" checked={tipoUsuario === "leitor"} 
-                                onChange={() => setTipoUsuario("leitor")}/>
-                                <label htmlFor="leitor">Leitor</label>
-                                <input type="checkbox" id="autor" checked={tipoUsuario === "autor"} 
-                                onChange={() => setTipoUsuario("autor")}/>
-                                <label htmlFor="autor">Autor</label>
+                        {error && (
+                            <div role="alert" className="alert alert-error">
+                                <span>{error}</span>
                             </div>
-                            <Link href={"/login"} legacyBehavior>
-                                <button type="submit">Cadastrar</button>
-                            </Link>
+                        )}
+                        <form onSubmit={handleSubmit} className={style.form}>
+                            <label htmlFor="nome">Nome</label>
+                            <input
+                                type="text"
+                                id="nome"
+                                placeholder="Digite seu nome de Usúario"
+                                value={nome}
+                                onChange={(e) => setNome(e.target.value)}
+                                required
+                            />
+
+                            <label htmlFor="email">E_mail</label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="exemplo@gmail.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+
+                            <label htmlFor="password">Senha</label>
+                            <input
+                                type="password"
+                                id="senha"
+                                placeholder="Digite sua Senha"
+                                value={senha}
+                                onChange={(e) => setSenha(e.target.value)}
+                                required
+                            />
+
+                            <label htmlFor="confirmarSenha">Confirmar Senha</label>
+                            <input
+                                type="password"
+                                id="confirmarSenha"
+                                placeholder="Confirme sua Senha"
+                                value={confirmarSenha}
+                                onChange={(e) => setConfirmarSenha(e.target.value)}
+                                required
+                            />
+
+                            <label htmlFor="fotoPerfil">Foto de Perfil</label>
+                            <input
+                                type="file"
+                                id="fotoPerfil"
+                                accept="image/*"
+                                onChange={handleFotoChange}
+                                className={style.fileInputStyled}
+                            />
+
+                            <label htmlFor="perfilId">Perfil</label>
+                            <select
+                                id="perfilId"
+                                value={perfilId}
+                                onChange={(e) => setPerfilId(e.target.value)}
+                                required
+                            >
+                                <option value="">Selecione o perfil</option>
+                                {perfis.map((perfil: any) => (
+                                    <option key={perfil.id} value={perfil.id}>
+                                        {perfil.tipo}
+                                    </option>
+                                ))}
+                            </select>
+
+                            <button type="submit">Cadastrar</button>
                         </form>
-                        <Link href={"/login"} legacyBehavior>
+                        <Link href="/login" legacyBehavior>
                             <a className={style.cadastro}>Já tem Conta? Faça Login</a>
                         </Link>
                     </div>
                 </div>
             </div>
         </>
-    )
+    );
 }

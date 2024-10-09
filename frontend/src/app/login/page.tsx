@@ -1,10 +1,60 @@
-"use client"
+"use client";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import style from './style.module.css';
+import { setCookie } from 'nookies';
+//import { Toast } from '@/components/Toast';
+//import { Loading } from '@/components/Loading';
 
 export default function Login() {
-    return(
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [toast, setToast] = useState(false);
+    const router = useRouter();
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); // Evita a recarga da página
+        setErrorMessage(''); // Limpa mensagens de erro anteriores
+        setLoading(true); // Ativa o estado de carregamento
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/usuario/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, senha }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                
+                // Armazena o token no cookie usando nookies
+                setCookie(undefined, 'authToken', data.token, { path: '/' });
+                
+                // Redireciona para a página inicial
+                router.push('/home');
+            } else {
+                const errorData = await response.json();
+                setErrorMessage(errorData.error || 'Erro no login. Tente novamente.');
+                setToast(true); // Mostra toast de erro
+            }
+        } catch (error) {
+            console.error('Erro ao fazer a solicitação:', error);
+            setErrorMessage('Erro de conexão. Tente novamente mais tarde.');
+            setToast(true); // Mostra toast de erro
+        } finally {
+            setLoading(false); // Desativa o estado de carregamento
+        }
+    };
+
+    return (
         <>
+        
             <div className={style.loginContainer}>
                 <div className={style.logo}>
                     <img src="/images/logoDark.png" alt="Logo" />
@@ -15,28 +65,41 @@ export default function Login() {
                     </div>
                     <div className={style.loginForm}>
                         <h2>Login</h2>
-                        <form>
-                            <label htmlFor="email">E_mail</label>
-                            <input type="email" id="email" placeholder="exemplo@gmail.com" required/>
+                        {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
+                        <form onSubmit={handleSubmit}>
+                            <label htmlFor="email">E-mail</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                placeholder="exemplo@gmail.com" 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required 
+                            />
                             
                             <label htmlFor="password">Senha</label>
-                            <input type="password" id="password" placeholder="Digite sua Senha" required/>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                placeholder="Digite sua Senha" 
+                                value={senha}
+                                onChange={(e) => setSenha(e.target.value)}
+                                required 
+                            />
                             
                             <div className={style.rememberMe}>
-                                <input type="checkbox" id="remember"/>
+                                <input type="checkbox" id="remember" />
                                 <label htmlFor="remember">Lembre-se</label>
                             </div>
                             
-                            <Link href={"/home"} legacyBehavior>
-                                <button type="submit">Entrar</button>
-                            </Link>
+                            <button type="submit">Entrar</button>
                         </form>
-                        <Link href={"/cadastro"} legacyBehavior>
+                        <Link href="/cadastro" legacyBehavior>
                             <a className={style.cadastro}>Não tem Conta? Cadastre-se</a>
                         </Link>
                     </div>
                 </div>
             </div>
         </>
-    )
+    );
 }

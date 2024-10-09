@@ -6,97 +6,160 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class UsuarioController extends Controller
 {
-    // Método para listar todos os usuários (não deletados)
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $usuarios = Usuario::with('perfil')->get();
         return response()->json($usuarios);
     }
 
-    // Método para criar um novo usuário
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        // Validação dos dados de entrada
+        $request->validate([
             'nome' => 'required|string|max:255',
-            'foto_perfil' => 'required|string|max:255',
-            'banner' => 'required|string|max:255',
-            'email' => 'required|email|unique:usuarios',
+            'foto_perfil' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'banner' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:usuarios,email',
             'senha' => 'required|string|min:6',
             'perfil_id' => 'required|exists:perfils,id',
         ]);
 
+        // Processamento do upload da foto de perfil
+        $fileName = time() . '-' . $request->file('foto_perfil')->getClientOriginalName();
+        $request->file('foto_perfil')->move(public_path('imagesUser'), $fileName);
+
+        // Criação do usuário
         $usuario = Usuario::create([
-            'nome' => $validatedData['nome'],
-            'foto_perfil' => $validatedData['foto_perfil'],
-            'banner' => $validatedData['banner'],
-            'email' => $validatedData['email'],
-            'senha' => bcrypt($validatedData['senha']),
-            'perfil_id' => $validatedData['perfil_id'],
+            'nome' => $request->nome,
+            'foto_perfil' => 'imagesUser/' . $fileName,  // Caminho da foto de perfil
+            'banner' => $request->banner,  // Banner pode ser nulo
+            'email' => $request->email,
+            'senha' => Hash::make($request->senha),  // Hash da senha
+            'perfil_id' => $request->perfil_id,
         ]);
 
-        return response()->json($usuario, 201);
+        // Resposta JSON com os dados do usuário e URL da imagem
+        return response()->json([
+            'usuario' => $usuario,
+            'image_url' => asset('imagesUser/' . $fileName),  // URL pública da imagem
+        ], 201);
     }
 
-    // Método para mostrar um único usuário (não deletado)
-    public function show($id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        $usuario = Usuario::with('perfil')->findOrFail($id);
-        return response()->json($usuario);
-    }
+        $usuario = Usuario::with('perfil')->find($id);
 
-    // Método para atualizar um usuário existente
-    public function update(Request $request, $id)
-    {
-        $usuario = Usuario::findOrFail($id);
-
-        $validatedData = $request->validate([
-            'nome' => 'sometimes|required|string|max:255',
-            'foto_perfil' => 'sometimes|required|string|max:255',
-            'banner' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|email|unique:usuarios,email,' . $id,
-            'senha' => 'sometimes|required|string|min:6',
-            'perfil_id' => 'sometimes|required|exists:perfils,id',
-        ]);
-
-        $usuario->update([
-            'nome' => $validatedData['nome'] ?? $usuario->nome,
-            'foto_perfil' => $validatedData['foto_perfil'] ?? $usuario->foto_perfil,
-            'banner' => $validatedData['banner'] ?? $usuario->banner,
-            'email' => $validatedData['email'] ?? $usuario->email,
-            'senha' => isset($validatedData['senha']) ? bcrypt($validatedData['senha']) : $usuario->senha,
-            'perfil_id' => $validatedData['perfil_id'] ?? $usuario->perfil_id,
-        ]);
+        if (!$usuario) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
 
         return response()->json($usuario);
     }
 
-    // Método para deletar um usuário (soft delete)
-    public function destroy($id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
     {
-        $usuario = Usuario::findOrFail($id);
-        $usuario->delete(); // Executa o soft delete
+        $usuario = Usuario::find($id);
+
+        if (!$usuario) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'foto_perfil' => 'nullable|string|max:255', // Permitir atualização sem uma nova imagem
+            'banner' => 'required|string|max:255',
+            'email' => 'required|email|unique:usuarios,email,' . $id,
+            'senha' => 'nullable|string|min:6',
+            'perfil_id' => 'required|exists:perfils,id',
+        ]);
+
+        $data = $request->only([
+            'nome', 'banner', 'email', 'perfil_id'
+        ]);
+
+        // Handle file upload if a new file is provided
+        if ($request->hasFile('foto_perfil')) {
+            $fileName = time() . '-' . $request->file('foto_perfil')->getClientOriginalName();
+            $fotoPerfilPath = $request->file('foto_perfil')->move(public_path('imagesUser'), $fileName);
+            $data['foto_perfil'] = 'imagesUser/' . $fileName; // Atualiza o caminho da imagem no banco de dados
+        }
+
+        // Verifica se a senha foi atualizada
+        if ($request->filled('senha')) {
+            $data['senha'] = bcrypt($request->senha);
+        }
+
+        $usuario->update($data);
+
+        return response()->json($usuario);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $usuario = Usuario::find($id);
+
+        if (!$usuario) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
+        $usuario->delete();
 
         return response()->json(null, 204);
     }
 
+    /**
+     * Login method for authentication.
+     */
     public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|string',
-            'senha' => 'required|string'
+{
+    try {
+        // Validação dos dados de entrada
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'senha' => 'required|string',
         ]);
 
-        $usuario = Usuario::where('email', $request->email)->first();
+        // Buscar o usuário pelo email
+        $usuario = Usuario::where('email', $validated['email'])->first();
 
-        if (!$usuario || !Hash::check($request->senha, $usuario->senha)) {
+        // Verificar se o usuário foi encontrado e a senha está correta
+        if (!$usuario || !Hash::check($validated['senha'], $usuario->senha)) {
             return response()->json(['error' => 'Credenciais inválidas'], 401);
         }
 
-        $token = $usuario->createToken('authToken')->plainTextToken;
+        // Gerar o token de autenticação
+        $token = $usuario->createToken('token-name')->plainTextToken;
 
-        return response()->json(['token' => $token], 200);
+        // Retornar a resposta JSON com o token e os dados do usuário
+        return response()->json([
+            'token' => $token,
+            'user' => $usuario,
+        ], 200);
+
+    } catch (\Exception $e) {
+        // Log do erro e retorno de mensagem de erro
+        Log::error('Erro no login: ' . $e->getMessage());
+        return response()->json(['error' => 'Erro no servidor'], 500);
     }
+}
+
 }
