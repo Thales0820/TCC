@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Cards } from "@/components/Cards";
 import Pesquisar from "@/components/Pesquisar";
+import { ModalPerfil } from "@/components/ModalPerfil";
 
 export default function MinhasObras() {
 
@@ -50,6 +51,7 @@ export default function MinhasObras() {
         <>
             <Menu />
             <Pesquisar />
+            <ModalPerfil />
             <div className={style.container}>
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
