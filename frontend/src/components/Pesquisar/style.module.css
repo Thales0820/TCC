@@ -1,6 +1,6 @@
 .pesquisarContainer {
   position: absolute;
-  left: 70%;
+  left: 75%;
   top: 0;
   transform: translateX(-50%);
   z-index: 2; /* Certifique-se de que o z-index esteja maior que o carrossel */

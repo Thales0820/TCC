@@ -6,6 +6,7 @@ import { Menu } from "@/components/Menu";
 import { Cards } from "@/components/Cards";
 import { useState } from "react";
 import Pesquisar from "@/components/Pesquisar";
+import { ModalPerfil } from "@/components/ModalPerfil";
 
 export default function Lista() {
 
@@ -60,6 +61,7 @@ export default function Lista() {
         <>
             <Menu />
             <Pesquisar />
+            <ModalPerfil />
             <div className={style.container}>
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />

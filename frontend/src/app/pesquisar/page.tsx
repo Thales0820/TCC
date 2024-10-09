@@ -5,7 +5,8 @@ import { FaArrowLeft } from "react-icons/fa";
 import style from './style.module.css';
 import { Cards } from "@/components/Cards";
 import { useState } from "react";
-import { Modal } from "@/components/Modal";
+import { ModalGenero } from "@/components/ModalGenero";
+import { ModalPerfil } from "@/components/ModalPerfil";
 
 interface Obra {
   image: string;
@@ -129,6 +130,7 @@ export default function Pesquisar(){
     return(
         <>
             <Menu />
+            <ModalPerfil />
             <div className={style.container}>
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
@@ -161,9 +163,9 @@ export default function Pesquisar(){
                 </div>
                 <Cards data={filtroObras}/>
             </div>
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal} selecionaGenero={selecioneGenero} 
+            <ModalGenero isOpen={isModalOpen} onClose={handleCloseModal} selecionaGenero={selecioneGenero} 
                    onSelectGenre={identificarGenero}>
-            </Modal>
+            </ModalGenero>
         </>
     )
 }

@@ -4,6 +4,7 @@ import style from './style.module.css';
 import { Carrossel } from '@/components/Carrossel';
 import { useEffect, useState } from 'react';
 import Pesquisar from '@/components/Pesquisar';
+import { ModalPerfil } from '@/components/ModalPerfil';
 
 async function getObras() {
     const res = await fetch("http://127.0.0.1:8000/api/v1/obras", {
@@ -33,6 +34,7 @@ export default function Home() {
             <Menu />
             <div className={style.container}>
                 <Pesquisar />
+                <ModalPerfil />
                 <Carrossel />
                 <div className={style.wrapper}>
                     <div className={style.cards}>

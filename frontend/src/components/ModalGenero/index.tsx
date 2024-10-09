@@ -26,7 +26,7 @@ const genres = [
     "Ficção Científica",
 ];
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGenero, onSelectGenre }) => {
+export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGenero, onSelectGenre }) => {
 
     if (!isOpen) return null;
 
