@@ -101,7 +101,7 @@ export default function CriarObra() {
             <div className={style.container}>
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
-                    <h1>Atualizações</h1>
+                    <h1>Criando Obra</h1>
                 </div>
                 <br />
                 {error && 

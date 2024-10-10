@@ -1,0 +1,202 @@
+.containerObra {
+    padding-left: calc(180px + 25px);
+    margin-top: 45px;
+}
+
+.detalhe {
+    display: flex; /* Permite alinhar a capa e as informações lado a lado */
+    margin-bottom: 0;   
+    padding: 20px 20px 0 20px;
+}
+
+.capa img {
+    width: 220px; /* Define o tamanho da capa */
+    height: 370px; /* Mantém a proporção da imagem */
+}
+
+.informacoes {
+    display: flex;
+    background-color: #424242;
+    padding: 20px;
+    color: #ffffff;
+    flex-direction: column; /* Faz os textos ficarem um abaixo do outro */
+    flex: 1; /* Faz as informações ocuparem o espaço restante */
+    border-radius: 0 15px 15px 0;
+    height: 370px;
+}
+
+.titulo {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 10px; /* Espaço abaixo do título */
+}
+
+.generos {
+    display: flex; /* Gêneros em linha horizontal */
+    flex-wrap: wrap; /* Permite que os gêneros quebrem de linha, se necessário */
+    gap: 10px; /* Espaçamento entre os gêneros */
+    margin-top: 10px;
+    margin-bottom: 10px; /* Espaço abaixo da seção de gêneros */
+}
+
+.generos div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    height: 10px;
+    background-color: rgba(34, 40, 49, 0.9);
+    padding: 13px;
+    border-radius: 40px;
+}
+
+.generos div p {
+    margin: 0; /* Espaçamento entre os parágrafos */
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.informacoes p {
+    margin-top: 20px;
+    font-size: 25px;
+    letter-spacing: normal;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.especificacao {
+    display: flex;
+    justify-content: space-between; /* Alinha os textos horizontalmente */
+    gap: 20px; /* Espaçamento entre os textos */
+}
+
+.especificacao p {
+    margin-top: 20px;
+    font-size: 30px;
+    letter-spacing: normal;
+    font-weight: bold;
+}
+
+.acoes {
+    margin-top: -4px;
+    display: flex;
+    gap: 50px;
+    color: #ffffff;
+    padding: 0 20px 20px 20px;
+}
+
+.funcoes {
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+}
+
+.funcoes button {
+    display: flex; /* Adiciona flexbox para alinhar os elementos */
+    align-items: center; /* Alinha verticalmente o ícone e o texto */
+    justify-content: center; /* Centraliza o ícone e o texto horizontalmente */
+    width: 100%;
+    margin-bottom: 35px;
+    background-color: #424242;
+    border: 0;
+    padding: 15px;
+    font-size: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.funcoes button svg {
+    margin-right: 10px; /* Adiciona um espaço entre o ícone e o texto */
+}
+
+.icones {
+    display: flex;
+    justify-content: space-around; /* Alinha os textos horizontalmente */
+    align-items: center;
+}
+
+.icones svg {
+    cursor: pointer;
+}
+
+.icones svg:hover {
+    color: #006BFF;
+}
+
+.icones i {
+    font-size: 37px;
+    cursor: pointer;
+}
+
+.icones i:hover {
+    color: #000000;
+}
+
+.topoCapitulos {
+    display: flex; /* Alinha os textos horizontalmente */
+    align-items: center;
+}
+
+.topoCapitulos h1 {
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.mudarOrdem {
+    margin-left: auto;
+    margin-top: 10px;
+}
+
+.mudarOrdem svg {
+    border: 1px solid #ffffff;
+    margin-left: 0.29px;
+}
+
+.mudarOrdem svg:hover {
+    border: 1px solid #006BFF;
+    color: #006BFF;
+}
+
+.mudarOrdem .selecionado {
+    border: 1px solid #006BFF;
+    color: #006BFF;
+}
+
+.capitulos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.capitulo {
+    display: flex;
+    justify-content: space-around;
+    background-color: #424242;
+    width: 800px;
+    border-radius: 15px;
+    padding: 10px;
+    color: #ffffff;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 25px;
+}
+
+.capitulo svg {
+    cursor: pointer;
+}
+
+.numero {
+    text-align: left;
+    width: 250px;
+    margin-left: 10px;
+}
+  
+.tituloCap {
+    text-align: left;
+    margin-left: 50px;
+    flex: 1;
+    word-wrap: break-word;
+}

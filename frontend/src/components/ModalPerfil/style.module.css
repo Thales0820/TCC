@@ -1,6 +1,7 @@
 .profileIcon {
     position: absolute;
     top: 10px;
+    color: #ffffff;
     right: 10px;
     cursor: pointer;
     z-index: 15;
