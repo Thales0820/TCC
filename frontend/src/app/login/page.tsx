@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import style from './style.module.css';
-import { setCookie } from 'nookies';
+import { IoEyeOff, IoEye } from 'react-icons/io5';
 //import { Toast } from '@/components/Toast';
 //import { Loading } from '@/components/Loading';
 
@@ -13,13 +13,16 @@ export default function Login() {
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [toast, setToast] = useState(false);
+    const [mostrarSenha, setMostrarSenha] = useState(false);
     const router = useRouter();
 
+    const toggleMostrarSenha = () => {
+        setMostrarSenha(!mostrarSenha); // Alterna entre true e false
+    };
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Evita a recarga da página
         setErrorMessage(''); // Limpa mensagens de erro anteriores
         setLoading(true); // Ativa o estado de carregamento
-
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/usuario/login', {
                 method: 'POST',
@@ -28,7 +31,6 @@ export default function Login() {
                 },
                 body: JSON.stringify({ email, senha }),
             });
-
             if (response.ok) {
                 const data = await response.json();
                 console.log(data);
@@ -51,10 +53,8 @@ export default function Login() {
             setLoading(false); // Desativa o estado de carregamento
         }
     };
-
     return (
         <>
-        
             <div className={style.loginContainer}>
                 <div className={style.logo}>
                     <img src="/images/logoDark.png" alt="Logo" />
@@ -78,15 +78,19 @@ export default function Login() {
                             />
                             
                             <label htmlFor="password">Senha</label>
-                            <input 
-                                type="password" 
-                                id="password" 
-                                placeholder="Digite sua Senha" 
-                                value={senha}
-                                onChange={(e) => setSenha(e.target.value)}
-                                required 
-                            />
-                            
+                            <div className={style.inputSenhaContainer}>
+                                <input 
+                                    type={mostrarSenha ? "text" : "password"} 
+                                    id="password" 
+                                    placeholder="Digite sua Senha" 
+                                    value={senha}
+                                    onChange={(e) => setSenha(e.target.value)}
+                                    required 
+                                />
+                                <span onClick={toggleMostrarSenha} className={style.iconeSenha}>
+                                    {mostrarSenha ? <IoEyeOff size={20}/> : <IoEye size={20}/>}
+                                </span>
+                            </div>
                             <div className={style.rememberMe}>
                                 <input type="checkbox" id="remember" />
                                 <label htmlFor="remember">Lembre-se</label>
@@ -102,4 +106,7 @@ export default function Login() {
             </div>
         </>
     );
+}
+function setCookie(undefined: undefined, arg1: string, token: any, arg3: { path: string; }) {
+    throw new Error('Function not implemented.');
 }

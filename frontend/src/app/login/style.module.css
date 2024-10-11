@@ -43,6 +43,7 @@
     text-align: center;
     font-weight: bold;
     font-size: 60px;
+    margin-bottom: 20px;
 }
 
 .loginForm form {
@@ -56,16 +57,42 @@
     font-weight: bold;
 }
 
+.inputSenhaContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputSenhaContainer input {
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #222831;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.iconeSenha {
+    position: absolute;
+    right: 10px;
+    top: 9px;
+    cursor: pointer;
+    color: #ffffff;
+}
+
 .loginForm input {
     padding: 10px;
     margin-bottom: 15px;
     background-color: #222831;
     border: 1px solid #ffffff;
+    color: #ffffff;
     border-radius: 5px;
     font-size: 16px;
 }
 
-.login-form input::placeholder {
+.loginForm input::placeholder {
     color: #ffffff;
 }
 

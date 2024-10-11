@@ -21,7 +21,7 @@
 
 .imageSection {
     width: 750px;
-    height: 450px;
+    height: 500px;
 }
 
 .imageSection img {
@@ -35,13 +35,14 @@
     padding: 7px 40px 7px 40px;
     border-radius: 0 15px 15px 0;
     width: 450px;
-    height: 450px;
+    height: 500px;
 }
 
 .loginForm h2 {
     color: #ffffff;
     text-align: center;
     font-weight: bold;
+    margin-bottom: 10px;
     font-size: 45px;
 }
 
@@ -62,16 +63,79 @@
     background-color: #222831;
     border: 1px solid #ffffff;
     border-radius: 5px;
+    color: #ffffff;
     font-size: 16px;
 }
 
-.login-form input::placeholder {
+.loginForm input::placeholder {
     color: #ffffff;
 }
 
+.inputSenhaContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputSenhaContainer input {
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #222831;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.iconeSenha {
+    position: absolute;
+    right: 10px;
+    top: 9px;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.fileInputStyled {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.fileInputStyled::-webkit-file-upload-button {
+    visibility: hidden; /* Oculta o botão padrão do input */
+}
+
+.fileInputStyled::before {
+    content: 'Escolher Arquivo ';
+    display: inline-block;
+    background: #222831;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.verticalBar {
+    width: 2px;
+    background-color: #ffffff; /* Cor da barra vertical */
+    height: 45px; /* Para ajustar à altura do input */
+    margin-left: 10px; /* Espaço entre o botão e a barra */
+    position: absolute;
+    right: 330px;
+    top: 74.9%;
+}
+
 .rememberMe {
+    display: flex;
+    margin-bottom: 10px;
+    margin-top: 10px;
     align-items: center;
     text-align: center;
+    justify-content: space-around;
 }
 
 .rememberMe input {
