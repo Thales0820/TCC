@@ -15,14 +15,14 @@
         @else
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
-                <tr>
+                <tr style="text-align: center;">
                     <th>Titulo</th>
+                    <th>Capa</th>
                     <th>Autor</th>
                     <th>Likes</th>
                     <th>Estado</th>
                     <th>Tipo Obra</th>
                     <th>Sinopse</th>
-
                     <th></th>
                 </tr>
             </thead>
@@ -30,6 +30,7 @@
                 @foreach($obras as $obra)
                 <tr>
                     <td>{{ $obra->titulo }}</td>
+                    <td><img src="{{ $obra->capa }}" width="200px" height="auto"></td>
                     <td>{{ $obra->usuario->nome}}</td>
                     <td>{{ $obra->likes }}</td>
                     <td>{{ $obra->estado ? $obra->estado->nome : 'Estado desconhecido' }}</td>
