@@ -17,15 +17,15 @@
             <thead class="thead-dark">
                 <tr>
                     <th>Estado</th>
-                    <th></th>
-
-                    <th></th>
+                    <th>#</th>
+                    <th>#</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($estados as $estado)
                 <tr>
                     <td>{{ $estado->nome }}</td>
+                    <td> <a href="{{ route('dashboardEstado.edit', $estado) }}" class="btn btn-warning">Editar</a></td>
                     <td>
                         <form action="{{ route('dashboardEstado.destroy', $estado->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar esta estado?');">
                             @csrf
@@ -33,7 +33,6 @@
                             <button type="submit" class="btn btn-danger">Deletar</button>
                         </form>
                     </td>
-                    <td> <a href="{{ route('dashboardEstado.edit', $estado) }}" class="btn btn-warning btn-sm">Editar</a></td>
                 </tr>
                 @endforeach
             </tbody>
@@ -43,7 +42,7 @@
 </div>
 <br>
 <a href="{{ route('dashboardEstado.create')}}">
-    <button type="button" class="btn btn-dark">
+    <button type="button" class="btn btn-primary">
         Novo Estado
     </button>
 </a>

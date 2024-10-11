@@ -21,7 +21,7 @@ class DashboardLeituraController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboardLeitura.create');
     }
 
     /**
@@ -29,7 +29,12 @@ class DashboardLeituraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'tipo' => 'required|string|max:255',
+        ]);
+        Leitura::create($request->all());
+
+        return redirect()->route('dashboardLeitura.index');
     }
 
     /**
@@ -45,7 +50,8 @@ class DashboardLeituraController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $leitura = Leitura::findOrFail($id);
+        return view('dashboardLeitura.edit', compact('leitura'));
     }
 
     /**
@@ -53,7 +59,14 @@ class DashboardLeituraController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'tipo' => 'required|string|max:255',
+        ]);
+
+        $leitura = Leitura::findOrFail($id);
+        $leitura->update($request->all());
+
+        return redirect()->route('dashboardLeitura.index');
     }
 
     /**

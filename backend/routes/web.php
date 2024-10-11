@@ -41,6 +41,10 @@ Route::put('/estados/{id}', [DashboardEstadoController::class, 'update'])->name(
 Route::delete('/estados/{id}', [DashboardEstadoController::class, 'destroy'])->name('dashboardEstado.destroy');
 
 Route::get('/leituras',[DashboardLeituraController::class, 'index'])->name('dashboardLeitura.index');
+Route::get('/leituras/create', [DashboardLeituraController::class, 'create'])->name('dashboardLeitura.create');
+Route::post('/leituras', [DashboardLeituraController::class, 'store'])->name('dashboardLeitura.store');
+Route::get('/leituras/{id}/edit', [DashboardLeituraController::class, 'edit'])->name('dashboardLeitura.edit');
+Route::put('/leituras/{id}', [DashboardLeituraController::class, 'update'])->name('dashboardLeitura.update');
 Route::delete('/leituras/{id}', [DashboardLeituraController::class, 'destroy'])->name('dashboardLeitura.destroy');
 
 Route::get('/perfils',[DashboardPerfilController::class, 'index'])->name('dashboardPerfil.index');

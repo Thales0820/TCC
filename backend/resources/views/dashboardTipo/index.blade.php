@@ -17,14 +17,15 @@
                 <thead class="thead-dark">
                     <tr>
                         <th>Tipo</th>
-                        <th></th>
-                        <th></th>
+                        <th>#</th>
+                        <th>#</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($tipos as $tipo)
                     <tr>
                         <td>{{ $tipo->nome }}</td>
+                        <td> <a href="{{ route('dashboardTipo.edit', $tipo) }}" class="btn btn-warning btn-sm">Editar</a></td>
                         <td>
                         <form action="{{ route('dashboardTipo.destroy', $tipo->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este usuário?');">
                                     @csrf
@@ -32,7 +33,6 @@
                                     <button type="submit" class="btn btn-danger">Deletar</button>
                                 </form>
                         </td>
-                        <td> <a href="{{ route('dashboardTipo.edit', $tipo) }}" class="btn btn-warning btn-sm">Editar</a></td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -42,7 +42,7 @@
     </div>
     <br>
 <a href="{{ route('dashboardTipo.create')}}">
-    <button type="button" class="btn btn-dark">
+    <button type="button" class="btn btn-primary">
         Novo Tipo
     </button>
 </a>

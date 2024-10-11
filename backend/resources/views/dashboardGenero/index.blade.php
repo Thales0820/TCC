@@ -5,7 +5,7 @@
 
 <div class="card">
     <div class="card-header">
-        LIsta de Gêneros
+        Lista de Gêneros
     </div>
     <div class="card-body">
         @if($generos->isEmpty())
@@ -17,15 +17,15 @@
             <thead class="thead-dark">
                 <tr>
                     <th>Genero</th>
-                    <th></th>
-
-                    <th></th>
+                    <th>#</th>
+                    <th>#</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($generos as $genero)
                 <tr>
                     <td>{{ $genero->nome }}</td>
+                    <td> <a href="{{ route('dashboardGenero.edit', $genero) }}" class="btn btn-warning">Editar</a></td>
                     <td>
                         <form action="{{ route('dashboardGenero.destroy', $genero->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar esta genero?');">
                             @csrf
@@ -33,7 +33,6 @@
                             <button type="submit" class="btn btn-danger">Deletar</button>
                         </form>
                     </td>
-                    <td> <a href="{{ route('dashboardGenero.edit', $genero) }}" class="btn btn-warning btn-sm">Editar</a></td>
                 </tr>
                 @endforeach
             </tbody>
@@ -44,7 +43,7 @@
 </div>
 <br>
 <a href="{{ route('dashboardGenero.create')}}">
-    <button type="button" class="btn btn-dark">
+    <button type="button" class="btn btn-primary">
         Novo gênero
     </button>
 </a>
