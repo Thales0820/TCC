@@ -64,6 +64,10 @@
     background-size: 30px; /* Aumente o tamanho do ícone aqui */
 }
 
+.select option {
+    font-weight: bold;
+}
+
 .generos {
     padding: 10px 20px;
     width: 210px;

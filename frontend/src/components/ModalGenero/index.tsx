@@ -42,9 +42,6 @@ export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGe
         <>
             <div className={style.modalFundo} onClick={onClose}>
                 <div className={style.modal} onClick={handleContentClick}>
-                    <button className={style.closeButton} onClick={onClose}>
-                        X
-                    </button>
                     <h2 className={style.titulo}>Selecione os Gêneros</h2>
                     <div className={style.checklistContainer}>
                     {genres.map((genre) => (

@@ -117,8 +117,32 @@
     align-items: center;
 }
 
+.icones div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .icones svg {
     cursor: pointer;
+}
+
+.like {
+    color: #007bff; /* Cor quando está com like */
+}
+
+.likesCount {
+    font-size: 17px;
+    font-weight: bold;
+    margin-top: 5px;
+    color: #ffffff;
+}
+
+.curtido {
+    font-size: 17px;
+    font-weight: bold;
+    margin-top: 5px;
+    color: #007bff;
 }
 
 .icones svg:hover {

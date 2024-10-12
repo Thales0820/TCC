@@ -40,6 +40,10 @@
     align-items: center;
 }
 
+.perfil svg {
+    cursor: pointer;
+}
+
 .texto {
     display: flex;
     flex-direction: column; /* Empilhar os spans verticalmente */
@@ -79,6 +83,7 @@
     margin: 20px 0;
     font-size: 1rem;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .lista li svg {

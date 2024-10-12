@@ -5,6 +5,7 @@ import { LuArrowLeftFromLine } from "react-icons/lu";
 import { MdWbSunny } from "react-icons/md";
 import { IoMdNotifications } from "react-icons/io";
 import { IoSettingsSharp } from "react-icons/io5";
+import Link from "next/link";
 
 
 export const ModalPerfil = () => {
@@ -32,9 +33,11 @@ export const ModalPerfil = () => {
                         <div className={style.barra}></div>
                         <div className={style.lista}>
                             <ul>
-                                <li><FaBookmark size={25}/> Lista de Leitura</li>
-                                <li><IoMdNotifications size={30}/> Notificações</li>
-                                <li><IoSettingsSharp size={30}/> Configuração</li>
+                                <Link href="/lista" legacyBehavior>
+                                    <li><FaBookmark size={25}/> Lista de Leitura</li>
+                                </Link>
+                                    <li><IoMdNotifications size={30}/> Notificações</li>
+                                    <li><IoSettingsSharp size={30}/> Configuração</li>
                             </ul>
                         </div>
                         <div className={style.barra}></div>

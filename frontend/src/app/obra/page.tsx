@@ -14,36 +14,65 @@ interface Capitulo {
     visualizado: boolean;
 }
 
+interface ObraInfo {
+    titulo: string;
+    image: string;
+    estado: string;
+    tipo: string;
+    dataLancamento: string;
+    autor: string;
+    sinopse: string;
+    likes: number;
+    generos: string[];
+    capitulos: Capitulo[];
+}
+
 export default function Obra() {
 
     const [ordemCrescente, setOrdemCrescente] = useState(true)
-
-    const [capitulos, setCapitulos] = useState([
-        { numero: 1124, titulo: "Melhor Amigo", visualizado: false },
-        { numero: 1123, titulo: "Duas Semanas Perdidas", visualizado: false },
-        { numero: 1122, titulo: "Quando a Hora Chegar", visualizado: false }
-    ])
+    const [like, setLike] = useState(false);
+    const [obra, setObra] = useState<ObraInfo>({
+        titulo: 'One Piece',
+        image: 'https://mangadex.org/covers/a1c7c817-4e59-43b7-9365-09675a149a6f/c4bdbbc6-f6c1-4fe9-ab28-ff9ab44b6694.png',
+        estado: 'Publicando',
+        tipo: 'Mangá',
+        dataLancamento: '22/07/1997',
+        autor: 'Eiichiro Oda',
+        sinopse: 'One Piece conta a história do jovem Monkey D. Luffy, que ganhou poderes de borracha depois de comer uma fruta do diabo. O enredo mostra as aventuras de Luffy e seu grupo, Os Piratas de Chapéu de Palha, em busca do One Piece, o tesouro mais procurado do mundo.',
+        likes: 100,
+        generos: ['Aventura', 'Ação', 'Comédia', 'Drama', 'Fantasia'],
+        capitulos: [
+            { numero: 1124, titulo: "Melhor Amigo", visualizado: false },
+            { numero: 1123, titulo: "Duas Semanas Perdidas", visualizado: false },
+            { numero: 1122, titulo: "Quando a Hora Chegar", visualizado: false }
+        ]
+    });
 
      // Função para alternar entre crescente e decrescente
      const toggleOrdem = () => {
         setOrdemCrescente(!ordemCrescente);
         // Ordena os capítulos com base no estado atual
-        const novaOrdem = [...capitulos].sort((a, b) => ordemCrescente ? a.numero - b.numero : b.numero 
-        - a.numero);
-        setCapitulos(novaOrdem);
+        const novaOrdem = [...obra.capitulos].sort((a, b) => 
+            ordemCrescente ? a.numero - b.numero : b.numero - a.numero);
+        setObra({ ...obra, capitulos: novaOrdem });
     };
 
     // Função para alternar o estado de visualização de um capítulo
     const toggleVisualizacao = (numero: number) => { // Tipando o parâmetro como number
-        const capitulosAtualizados = capitulos.map(capitulo => {
+        const capitulosAtualizados = obra.capitulos.map(capitulo => {
             if (capitulo.numero === numero) {
                 return { ...capitulo, visualizado: !capitulo.visualizado }; // Alterna o estado de visualizado
             }
             return capitulo;
         });
-        setCapitulos(capitulosAtualizados);
+        setObra({ ...obra, capitulos: capitulosAtualizados });
     };
 
+    const toggleLike = () => {
+        setLike(!like);
+        const novoLike = like ? obra.likes - 1 : obra.likes + 1;
+        setObra({ ...obra, likes: novoLike})
+    }
     return(
         <>
         <Menu />
@@ -52,22 +81,21 @@ export default function Obra() {
         <div className={style.containerObra}>
             <div className={style.detalhe}>
                 <div className={style.capa}>
-                    <img src="https://mangadex.org/covers/a1c7c817-4e59-43b7-9365-09675a149a6f/c4bdbbc6-f6c1-4fe9-ab28-ff9ab44b6694.png" alt="Capa de One Piece" />
+                    <img src={obra.image} alt={`Capa de ${obra.titulo}`} />
                 </div>
                 <div className={style.informacoes}>
-                    <h1 className={style.titulo}>One Piece</h1>
+                    <h1 className={style.titulo}>{obra.titulo}</h1>
                     <div className={style.generos}>
-                        <div><p>Aventura</p></div>
-                        <div><p>Ação</p></div>
-                        <div><p>Comédia</p></div>
-                        <div><p>Drama</p></div>
-                        <div><p>Fantasia</p></div>
+                        {obra.generos.map((genero, index) => (
+                            <div key={index}><p>{genero}</p></div>
+                        ))}
                     </div>
-                    <p>One Piece conta a história do jovem Monkey D. Luffy, que ganhou poderes de borracha depois de comer uma fruta do diabo. O enredo mostra as aventuras de Luffy e seu grupo, Os Piratas de Chapéu de Palha, em busca do One Piece, o tesouro mais procurado do mundo.</p>
+                    <p>{obra.sinopse}</p>
                     <div className={style.especificacao}>
-                        <p>Eiichiro Oda</p>
-                        <p>Publicando</p>
-                        <p>22/07/1997</p>
+                        <p>{obra.autor}</p>
+                        <p>{obra.tipo}</p>
+                        <p>{obra.estado}</p>
+                        <p>{obra.dataLancamento}</p>
                     </div>
                 </div>
             </div>
@@ -75,7 +103,12 @@ export default function Obra() {
                 <div className={style.funcoes}>
                     <button><FaPlus size={25}/> Adicionar</button>
                     <div className={style.icones}>
-                        <BiSolidLike size={45}/>
+                        <div onClick={toggleLike}>
+                            <BiSolidLike size={45} className={like ? style.like : ''}/>
+                                {obra.likes > 0 && (
+                                    <span className={like ? style.curtido : style.likesCount}>{obra.likes}</span>
+                                )}
+                        </div>
                         <i className="bi bi-chat-left-text"></i>
                     </div>
                 </div>
@@ -90,7 +123,7 @@ export default function Obra() {
                         </div>
                     </div>
                     <div className={style.capitulos}>
-                        {capitulos.map(cap => (
+                        {obra.capitulos.map(cap => (
                             <div className={style.capitulo} key={cap.numero}>
                                 {cap.visualizado ? (
                                     <IoEyeOff size={25} onClick={() => toggleVisualizacao(cap.numero)} />
