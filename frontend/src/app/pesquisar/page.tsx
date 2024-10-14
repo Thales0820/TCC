@@ -1,22 +1,23 @@
 "use client"
+import { useEffect, useState } from "react";
 import { Menu } from "@/components/Menu";
 import { useRouter } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa";
 import style from './style.module.css';
 import { Cards } from "@/components/Cards";
-import { useState } from "react";
 import { ModalGenero } from "@/components/ModalGenero";
 import { ModalPerfil } from "@/components/ModalPerfil";
+import { getEstados, getTipos } from "../api/routes";
 
 interface Obra {
   image: string;
   titulo: string;
   tipo: string;
   estado: string;
-  genero: string[];  // Aqui é um array de strings
+  genero: string[];
 }
 
-export default function Pesquisar(){
+export default function Pesquisar() {
 
   const obrasData: Obra[] = [
     {
@@ -91,81 +92,94 @@ export default function Pesquisar(){
     },
   ];
 
-    const router = useRouter();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selecioneGenero, setSelecioneGenero] = useState<string[]>([]);
-    const [tipoObra, setTipoObra] = useState("");
-    const [estadoObra, setEstadoObra] = useState("");
-    const [pesquisar, setPesquisar] = useState("");
+  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selecioneGenero, setSelecioneGenero] = useState<string[]>([]);
+  const [tipoObra, setTipoObra] = useState("");
+  const [estadoObra, setEstadoObra] = useState("");
+  const [pesquisar, setPesquisar] = useState("");
+  const [tiposObra, setTiposObra] = useState<string[]>([]);  // Armazena os tipos de obra
+  const [estadosObra, setEstadosObra] = useState<string[]>([]);  // Armazena os estados de obra
 
-    const handleOpenModal = () => {
-      setIsModalOpen(true);
-    };
-  
-    const handleCloseModal = () => {
-      setIsModalOpen(false);
-    };
+  // Função para abrir o modal de gêneros
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
 
-    const identificarGenero = (selectedGenres: string[]) => {
-      setSelecioneGenero(selectedGenres);
-      // Aqui você pode adicionar a lógica para filtrar as obras com base nos gêneros selecionados
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const identificarGenero = (selectedGenres: string[]) => {
+    setSelecioneGenero(selectedGenres);
   };
 
   const handleFilter = () => {
     return obrasData.filter(obra => {
-        const matchesSearchTerm = obra.titulo.toLowerCase().includes(pesquisar.toLowerCase());
-        const matchesTipo = tipoObra === "" || obra.tipo === tipoObra;
-        const matchesEstado = estadoObra === "" || obra.estado === estadoObra;
-        const matchesGenero = selecioneGenero.length === 0 || obra.genero.some(g => selecioneGenero.includes(g));
-        return matchesSearchTerm && matchesTipo && matchesEstado && matchesGenero;
+      const matchesSearchTerm = obra.titulo.toLowerCase().includes(pesquisar.toLowerCase());
+      const matchesTipo = tipoObra === "" || obra.tipo === tipoObra;
+      const matchesEstado = estadoObra === "" || obra.estado === estadoObra;
+      const matchesGenero = selecioneGenero.length === 0 || obra.genero.some(g => selecioneGenero.includes(g));
+      return matchesSearchTerm && matchesTipo && matchesEstado && matchesGenero;
     });
-};
+  };
 
-    const filtroObras = handleFilter();
+  const filtroObras = handleFilter();
 
-    const voltar = () => {
-        router.back();
-    }
+  const voltar = () => {
+    router.back();
+  };
 
-    return(
-        <>
-            <Menu />
-            <ModalPerfil />
-            <div className={style.container}>
-                <div className={style.titulo}>
-                    <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
-                    <h1>Pesquisa Avançada</h1>
-                </div>
-                <div className={style.pesquisaContainer}>
-                    <input type="text" placeholder="Pesquisar..." className={style.pesquisa} 
-                           value={pesquisar} onChange={(e) => setPesquisar(e.target.value)}/>
-                    <select className={style.select} value={tipoObra} onChange={(e) => setTipoObra(e.target.value)}>
-                        <option value="">Tipo da Obra</option>
-                        <option value="Mangá">Mangá</option>
-                        <option value="Graphic Novels">Graphic Novels</option>
-                        <option value="Webcomics">Webcomics</option>
-                        <option value="Tirinha">Tirinha de Jornal</option>
-                        <option value="Banda Desenhada">Banda Desenhada</option>
-                        <option value="Manhwa">Manhwa</option>
-                        <option value="Super-heróis">Super-heróis</option>
-                        <option value="Histórias Infantis">Histórias Infantis</option>
-                        <option value="Documentais">Documentais</option>
-                    </select>
-                    <select className={style.select} value={estadoObra} 
-                            onChange={(e) => setEstadoObra(e.target.value)}>
-                        <option value="">Estado da Obra</option>
-                        <option value="Publicando">Publicando</option>
-                        <option value="Finalizado">Finalizado</option>
-                        <option value="Pausado">Pausado</option>
-                        <option value="Cancelado">Cancelado</option>
-                    </select>
-                    <button className={style.generos} onClick={handleOpenModal}>Selecione Gêneros</button>
-                </div>
-                <Cards data={filtroObras}/>
-            </div>
-            <ModalGenero isOpen={isModalOpen} onClose={handleCloseModal} selecionaGenero={selecioneGenero} 
+  // useEffect para buscar os tipos e estados de obra da API
+  useEffect(() => {
+    const loadTiposEEstados = async () => {
+      try {
+        const tipos = await getTipos();
+        const estados = await getEstados();
+        setTiposObra(tipos);   // Armazena os tipos de obra
+        setEstadosObra(estados); // Armazena os estados de obra
+      } catch (error) {
+        console.error("Erro ao buscar tipos e estados:", error);
+      }
+    };
+
+    loadTiposEEstados(); // Carrega as informações ao montar o componente
+  }, []);
+
+  return (
+    <>
+      <Menu />
+      <ModalPerfil />
+      <div className={style.container}>
+        <div className={style.titulo}>
+          <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
+          <h1>Pesquisa Avançada</h1>
+        </div>
+        <div className={style.pesquisaContainer}>
+          <input type="text" placeholder="Pesquisar..." className={style.pesquisa} 
+                 value={pesquisar} onChange={(e) => setPesquisar(e.target.value)} />
+          
+          <select className={style.select} value={tipoObra} onChange={(e) => setTipoObra(e.target.value)}>
+            <option value="">Tipo da Obra</option>
+            {tiposObra.map(tipo => (
+              <option key={tipo} value={tipo}>{tipo}</option>
+            ))}
+          </select>
+          
+          <select className={style.select} value={estadoObra} onChange={(e) => setEstadoObra(e.target.value)}>
+            <option value="">Estado da Obra</option>
+            {estadosObra.map(estado => (
+              <option key={estado} value={estado}>{estado}</option>
+            ))}
+          </select>
+
+          <button className={style.generos} onClick={handleOpenModal}>Selecione Gêneros</button>
+        </div>
+        <Cards data={filtroObras} />
+      </div>
+      <ModalGenero isOpen={isModalOpen} onClose={handleCloseModal} selecionaGenero={selecioneGenero} 
                    onSelectGenre={identificarGenero}>
-            </ModalGenero>
-        </>
-    )
+      </ModalGenero>
+    </>
+  );
 }

@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import style from './style.module.css'
+import { getGeneros } from '@/app/api/routes';
 
 type ModalProps = {
     isOpen: boolean;
@@ -7,26 +9,19 @@ type ModalProps = {
     onSelectGenre: (selectedGenres: string[]) => void;
 };
 
-const genres = [
-    "Ação",
-    "Aventura",
-    "Romance",
-    "Comédia",
-    "Drama",
-    "Terror",
-    "Policial",
-    "Psicológico",
-    "Ficção Psicológica",
-    "Fantasia",
-    "Sobrenatural",
-    "Mistério",
-    "Político",
-    "Social",
-    "Slice of Life",
-    "Ficção Científica",
-];
-
 export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGenero, onSelectGenre }) => {
+    const [generos, setGeneros] = useState<string[]>([])
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+        if (isOpen) {
+            getGeneros()
+                .then((data) => setGeneros(data)).catch((error) => {
+                    setError('Erro ao carregar Gêneros')
+                    console.log(error)
+                })
+        }
+    }, [isOpen])
 
     if (!isOpen) return null;
 
@@ -44,19 +39,19 @@ export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGe
                 <div className={style.modal} onClick={handleContentClick}>
                     <h2 className={style.titulo}>Selecione os Gêneros</h2>
                     <div className={style.checklistContainer}>
-                    {genres.map((genre) => (
-                        <label key={genre} className={style.checkboxItem}>
+                    {generos.map((genero) => (
+                        <label key={genero} className={style.checkboxItem}>
                             <input
                                 type="checkbox"
-                                checked={selecionaGenero.includes(genre)}
+                                checked={selecionaGenero.includes(genero)}
                                 onChange={() => {
-                                    const updatedGenres = selecionaGenero.includes(genre)
-                                            ? selecionaGenero.filter(g => g !== genre) // Desmarcar
-                                            : [...selecionaGenero, genre]; // Marcar
+                                    const updatedGenres = selecionaGenero.includes(genero)
+                                            ? selecionaGenero.filter(g => g !== genero) // Desmarcar
+                                            : [...selecionaGenero, genero]; // Marcar
                                         onSelectGenre(updatedGenres);
                                 }}
                             />
-                            {genre}
+                            {genero}
                         </label>
                     ))}
                     </div>
