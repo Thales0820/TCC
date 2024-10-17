@@ -1,66 +1,59 @@
-import { useEffect, useState } from 'react';
-import style from './style.module.css'
-import { getGeneros } from '@/app/api/routes';
+// ModalGenero.tsx
+import React, { useState } from 'react';
+import style from './style.module.css';
 
-type ModalProps = {
-    isOpen: boolean;
-    onClose: () => void;
-    selecionaGenero: string[]; // Gêneros para o checklist
-    onSelectGenre: (selectedGenres: string[]) => void;
-};
-
-export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGenero, onSelectGenre }) => {
-    const [generos, setGeneros] = useState<string[]>([])
-    const [error, setError] = useState<string | null>(null)
-
-    useEffect(() => {
-        if (isOpen) {
-            getGeneros()
-                .then((data) => setGeneros(data)).catch((error) => {
-                    setError('Erro ao carregar Gêneros')
-                    console.log(error)
-                })
-        }
-    }, [isOpen])
-
-    if (!isOpen) return null;
-
-    const handleContentClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e.stopPropagation();
-    };
-
-    const limparGeneros = () => {
-        onSelectGenre([]); // Reseta o array de gêneros selecionados
-    };
-
-    return(
-        <>
-            <div className={style.modalFundo} onClick={onClose}>
-                <div className={style.modal} onClick={handleContentClick}>
-                    <h2 className={style.titulo}>Selecione os Gêneros</h2>
-                    <div className={style.checklistContainer}>
-                    {generos.map((genero) => (
-                        <label key={genero} className={style.checkboxItem}>
-                            <input
-                                type="checkbox"
-                                checked={selecionaGenero.includes(genero)}
-                                onChange={() => {
-                                    const updatedGenres = selecionaGenero.includes(genero)
-                                            ? selecionaGenero.filter(g => g !== genero) // Desmarcar
-                                            : [...selecionaGenero, genero]; // Marcar
-                                        onSelectGenre(updatedGenres);
-                                }}
-                            />
-                            {genero}
-                        </label>
-                    ))}
-                    </div>
-                    <div className={style.controle}>
-                        <button onClick={onClose} className={style.botao}>Confirmar</button>
-                        <button onClick={limparGeneros} className={style.botao}>Limpar</button>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
+// Defina a interface Genero
+interface Genero {
+  id: string;
+  nome: string;
 }
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  selecionaGenero: string[];
+  onSelectGenre: (selected: string[]) => void;
+  generos: Genero[]; // Adicione esta linha para incluir generos
+}
+
+export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGenero, onSelectGenre, generos }) => {
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(selecionaGenero);
+
+  const handleGenreToggle = (id: string) => {
+    setSelectedGenres((prevSelected) => {
+      if (prevSelected.includes(id)) {
+        return prevSelected.filter(g => g !== id);
+      } else {
+        return [...prevSelected, id];
+      }
+    });
+  };
+
+  const handleConfirm = () => {
+    onSelectGenre(selectedGenres);
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className={style.modal}>
+      <h2>Selecionar Gêneros</h2>
+      <div className={style.genreList}>
+        {generos.map((genero) => (
+          <div key={genero.id}>
+            <input
+              type="checkbox"
+              id={genero.id}
+              checked={selectedGenres.includes(genero.id)}
+              onChange={() => handleGenreToggle(genero.id)}
+            />
+            <label htmlFor={genero.id}>{genero.nome}</label>
+          </div>
+        ))}
+      </div>
+      <button onClick={handleConfirm}>Confirmar</button>
+      <button onClick={onClose}>Cancelar</button>
+    </div>
+  );
+};

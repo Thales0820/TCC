@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\v1\ComentarioController;
 use App\Http\Controllers\Api\v1\GeneroController;
 use App\Http\Controllers\Api\v1\historicoUsuarioController;
 use App\Http\Controllers\Api\v1\LeituraController;
-
+use App\Http\Controllers\Api\V1\ObraGeneroController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +31,7 @@ Route::group(['prefix' => 'v1'], function() {
     Route::apiResource('obras', ObraController::class);
     Route::apiResource('generos', GeneroController::class);
     Route::apiResource('historico',historicoUsuarioController::class);
+    Route::apiResource('obragenero',ObraGeneroController::class);
 
     Route::post('usuario/login',[ UsuarioController::class, 'login']);
  });

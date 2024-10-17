@@ -27,7 +27,6 @@ return new class extends Migration
             $table->foreign('autor_id')->references('id')->on('usuarios')->onDelete('cascade');
             $table->foreign('tipo_id')->references('id')->on('tipos')->onDelete('cascade');
             $table->foreign('estado_id')->references('id')->on('estados')->onDelete('cascade');
-
         });
     }
 
