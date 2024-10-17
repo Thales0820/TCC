@@ -36,7 +36,7 @@ export default function Login() {
                 console.log(data);
                 
                 // Armazena o token no cookie usando nookies
-                setCookie(undefined, 'authToken', data.token, { path: '/' });
+                //setCookie(undefined, 'authToken', data.token, { path: '/' });
                 
                 // Redireciona para a página inicial
                 router.push('/home');

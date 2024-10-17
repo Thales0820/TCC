@@ -11,7 +11,6 @@ export default function CadastroUsuario() {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [confirmarSenha, setConfirmarSenha] = useState('');
     const [fotoPerfil, setFotoPerfil] = useState<File | null>(null); // Arquivo da foto
     const [perfilId, setPerfilId] = useState(''); // ID do perfil
     const [perfis, setPerfis] = useState([]); // Lista de perfis a serem carregados da API
@@ -34,12 +33,6 @@ export default function CadastroUsuario() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
-
-        // Verificação se as senhas coincidem
-        if (senha !== confirmarSenha) {
-            setError('As senhas não coincidem.');
-            return;
-        }
 
         // Criando um FormData para enviar arquivos e dados juntos
         const formData = new FormData();
@@ -65,7 +58,6 @@ export default function CadastroUsuario() {
             setNome('');
             setEmail('');
             setSenha('');
-            setConfirmarSenha('');
             setFotoPerfil(null);
             setPerfilId('');
 
@@ -117,38 +109,38 @@ export default function CadastroUsuario() {
                         )}
                         <form onSubmit={handleSubmit} className={style.form}>
                             <label htmlFor="nome">Nome</label>
-                            <input type="text" id="nome" placeholder="Digite seu nome de Usúario" value={nome}
-                                onChange={(e) => setNome(e.target.value)}required/>
-                            <label htmlFor="email">E_mail</label>
+                            <input type="text" id="nome" placeholder="Digite seu nome de Usuário" value={nome}
+                                onChange={(e) => setNome(e.target.value)} required />
+                            <label htmlFor="email">E-mail</label>
                             <input type="email" id="email" placeholder="exemplo@gmail.com" value={email}
-                                onChange={(e) => setEmail(e.target.value)} required/>
+                                onChange={(e) => setEmail(e.target.value)} required />
                             <label htmlFor="password">Senha</label>
                             <div className={style.inputSenhaContainer}>
                                 <input type={mostrarSenha ? "text" : "password"} id="senha" value={senha}
-                                    placeholder="Digite sua Senha" onChange={(e) => setSenha(e.target.value)}required/>
+                                    placeholder="Digite sua Senha" onChange={(e) => setSenha(e.target.value)} required />
                                 <span onClick={toggleMostrarSenha} className={style.iconeSenha}>
-                                    {mostrarSenha ? <IoEyeOff size={20}/> : <IoEye size={20}/>}
+                                    {mostrarSenha ? <IoEyeOff size={20} /> : <IoEye size={20} />}
                                 </span>
                             </div>
                             <div className={style.formGroup}>
                                 <label htmlFor="fotoPerfil">Foto de Perfil</label>
                                 <input type="file" id="fotoPerfil" accept="image/*" onChange={handleFotoChange}
-                                    className={style.fileInputStyled}/>
+                                    className={style.fileInputStyled} />
                                 <div className={style.verticalBar}></div>
                             </div>
                             <div className={style.rememberMe}>
-                            {perfis.map((perfil: any) => (
-                                <div key={perfil.id}>
-                                    <input 
-                                        type="checkbox" 
-                                        id={perfil.id} 
-                                        value={perfil.id} 
-                                        checked={perfilId === perfil.id} 
-                                        onChange={() => setPerfilId(perfil.id)} 
-                                    />
-                                    <label htmlFor={perfil.id}>{perfil.tipo}</label>
-                                </div>
-                            ))}
+                                {perfis.map((perfil: any) => (
+                                    <div key={perfil.id}>
+                                        <input
+                                            type="checkbox"
+                                            id={perfil.id}
+                                            value={perfil.id}
+                                            checked={perfilId === perfil.id}
+                                            onChange={() => setPerfilId(perfil.id)}
+                                        />
+                                        <label htmlFor={perfil.id}>{perfil.tipo}</label>
+                                    </div>
+                                ))}
                             </div>
                             <button type="submit">Cadastrar</button>
                         </form>

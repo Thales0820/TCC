@@ -22,6 +22,7 @@
                     <th>Likes</th>
                     <th>Estado</th>
                     <th>Tipo Obra</th>
+                    <th>Gênero</th>
                     <th>Sinopse</th>
                     <th></th>
                 </tr>
@@ -34,7 +35,8 @@
                     <td>{{ $obra->usuario->nome}}</td>
                     <td>{{ $obra->likes }}</td>
                     <td>{{ $obra->estado ? $obra->estado->nome : 'Estado desconhecido' }}</td>
-                    <td>{{ $obra->tipo ? $obra->tipo->nome : 'Estado desconhecido' }}</td>
+                    <td>{{ $obra->tipo ? $obra->tipo->nome : 'Tipo desconhecido' }}</td>
+                    <td>{{$obra->genero ? $obra->genero->nome : 'genero desconhecido'}}</td>
                     <td>{{ $obra->sinopse }}</td>
                     <td>
                         <form action="{{ route('dashboardObra.destroy', $obra->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar esta obra?');">
