@@ -127,6 +127,10 @@
     cursor: pointer;
 }
 
+.curtir:hover {
+    color: #007bff;
+}
+
 .like {
     color: #007bff; /* Cor quando está com like */
 }
@@ -145,17 +149,16 @@
     color: #007bff;
 }
 
-.icones svg:hover {
-    color: #007bff;
-}
-
-.icones i {
-    font-size: 37px;
-    cursor: pointer;
-}
-
-.icones i:hover {
+.fechado:hover {
     color: #000000;
+}
+
+.aberto {
+    color: #000000;
+}
+
+.aberto:hover {
+    color: #ffffff;
 }
 
 .topoCapitulos {

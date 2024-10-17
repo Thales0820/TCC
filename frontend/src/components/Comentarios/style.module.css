@@ -1,0 +1,85 @@
+.comentarios {
+    width: 100%;
+    max-width: 800px;
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;
+}
+  
+.comentarios h1 {
+    font-size: 50px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.novoComentario {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    margin-bottom: 25px;
+}
+
+.iconeUsuario {
+    color: #ffffff;
+}
+  
+.novoComentario input {
+    margin-top: 15px;
+    margin-left: 10px;
+    width: 100%;
+    border: 0;
+    outline: none;
+    background-color: transparent;
+    color: #fff;
+    font-size: 16px;
+    border-bottom: 2px solid #ffffff;
+}
+
+.novoComentario input::placeholder {
+    color: #fff; /* Cor do placeholder */
+    font-size: 20px;
+}
+  
+.comentario {
+    display: flex;
+    align-items: flex-start;
+    background-color: #424242; /* Fundo dos comentários */
+    padding: 10px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.iconeUsuarioComentario {
+    margin-right: 10px;
+    top: 50%;
+}
+
+.conteudoComentario {
+    flex: 1;
+}
+
+.usuario {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+  
+.texto {
+    color: #ffffff; /* Texto dos comentários */
+    width: 95%;
+}
+  
+.like {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffffff;
+    cursor: pointer;
+}
+  
+.like:hover {
+    color: #007bff;
+}
+  

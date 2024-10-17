@@ -7,6 +7,8 @@ import { BiArrowFromBottom, BiArrowToBottom, BiSolidLike } from 'react-icons/bi'
 import { FaPlus } from 'react-icons/fa';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { useState } from 'react';
+import Comentarios from '@/components/Comentarios';
+import { BsFillChatLeftTextFill } from 'react-icons/bs';
 
 interface Capitulo {
     numero: number;
@@ -31,6 +33,7 @@ export default function Obra() {
 
     const [ordemCrescente, setOrdemCrescente] = useState(true)
     const [like, setLike] = useState(false);
+    const [mostrarComentarios, setMostrarComentarios] = useState(false);
     const [obra, setObra] = useState<ObraInfo>({
         titulo: 'One Piece',
         image: 'https://mangadex.org/covers/a1c7c817-4e59-43b7-9365-09675a149a6f/c4bdbbc6-f6c1-4fe9-ab28-ff9ab44b6694.png',
@@ -73,6 +76,10 @@ export default function Obra() {
         const novoLike = like ? obra.likes - 1 : obra.likes + 1;
         setObra({ ...obra, likes: novoLike})
     }
+
+    const toggleComentarios = () => {
+        setMostrarComentarios(!mostrarComentarios);
+    };
     return(
         <>
         <Menu />
@@ -104,38 +111,43 @@ export default function Obra() {
                     <button><FaPlus size={25}/> Adicionar</button>
                     <div className={style.icones}>
                         <div onClick={toggleLike}>
-                            <BiSolidLike size={45} className={like ? style.like : ''}/>
+                            <BiSolidLike size={45} className={like ? style.like : style.curtir}/>
                                 {obra.likes > 0 && (
                                     <span className={like ? style.curtido : style.likesCount}>{obra.likes}</span>
                                 )}
                         </div>
-                        <i className="bi bi-chat-left-text"></i>
+                        <BsFillChatLeftTextFill size={45} onClick={toggleComentarios} 
+                            className={mostrarComentarios ? style.aberto : style.fechado}/>
                     </div>
                 </div>
-                <div className={style.capitulosContainer}>
-                    <div className={style.topoCapitulos}>
-                        <h1>Capítulos: </h1>
-                        <div className={style.mudarOrdem}>
-                            <BiArrowToBottom size={45} 
-                            className={ordemCrescente ? style.selecionado : ''} onClick={toggleOrdem}/>
-                            <BiArrowFromBottom size={45} className={!ordemCrescente ? style.selecionado : ''} 
-                            onClick={toggleOrdem}/>
+                {mostrarComentarios ? (
+                    <Comentarios />
+                ) : (
+                    <div className={style.capitulosContainer}>
+                        <div className={style.topoCapitulos}>
+                            <h1>Capítulos: </h1>
+                            <div className={style.mudarOrdem}>
+                                <BiArrowToBottom size={45} 
+                                className={ordemCrescente ? style.selecionado : ''} onClick={toggleOrdem}/>
+                                <BiArrowFromBottom size={45} className={!ordemCrescente ? style.selecionado : ''} 
+                                onClick={toggleOrdem}/>
+                            </div>
+                        </div>
+                        <div className={style.capitulos}>
+                            {obra.capitulos.map(cap => (
+                                <div className={style.capitulo} key={cap.numero}>
+                                    {cap.visualizado ? (
+                                        <IoEyeOff size={25} onClick={() => toggleVisualizacao(cap.numero)} />
+                                    ) : (
+                                        <IoEye size={25} onClick={() => toggleVisualizacao(cap.numero)} />
+                                    )}
+                                    <span className={style.numero}>Cap. {cap.numero}</span>
+                                    <span className={style.tituloCap}>{cap.titulo}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
-                    <div className={style.capitulos}>
-                        {obra.capitulos.map(cap => (
-                            <div className={style.capitulo} key={cap.numero}>
-                                {cap.visualizado ? (
-                                    <IoEyeOff size={25} onClick={() => toggleVisualizacao(cap.numero)} />
-                                ) : (
-                                    <IoEye size={25} onClick={() => toggleVisualizacao(cap.numero)} />
-                                )}
-                                <span className={style.numero}>Cap. {cap.numero}</span>
-                                <span className={style.tituloCap}>{cap.titulo}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                )}
             </div>
         </div>
         </>

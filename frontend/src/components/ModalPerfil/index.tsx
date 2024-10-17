@@ -34,7 +34,7 @@ export const ModalPerfil = () => {
                         <div className={style.lista}>
                             <ul>
                                 <Link href="/lista" legacyBehavior>
-                                    <li><FaBookmark size={25}/> Lista de Leitura</li>
+                                    <li><FaBookmark size={30}/> Lista de Leitura</li>
                                 </Link>
                                     <li><IoMdNotifications size={30}/> Notificações</li>
                                     <li><IoSettingsSharp size={30}/> Configuração</li>

@@ -80,6 +80,7 @@
 .lista li {
     display: flex;
     align-items: center;
+    text-align: start;
     margin: 20px 0;
     font-size: 1rem;
     font-weight: bold;
