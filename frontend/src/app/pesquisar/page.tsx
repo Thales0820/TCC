@@ -1,13 +1,13 @@
-"use client";
+"use client"
 import { useEffect, useState } from "react";
 import { Menu } from "@/components/Menu";
 import { useRouter } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa";
 import style from './style.module.css';
 import { Cards } from "@/components/Cards";
-import { ModalGenero } from "@/components/ModalGenero";
 import { ModalPerfil } from "@/components/ModalPerfil";
 import { getEstados, getTipos } from "../api/routes";
+import { FiltroGenero } from "@/components/FiltroGenero";
 
 interface Obra {
   image: string;
@@ -17,12 +17,8 @@ interface Obra {
   genero: string[];
 }
 
-interface Genero {
-  id: string; // Certifique-se que aqui é number
-  nome: string;
-}
-
 export default function Pesquisar() {
+
   const obrasData: Obra[] = [
     {
       image: "https://a-static.mlcdn.com.br/450x450/poster-cartaz-batman-a-piada-mortal-pop-arte-poster/poparteskins2/15938544114/bb3e16085364ca48b024042f6dc1548e.jpeg",
@@ -96,17 +92,16 @@ export default function Pesquisar() {
     },
   ];
 
-
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selecioneGenero, setSelecioneGenero] = useState<string[]>([]);
   const [tipoObra, setTipoObra] = useState("");
   const [estadoObra, setEstadoObra] = useState("");
   const [pesquisar, setPesquisar] = useState("");
-  const [tiposObra, setTiposObra] = useState<string[]>([]);
-  const [estadosObra, setEstadosObra] = useState<string[]>([]);
-  const [generosObra, setGenerosObra] = useState<Genero[]>([]); // Atualizado para Genero[]
+  const [tiposObra, setTiposObra] = useState<string[]>([]);  // Armazena os tipos de obra
+  const [estadosObra, setEstadosObra] = useState<string[]>([]);  // Armazena os estados de obra
 
+  // Função para abrir o modal de gêneros
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -135,25 +130,20 @@ export default function Pesquisar() {
     router.back();
   };
 
+  // useEffect para buscar os tipos e estados de obra da API
   useEffect(() => {
-    const loadTiposEEstadosEGeneros = async () => {
+    const loadTiposEEstados = async () => {
       try {
         const tipos = await getTipos();
         const estados = await getEstados();
-
-        // Fetch generos from the new API
-        const response = await fetch("http://127.0.0.1:8000/api/v1/generos");
-        const generosData: Genero[] = await response.json(); // Assuming it returns an array of Genero
-
-        setTiposObra(tipos);
-        setEstadosObra(estados);
-        setGenerosObra(generosData); // Armazena os gêneros no estado
+        setTiposObra(tipos);   // Armazena os tipos de obra
+        setEstadosObra(estados); // Armazena os estados de obra
       } catch (error) {
-        console.error("Erro ao buscar tipos, estados e gêneros:", error);
+        console.error("Erro ao buscar tipos e estados:", error);
       }
     };
 
-    loadTiposEEstadosEGeneros();
+    loadTiposEEstados(); // Carrega as informações ao montar o componente
   }, []);
 
   return (
@@ -166,21 +156,16 @@ export default function Pesquisar() {
           <h1>Pesquisa Avançada</h1>
         </div>
         <div className={style.pesquisaContainer}>
-          <input
-            type="text"
-            placeholder="Pesquisar..."
-            className={style.pesquisa}
-            value={pesquisar}
-            onChange={(e) => setPesquisar(e.target.value)}
-          />
-
+          <input type="text" placeholder="Pesquisar..." className={style.pesquisa} 
+                 value={pesquisar} onChange={(e) => setPesquisar(e.target.value)} />
+          
           <select className={style.select} value={tipoObra} onChange={(e) => setTipoObra(e.target.value)}>
             <option value="">Tipo da Obra</option>
             {tiposObra.map(tipo => (
               <option key={tipo} value={tipo}>{tipo}</option>
             ))}
           </select>
-
+          
           <select className={style.select} value={estadoObra} onChange={(e) => setEstadoObra(e.target.value)}>
             <option value="">Estado da Obra</option>
             {estadosObra.map(estado => (
@@ -192,13 +177,9 @@ export default function Pesquisar() {
         </div>
         <Cards data={filtroObras} />
       </div>
-      <ModalGenero
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        selecionaGenero={selecioneGenero}  // Passa os gêneros selecionados para o modal
-        onSelectGenre={identificarGenero}  // Passa a função que identifica os gêneros
-        generos={generosObra} // Passa os gêneros disponíveis corretamente
-      />
+      <FiltroGenero isOpen={isModalOpen} onClose={handleCloseModal} selecionaGenero={selecioneGenero} 
+                   onSelectGenre={identificarGenero}>
+      </FiltroGenero>
     </>
   );
 }

@@ -1,0 +1,112 @@
+.modalFundo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    font-family: "Comic Neue", system-ui;
+}
+    
+.modal {
+    background: #424242;
+    padding: 20px;
+    border-radius: 8px;
+    width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 101;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+    scrollbar-width: none; /* Para Firefox */
+    -ms-overflow-style: none;
+}
+  
+.modal::-webkit-scrollbar {
+    display: none; /* Para Chrome, Safari e Edge */
+}
+  
+.titulo {
+    text-align: center;
+}
+  
+.checklistContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-height: 100%;
+}
+  
+.checkboxItem {
+    width: 30%;
+    margin: 10px 0;
+    padding: 10px; /* Adiciona espaçamento interno */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 8px; /* Bordas arredondadas */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave */
+    cursor: pointer; /* Indica que é clicável */
+    font-weight: bold;
+    font-size: 20px;
+}
+  
+.checkboxItem:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Fundo um pouco mais claro ao passar o mouse */
+}
+  
+.checkboxItem input {
+    margin-right: 10px;
+    -webkit-appearance: none; /* Remove a aparência padrão */
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Borda inicial do checkbox */
+    border-radius: 4px; /* Bordas arredondadas */
+    background-color: transparent; /* Fundo transparente inicialmente */
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+  
+.checkboxItem input:checked {
+    background-color: black; /* Fundo preto quando marcado */
+    border-color: black; /* Borda preta ao marcar */
+}
+  
+.checkboxItem input:checked::before {
+    content: "✔";
+    display: block;
+    color: white;
+    text-align: center;
+    line-height: 19px;
+    font-size: 23px;
+}
+  
+.checkboxItem label {
+    flex: 1;
+    font-size: 1.2em; /* Aumenta o tamanho da fonte */
+}
+  
+.selectedGenres {
+    margin-top: 20px;
+}
+  
+.controle {
+    display: flex;
+    justify-content: space-between;
+}
+  
+.botao {
+    padding: 10px 20px;
+    width: 210px;
+    font-size: 16px;
+    background-color: #222831;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
