@@ -144,6 +144,31 @@
 .submitButton:hover {
     background-color: #000000;
 }
+/* Estilo para o botão Selecionar Gêneros */
+.generosButton {
+    padding: 10px 15px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #222831; /* Mesmo fundo do .submitButton */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px; /* Adiciona um espaçamento acima */
+    width: 100%; /* Torna o botão responsivo como os outros elementos */
+}
+
+.generosButton:hover {
+    background-color: #000000; /* Mesmo efeito de hover do .submitButton */
+}
+
+/* Container opcional para melhor alinhamento */
+.generosContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 
 /* Responsividade */
 @media (max-width: 768px) {

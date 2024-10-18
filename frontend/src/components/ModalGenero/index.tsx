@@ -37,23 +37,28 @@ export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGe
   if (!isOpen) return null;
 
   return (
-    <div className={style.modal}>
-      <h2>Selecionar Gêneros</h2>
-      <div className={style.genreList}>
-        {generos.map((genero) => (
-          <div key={genero.id}>
-            <input
-              type="checkbox"
-              id={genero.id}
-              checked={selectedGenres.includes(genero.id)}
-              onChange={() => handleGenreToggle(genero.id)}
-            />
-            <label htmlFor={genero.id}>{genero.nome}</label>
-          </div>
-        ))}
+    <div className={style.modalFundo}>
+      <div className={style.modal}>
+        <h2 className={style.titulo}>Selecionar Gêneros</h2>
+        <div className={style.genreList}>
+          {generos.map((genero) => (
+            <div key={genero.id} className={style.checkboxItem}>
+              <input
+                type="checkbox"
+                id={genero.id}
+                checked={selectedGenres.includes(genero.id)}
+                onChange={() => handleGenreToggle(genero.id)}
+              />
+              <label htmlFor={genero.id}>{genero.nome}</label>
+            </div>
+          ))}
+        </div>
+        <div className={style.controle}>
+          <button onClick={handleConfirm} className={style.botao}>Confirmar</button>
+          <button onClick={onClose} className={style.botao}>Cancelar</button>
+        </div>
       </div>
-      <button onClick={handleConfirm}>Confirmar</button>
-      <button onClick={onClose}>Cancelar</button>
     </div>
   );
+  
 };

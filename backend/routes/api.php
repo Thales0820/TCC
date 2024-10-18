@@ -32,6 +32,8 @@ Route::group(['prefix' => 'v1'], function() {
     Route::apiResource('generos', GeneroController::class);
     Route::apiResource('historico',historicoUsuarioController::class);
     Route::apiResource('obragenero',ObraGeneroController::class);
+    Route::apiResource('obraslancadas', ObraController::class);
+
 
     Route::post('usuario/login',[ UsuarioController::class, 'login']);
  });

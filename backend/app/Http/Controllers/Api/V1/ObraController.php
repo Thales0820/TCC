@@ -87,8 +87,13 @@ class ObraController extends Controller
         ]);
 
         $data = $request->only([
-            'titulo', 'sinopse', 'autor_id', 'likes',
-            'data_publicacao', 'tipo_id', 'estado_id'
+            'titulo',
+            'sinopse',
+            'autor_id',
+            'likes',
+            'data_publicacao',
+            'tipo_id',
+            'estado_id'
         ]);
 
         // Atualizando a imagem se necessário
@@ -122,5 +127,12 @@ class ObraController extends Controller
         $obra->delete();
 
         return response()->json(null, 204);
+    }
+    public function obrasLancadasRecentes()
+    {
+        $dataLimite = now()->subDays(5); // Define a data limite para 5 dias atrás
+        $obrasRecentes = Obra::where('data_publicacao', '>=', $dataLimite)->get();
+
+        return response()->json($obrasRecentes);
     }
 }

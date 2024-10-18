@@ -187,10 +187,17 @@ export default function CriarObra() {
                             ))}
                         </select>
                     </div>
-                    <div className={style.formGroup}>
+                    <div className={`${style.formGroup} ${style.generosContainer}`}>
                         <label>Gêneros:</label>
-                        <button type="button" onClick={() => setModalOpen(true)}>Selecionar Gêneros</button>
+                        <button
+                            type="button"
+                            className={style.generosButton}
+                            onClick={() => setModalOpen(true)}
+                        >
+                            Selecionar Gêneros
+                        </button>
                     </div>
+
                     <button type="submit" className={style.submitButton}>Criar Obra</button>
                 </form>
                 <ModalGenero
