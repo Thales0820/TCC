@@ -2,7 +2,7 @@
 import style from "./style.module.css";
 
 interface CardItem {
-  image: string;
+  capa: string;
   titulo: string;
 }
 
@@ -17,7 +17,7 @@ export const Cards: React.FC<CardsProps> = ({ data }) => {
       <div className={style.cardsContainer}>
           {data.map((item, index) => (
             <div key={index} className={style.card}>
-              <img src={item.image} alt={`Capa de ${item.titulo}`} />
+               <img src={`http://localhost:8000/${item.capa}`} alt={`Capa de ${item.titulo}`} />
               <p>{item.titulo}</p>
             </div>
         ))}

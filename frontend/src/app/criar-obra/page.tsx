@@ -210,8 +210,6 @@ export default function CriarObra() {
                     }}
                     generos={generos} // Assegure-se de que esta linha está presente
                 />
-
-
             </div>
         </>
     );

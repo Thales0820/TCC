@@ -7,7 +7,7 @@ export const getUsuarios = async () => {
     const response = await axios.get(`${API_URL}/usuarios`);
     return response.data;
   } catch (error) {
-      console.error('Erro ao buscar Idosos:', error);
+      console.error('Erro ao buscar Usuario:', error);
       throw error;
     }
 };
