@@ -22,12 +22,12 @@ class Obra extends Model
 
     public function tipo()
     {
-        return $this->belongsTo(Tipo::class);
+        return $this->belongsTo(Tipo::class, 'tipo_id');
     }
 
     public function estado()
     {
-        return $this->belongsTo(Estado::class);
+        return $this->belongsTo(Estado::class, 'estado_id');
     }
 
     public function comentarios()
