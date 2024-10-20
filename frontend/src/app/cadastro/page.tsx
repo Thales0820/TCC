@@ -126,7 +126,6 @@ export default function CadastroUsuario() {
                                 <label htmlFor="fotoPerfil">Foto de Perfil</label>
                                 <input type="file" id="fotoPerfil" accept="image/*" onChange={handleFotoChange}
                                     className={style.fileInputStyled} />
-                                <div className={style.verticalBar}></div>
                             </div>
                             <div className={style.rememberMe}>
                                 {perfis.map((perfil: any) => (

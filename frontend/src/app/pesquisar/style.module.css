@@ -68,6 +68,10 @@
     font-weight: bold;
 }
 
+.select option:hover {
+    background-color: #000000;
+}
+
 .generos {
     padding: 10px 20px;
     width: 210px;

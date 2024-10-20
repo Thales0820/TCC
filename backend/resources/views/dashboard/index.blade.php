@@ -17,6 +17,7 @@
                 <thead class="thead-dark">
                     <tr>
                         <th>Nome</th>
+                        <th>Foto Perfil</th>
                         <th>Email</th>
                         <th>Perfil</th>
                         <th></th>
@@ -26,6 +27,7 @@
                     @foreach($usuarios as $usuario)
                     <tr>
                         <td>{{ $usuario->nome }}</td>
+                        <td><img src="{{ $usuario->foto_perfil }}" alt="Foto do {{ $usuario->nome }}" width="200px" height="auto"></td>
                         <td>{{ $usuario->email }}</td>
                         <td>{{ $usuario->perfil->tipo ?? 'Sem perfil' }}</td>
                         <td>
