@@ -193,7 +193,6 @@ class UsuarioController extends Controller
         ]);
 
         // Lógica para resetar a senha aqui
-        // Exemplo:
         $usuario = Usuario::where('email', $request->email)->first();
         if (!$usuario) {
             return response()->json(['message' => 'Usuário não encontrado'], 404);

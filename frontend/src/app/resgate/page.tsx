@@ -29,6 +29,10 @@ const PasswordReset = () => {
         }
     };
 
+    const handleBackToLogin = () => {
+        router.push('/login'); // Redirecionar para a página de login
+    };
+
     return (
         <div className={styles.container}>
             <h2>Recuperação de Senha</h2>
@@ -47,6 +51,9 @@ const PasswordReset = () => {
             </form>
             {message && <p className={styles.message}>{message}</p>}
             {error && <p className={styles.error}>{error}</p>}
+            <button onClick={handleBackToLogin} className={styles.buttonSecondary}>
+                Voltar para Login
+            </button>
         </div>
     );
 };
