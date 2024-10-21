@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class UsuarioController extends Controller
 {
@@ -90,7 +93,10 @@ class UsuarioController extends Controller
         ]);
 
         $data = $request->only([
-            'nome', 'banner', 'email', 'perfil_id'
+            'nome',
+            'banner',
+            'email',
+            'perfil_id'
         ]);
 
         // Handle file upload if a new file is provided
@@ -130,36 +136,73 @@ class UsuarioController extends Controller
      * Login method for authentication.
      */
     public function login(Request $request)
-{
-    try {
-        // Validação dos dados de entrada
-        $validated = $request->validate([
-            'email' => 'required|email',
-            'senha' => 'required|string',
-        ]);
+    {
+        try {
+            // Validação dos dados de entrada
+            $validated = $request->validate([
+                'email' => 'required|email',
+                'senha' => 'required|string',
+            ]);
 
-        // Buscar o usuário pelo email
-        $usuario = Usuario::where('email', $validated['email'])->first();
+            // Buscar o usuário pelo email
+            $usuario = Usuario::where('email', $validated['email'])->first();
 
-        // Verificar se o usuário foi encontrado e a senha está correta
-        if (!$usuario || !Hash::check($validated['senha'], $usuario->senha)) {
-            return response()->json(['error' => 'Credenciais inválidas'], 401);
+            // Verificar se o usuário foi encontrado e a senha está correta
+            if (!$usuario || !Hash::check($validated['senha'], $usuario->senha)) {
+                return response()->json(['error' => 'Credenciais inválidas'], 401);
+            }
+
+            // Gerar o token de autenticação
+            $token = $usuario->createToken('token-name')->plainTextToken;
+
+            // Retornar a resposta JSON com o token e os dados do usuário
+            return response()->json([
+                'token' => $token,
+                'user' => $usuario,
+            ], 200);
+        } catch (\Exception $e) {
+            // Log do erro e retorno de mensagem de erro
+            Log::error('Erro no login: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro no servidor'], 500);
+        }
+    }
+    // Método para verificar o email e enviar o token
+    public function verificarEmail(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $usuario = Usuario::where('email', $request->email)->first();
+
+        if (!$usuario) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
         }
 
-        // Gerar o token de autenticação
-        $token = $usuario->createToken('token-name')->plainTextToken;
+        // Gerar o token de redefinição de senha e armazená-lo
+        $token = Str::random(60);
+        DB::table('reseta_senha')->insert(['email' => $usuario->email, 'token' => $token]);
 
-        // Retornar a resposta JSON com o token e os dados do usuário
-        return response()->json([
-            'token' => $token,
-            'user' => $usuario,
-        ], 200);
-
-    } catch (\Exception $e) {
-        // Log do erro e retorno de mensagem de erro
-        Log::error('Erro no login: ' . $e->getMessage());
-        return response()->json(['error' => 'Erro no servidor'], 500);
+        // Aqui você enviaria um e-mail com o link de redefinição de senha
+        return response()->json(['message' => 'Token gerado com sucesso', 'token' => $token]);
     }
-}
+    public function resetarSenha(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string',
+            'email' => 'required|email',
+            'nova_senha' => 'required|string|min:6|confirmed', // Use 'nova_senha_confirmation' se você tiver esse campo
+        ]);
 
+        // Lógica para resetar a senha aqui
+        // Exemplo:
+        $usuario = Usuario::where('email', $request->email)->first();
+        if (!$usuario) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
+        // Atualize a senha (supondo que você use bcrypt)
+        $usuario->senha = bcrypt($request->nova_senha);
+        $usuario->save();
+
+        return response()->json(['message' => 'Senha atualizada com sucesso']);
+    }
 }

@@ -19,9 +19,9 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::group(['prefix' => 'v1'], function() {
+Route::group(['prefix' => 'v1'], function () {
     Route::apiResource('usuarios', UsuarioController::class);
-    Route::apiResource('tipos',TipoController::class);
+    Route::apiResource('tipos', TipoController::class);
     Route::apiResource('capitulos', CapituloController::class);
     Route::apiResource('leituras', LeituraController::class);
     Route::apiResource('paginas', PaginaController::class);
@@ -30,15 +30,16 @@ Route::group(['prefix' => 'v1'], function() {
     Route::apiResource('comentarios', ComentarioController::class);
     Route::apiResource('obras', ObraController::class);
     Route::apiResource('generos', GeneroController::class);
-    Route::apiResource('historico',historicoUsuarioController::class);
-    Route::apiResource('obragenero',ObraGeneroController::class);
+    Route::apiResource('historico', historicoUsuarioController::class);
+    Route::apiResource('obragenero', ObraGeneroController::class);
     Route::apiResource('obraslancadas', ObraController::class);
 
 
-    Route::post('usuario/login',[ UsuarioController::class, 'login']);
- });
-
- Route::get('/', function () {
-    dd("dddd");
+    Route::post('usuario/login', [UsuarioController::class, 'login']);
+    Route::post('usuario/verificar-email', [UsuarioController::class, 'verificarEmail']);
+    Route::post('/usuarios/resetar-senha', [UsuarioController::class, 'resetarSenha']);
 });
 
+Route::get('/', function () {
+    dd("dddd");
+});
