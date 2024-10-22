@@ -30,7 +30,7 @@ class UsuarioController extends Controller
         // Validação dos dados de entrada
         $request->validate([
             'nome' => 'required|string|max:255',
-            'foto_perfil' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'foto_perfil' => 'required|image|mimes:jpeg,png,jpg|max:50000',
             'banner' => 'nullable|string|max:255',
             'email' => 'required|email|unique:usuarios,email',
             'senha' => 'required|string|min:6',
