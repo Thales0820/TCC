@@ -119,16 +119,6 @@
     cursor: pointer;
 }
 
-.verticalBar {
-    width: 2px;
-    background-color: #ffffff; /* Cor da barra vertical */
-    height: 45px; /* Para ajustar à altura do input */
-    margin-left: 10px; /* Espaço entre o botão e a barra */
-    position: absolute;
-    right: 330px;
-    top: 74.9%;
-}
-
 .rememberMe {
     display: flex;
     margin-bottom: 10px;
