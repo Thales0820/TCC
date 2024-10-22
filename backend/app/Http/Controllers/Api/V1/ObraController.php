@@ -24,7 +24,7 @@ class ObraController extends Controller
     {
         $request->validate([
             'titulo' => 'required|string|max:255',
-            'capa' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'capa' => 'required|image|mimes:jpeg,png,jpg|max:100000',
             'sinopse' => 'required|string',
             'autor_id' => 'required|exists:usuarios,id',
             'likes' => 'nullable|integer|min:0',
