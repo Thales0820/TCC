@@ -135,7 +135,7 @@ export const Pesquisar = () => {
                                 className={`${style.sugestaoItem} ${index === activeSuggestionIndex ? style.sugestaoAtiva : ""}`}
                             >
                                 {obra.titulo}
-                                <img src={`http://localhost:8000/${obra.capa}`} alt={`Capa de ${obra.titulo}`} className={style.capamSugestao}/>
+                                <img src={`http://localhost:8000/${obra.capa}`} alt={`Capa de ${obra.titulo}`} className={style.imagemSugestao}/>
                             </li>
                         ))}
                     </ul>
