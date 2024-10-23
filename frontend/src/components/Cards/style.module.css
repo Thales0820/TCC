@@ -20,6 +20,7 @@
 .card img {
     width: 100%;
     height: 100%;
+    cursor: pointer;
 }
 
 .card::after {
@@ -47,4 +48,3 @@
     box-sizing: border-box; /* Fundo escuro translúcido para dar contraste ao texto */
     z-index: 2;
 }
-  

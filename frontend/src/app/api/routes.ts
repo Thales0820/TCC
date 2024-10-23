@@ -58,3 +58,35 @@ export const getTipos = async () => {
   return response.data.map((tipo: { nome: string }) => tipo.nome)
                       .sort((a: string, b: string) => a.localeCompare(b));
 };
+
+export const getObras = async () => {
+  const response = await axios.get(`${API_URL}/obras`);
+  const obras = response.data;
+
+  return obras.map((obra: { id: number, capa: string, titulo: string }) => ({
+    id: obra.id,
+    capa: obra.capa,
+    titulo: obra.titulo
+  }));
+};
+
+export const getObraDetails = async (obraId: number) => {
+  const response = await axios.get(`${API_URL}/obras/${obraId}`);
+  const data = response.data;
+
+  return {
+    id: data.id,
+    titulo: data.titulo,
+    sinopse: data.sinopse,
+    capa: data.capa,
+    autor: {
+      nome: data.usuario.nome,
+      fotoPerfil: data.usuario.foto_perfil
+    },
+    dataPublicacao: data.data_publicacao,
+    tipo: data.tipo.nome,
+    estado: data.estado.nome,
+    generos: data.generos.map((genero: { nome: string }) => genero.nome),
+    likes: data.likes
+  };
+};

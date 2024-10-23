@@ -15,11 +15,10 @@ export const FiltroGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaG
 
     useEffect(() => {
         if (isOpen) {
-            getGeneros()
-                .then((data) => setGeneros(data)).catch((error) => {
-                    setError('Erro ao carregar Gêneros')
-                    console.log(error)
-                })
+            getGeneros().then((data) => setGeneros(data)).catch((error) => {
+                setError('Erro ao carregar Gêneros')
+                console.log(error)
+            })
         }
     }, [isOpen])
 
