@@ -54,13 +54,12 @@ export default function Home() {
                             <img src="https://mangadex.org/covers/4ada20eb-085a-491a-8c49-477ab42014d7/69098388-a967-464f-8178-344aa9bd4b31.jpg" alt="Capa de The Beginning After the End" />
                             <p>The Beginning After the End</p>
                         </div>
-                        {obras.map((obra: any) => (
+                        {/* {obras.map((obra: any) => (
                             <div key={obra.id} className={style.card}>
-                                {/* Verificação do caminho da capa */}
                                 <img src={`http://localhost:8000/${obra.capa}`} alt={`Capa de ${obra.titulo}`} />
                                 <p>{obra.titulo}</p>
                             </div>
-                        ))}
+                        ))} */}
                     </div>
                 </div>
             </div>

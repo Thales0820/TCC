@@ -70,23 +70,44 @@ export const getObras = async () => {
   }));
 };
 
-export const getObraDetails = async (obraId: number) => {
-  const response = await axios.get(`${API_URL}/obras/${obraId}`);
+export const getObraIds = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/obras`); // Suponha que essa rota retorna uma lista de obras
+    const data = response.data;
+
+    // Retorna um array de IDs das obras
+    return data.map((obra: { id: number }) => obra.id);
+  } catch (error) {
+    console.error("Erro ao buscar IDs de obras:", error);
+    return [];
+  }
+};
+
+
+export const getObraDetails = async (id: number) => {
+  const response = await axios.get(`${API_URL}/obras/${id}`);
   const data = response.data;
 
-  return {
-    id: data.id,
-    titulo: data.titulo,
-    sinopse: data.sinopse,
-    capa: data.capa,
-    autor: {
-      nome: data.usuario.nome,
-      fotoPerfil: data.usuario.foto_perfil
-    },
-    dataPublicacao: data.data_publicacao,
-    tipo: data.tipo.nome,
-    estado: data.estado.nome,
-    generos: data.generos.map((genero: { nome: string }) => genero.nome),
-    likes: data.likes
-  };
+  try {
+    const response = await axios.get(`${API_URL}/obras/${id}`);
+    const data = response.data;
+
+    return {
+      id: data.id,
+      titulo: data.titulo,
+      sinopse: data.sinopse,
+      capa: `http://127.0.0.1:8000/${data.capa}`, // Adicionando o caminho completo da imagem
+      autor: {
+        nome: data.usuario.nome,
+      },
+      dataPublicacao: data.data_publicacao,
+      tipo: data.tipo, // Verifique se data.tipo.nome é correto ou se é apenas data.tipo
+      estado: data.estado,
+      generos: data.generos,
+      likes: data.likes
+    };
+  } catch (error) {
+    console.error("Erro ao buscar detalhes da obra:", error);
+    return null; // Ou trate o erro de outra forma
+  }
 };

@@ -135,4 +135,34 @@ class ObraController extends Controller
 
         return response()->json($obrasRecentes);
     }
+
+    // Função show que retorna os detalhes da obra pelo ID
+    public function show($id)
+    {
+        // Busca a obra no banco de dados com o ID fornecido
+        $obra = Obra::with(['usuario', 'generos']) // Relacionamentos com autor (usuario) e gêneros
+                    ->find($id);
+
+        // Verifica se a obra foi encontrada
+        if (!$obra) {
+            return response()->json(['error' => 'Obra não encontrada'], 404);
+        }
+
+        // Formata a resposta da obra com os detalhes
+        return response()->json([
+            'id' => $obra->id,
+            'titulo' => $obra->titulo,
+            'sinopse' => $obra->sinopse,
+            'capa' => $obra->capa,
+            'usuario' => [
+                'nome' => $obra->usuario->nome,
+                'foto_perfil' => $obra->usuario->foto_perfil,
+            ],
+            'data_publicacao' => $obra->data_publicacao,
+            'tipo' => $obra->tipo->nome,  // Supondo que você tenha o relacionamento tipo
+            'estado' => $obra->estado->nome,  // Supondo que você tenha o relacionamento estado
+            'generos' => $obra->generos->pluck('nome'), // Retorna apenas os nomes dos gêneros
+            'likes' => $obra->likes, // Quantidade de likes, se houver
+        ]);
+    }
 }
