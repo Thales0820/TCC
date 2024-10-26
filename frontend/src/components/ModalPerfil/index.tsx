@@ -7,23 +7,28 @@ import { IoMdNotifications } from "react-icons/io";
 import { IoSettingsSharp } from "react-icons/io5";
 import Link from "next/link";
 import { parseCookies, destroyCookie } from 'nookies';
+import { jwtDecode } from "jwt-decode"; // Corrige para "jwtDecode"
 
-// Definição da interface para o perfil
+// Interface do payload do token
+interface TokenPayload {
+    sub: string; // ID do usuário no token
+}
+
 interface Perfil {
     id: number;
     tipo: string;
 }
 
-// Definição da interface para o usuário
 interface Usuario {
     id: number;
     nome: string;
-    perfil: Perfil | null; // Permite que perfil seja null
+    perfil: Perfil | null;
 }
 
 export const ModalPerfil = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [usuario, setUsuario] = useState<Usuario | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const toggleModal = () => {
         setIsOpen(!isOpen);
@@ -34,9 +39,12 @@ export const ModalPerfil = () => {
         const token = cookies['obra.token'];
 
         if (token) {
+            const decodedToken = jwtDecode<TokenPayload>(token); // Usando jwtDecode com a importação correta
+            const userId = decodedToken.sub;
+
             const fetchUserData = async () => {
                 try {
-                    const res = await fetch('http://127.0.0.1:8000/api/v1/usuarios', {
+                    const res = await fetch(`http://127.0.0.1:8000/api/v1/usuarios/${userId}`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -44,14 +52,15 @@ export const ModalPerfil = () => {
                     });
 
                     if (res.ok) {
-                        const data: Usuario[] = await res.json();
-                        console.log('Dados do usuário:', data[0]);
-                        setUsuario(data[0]);
+                        const data: Usuario = await res.json();
+                        console.log('Dados do usuário:', data);
+                        setUsuario(data);
                     } else {
-                        console.error('Erro ao buscar dados do usuário');
+                        setError("Erro ao buscar dados do usuário.");
                     }
                 } catch (error) {
                     console.error('Erro ao buscar dados do usuário:', error);
+                    setError("Erro ao buscar dados do usuário.");
                 }
             };
 
@@ -62,7 +71,7 @@ export const ModalPerfil = () => {
     const handleLogout = () => {
         destroyCookie(null, 'obra.token');
         console.log("Usuário deslogado");
-        window.location.href = '/login'; // Redireciona para a página de login
+        window.location.href = '/login';
     };
 
     return (
@@ -83,6 +92,8 @@ export const ModalPerfil = () => {
                                             {usuario.perfil ? usuario.perfil.tipo : 'Perfil não encontrado'}
                                         </span>
                                     </>
+                                ) : error ? (
+                                    <span>{error}</span>
                                 ) : (
                                     <span>Carregando...</span>
                                 )}
