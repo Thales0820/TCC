@@ -33,8 +33,7 @@ export default function CadastroUsuario() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
-
-        // Criando um FormData para enviar arquivos e dados juntos
+    
         const formData = new FormData();
         formData.append('nome', nome);
         formData.append('email', email);
@@ -43,27 +42,34 @@ export default function CadastroUsuario() {
             formData.append('foto_perfil', fotoPerfil);
         }
         formData.append('perfil_id', perfilId);
-
+    
         try {
-            // Enviando os dados para o servidor Laravel
             const response = await axios.post('http://127.0.0.1:8000/api/v1/usuarios', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
+    
             console.log('Usuário cadastrado com sucesso:', response.data);
-
+    
+            // Aqui você deve receber o token do servidor
+            const token = response.data.token; // Ajuste isso conforme a resposta do seu backend
+            if (token) {
+                // Armazenar o token no localStorage ou cookies
+                localStorage.setItem('token', token); // Armazenando no localStorage
+            }
+    
             // Limpar os campos do formulário após sucesso
             setNome('');
             setEmail('');
             setSenha('');
             setFotoPerfil(null);
             setPerfilId('');
-
+            setError(''); // Limpar mensagens de erro
+    
             (e.target as HTMLFormElement).reset();
+            router.push('/home'); // Redireciona para a página inicial após cadastro bem-sucedido
         } catch (error: unknown) {
-            // Exibindo o erro detalhado da resposta do servidor
             if (axios.isAxiosError(error) && error.response) {
                 const message = error.response?.data.message || 'Erro ao cadastrar usuário';
                 setError(message);
@@ -73,7 +79,7 @@ export default function CadastroUsuario() {
             console.error('Erro ao cadastrar usuário:', error);
         }
     };
-
+    
     // Buscar os perfis disponíveis na API
     const fetchPerfis = async () => {
         try {
@@ -109,37 +115,62 @@ export default function CadastroUsuario() {
                         )}
                         <form onSubmit={handleSubmit} className={style.form}>
                             <label htmlFor="nome">Nome</label>
-                            <input type="text" id="nome" placeholder="Digite seu nome de Usuário" value={nome}
-                                onChange={(e) => setNome(e.target.value)} required />
+                            <input
+                                type="text"
+                                id="nome"
+                                placeholder="Digite seu nome de Usuário"
+                                value={nome}
+                                onChange={(e) => setNome(e.target.value)}
+                                required
+                            />
                             <label htmlFor="email">E-mail</label>
-                            <input type="email" id="email" placeholder="exemplo@gmail.com" value={email}
-                                onChange={(e) => setEmail(e.target.value)} required />
-                            <label htmlFor="password">Senha</label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="exemplo@gmail.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                            <label htmlFor="senha">Senha</label>
                             <div className={style.inputSenhaContainer}>
-                                <input type={mostrarSenha ? "text" : "password"} id="senha" value={senha}
-                                    placeholder="Digite sua Senha" onChange={(e) => setSenha(e.target.value)} required />
+                                <input
+                                    type={mostrarSenha ? "text" : "password"}
+                                    id="senha"
+                                    value={senha}
+                                    placeholder="Digite sua Senha"
+                                    onChange={(e) => setSenha(e.target.value)}
+                                    required
+                                />
                                 <span onClick={toggleMostrarSenha} className={style.iconeSenha}>
                                     {mostrarSenha ? <IoEyeOff size={20} /> : <IoEye size={20} />}
                                 </span>
                             </div>
                             <div className={style.formGroup}>
                                 <label htmlFor="fotoPerfil">Foto de Perfil</label>
-                                <input type="file" id="fotoPerfil" accept="image/*" onChange={handleFotoChange}
-                                    className={style.fileInputStyled} />
+                                <input
+                                    type="file"
+                                    id="fotoPerfil"
+                                    accept="image/*"
+                                    onChange={handleFotoChange}
+                                    className={style.fileInputStyled}
+                                />
                             </div>
-                            <div className={style.rememberMe}>
-                                {perfis.map((perfil: any) => (
-                                    <div key={perfil.id}>
-                                        <input
-                                            type="checkbox"
-                                            id={perfil.id}
-                                            value={perfil.id}
-                                            checked={perfilId === perfil.id}
-                                            onChange={() => setPerfilId(perfil.id)}
-                                        />
-                                        <label htmlFor={perfil.id}>{perfil.tipo}</label>
-                                    </div>
-                                ))}
+                            <div className={style.formGroup}>
+                                <label htmlFor="perfilId">Selecione o Perfil</label>
+                                <select
+                                    id="perfilId"
+                                    value={perfilId}
+                                    onChange={(e) => setPerfilId(e.target.value)}
+                                    required
+                                >
+                                    <option value="" disabled>Escolha um perfil</option>
+                                    {perfis.map((perfil: any) => (
+                                        <option key={perfil.id} value={perfil.id}>
+                                            {perfil.tipo}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                             <button type="submit">Cadastrar</button>
                         </form>

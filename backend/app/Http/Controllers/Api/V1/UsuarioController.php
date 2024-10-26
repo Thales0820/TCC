@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UsuarioController extends Controller
 {
@@ -44,17 +44,21 @@ class UsuarioController extends Controller
         // Criação do usuário
         $usuario = Usuario::create([
             'nome' => $request->nome,
-            'foto_perfil' => 'imagesUser/' . $fileName,  // Caminho da foto de perfil
-            'banner' => $request->banner,  // Banner pode ser nulo
+            'foto_perfil' => 'imagesUser/' . $fileName,
+            'banner' => $request->banner,
             'email' => $request->email,
-            'senha' => Hash::make($request->senha),  // Hash da senha
+            'senha' => $request->senha, // A senha será armazenada como hash via mutator
             'perfil_id' => $request->perfil_id,
         ]);
 
-        // Resposta JSON com os dados do usuário e URL da imagem
+        // Gerar o token JWT
+        $token = JWTAuth::fromUser($usuario);
+
+        // Resposta JSON com os dados do usuário e o token
         return response()->json([
             'usuario' => $usuario,
-            'image_url' => asset('imagesUser/' . $fileName),  // URL pública da imagem
+            'token' => $token, // Adicione o token na resposta
+            'image_url' => asset('imagesUser/' . $fileName),
         ], 201);
     }
 
@@ -85,7 +89,7 @@ class UsuarioController extends Controller
 
         $request->validate([
             'nome' => 'required|string|max:255',
-            'foto_perfil' => 'nullable|string|max:255', // Permitir atualização sem uma nova imagem
+            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg|max:50000', // Permitir atualização sem uma nova imagem
             'banner' => 'required|string|max:255',
             'email' => 'required|email|unique:usuarios,email,' . $id,
             'senha' => 'nullable|string|min:6',
@@ -102,13 +106,13 @@ class UsuarioController extends Controller
         // Handle file upload if a new file is provided
         if ($request->hasFile('foto_perfil')) {
             $fileName = time() . '-' . $request->file('foto_perfil')->getClientOriginalName();
-            $fotoPerfilPath = $request->file('foto_perfil')->move(public_path('imagesUser'), $fileName);
+            $request->file('foto_perfil')->move(public_path('imagesUser'), $fileName);
             $data['foto_perfil'] = 'imagesUser/' . $fileName; // Atualiza o caminho da imagem no banco de dados
         }
 
         // Verifica se a senha foi atualizada
         if ($request->filled('senha')) {
-            $data['senha'] = bcrypt($request->senha);
+            $data['senha'] = bcrypt($request->senha); // Usar bcrypt para a nova senha
         }
 
         $usuario->update($data);
@@ -153,7 +157,7 @@ class UsuarioController extends Controller
             }
 
             // Gerar o token de autenticação
-            $token = $usuario->createToken('token-name')->plainTextToken;
+            $token = JWTAuth::fromUser($usuario);
 
             // Retornar a resposta JSON com o token e os dados do usuário
             return response()->json([
@@ -166,6 +170,7 @@ class UsuarioController extends Controller
             return response()->json(['error' => 'Erro no servidor'], 500);
         }
     }
+
     // Método para verificar o email e enviar o token
     public function verificarEmail(Request $request)
     {
@@ -184,6 +189,7 @@ class UsuarioController extends Controller
         // Aqui você enviaria um e-mail com o link de redefinição de senha
         return response()->json(['message' => 'Token gerado com sucesso', 'token' => $token]);
     }
+
     public function resetarSenha(Request $request)
     {
         $request->validate([

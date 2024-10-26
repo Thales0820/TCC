@@ -1,0 +1,37 @@
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    padding: 15px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.toast button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    margin-bottom: 5px;
+    margin-left: 100px;
+}
+
+.toast button:hover {
+    color: black;
+}
+
+.toast p {
+    margin: 0;
+}
+
+.toast.success {
+    background-color: #28a745;
+}
+
+.toast.danger {
+    background-color: #dc3545;
+}
