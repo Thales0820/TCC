@@ -2,6 +2,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import style from "./style.module.css";
 import { FaSearch } from "react-icons/fa";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Obra {
     id: number;
@@ -14,8 +16,14 @@ export const Pesquisar = () => {
     const [sugestoes, setSugestoes] = useState<Obra[]>([]);
     const [obrasList, setObrasList] = useState<Obra[]>([]);
     const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+    const [isMounted, setIsMounted] = useState(false);
     const suggestionListRef = useRef<HTMLUListElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const router = useRouter();
+
+    useEffect(() => {
+        setIsMounted(true); // Seta para verdadeiro quando o componente está montado
+    }, []);
 
     // Função para buscar as obras da API
     const fetchObras = async () => {
@@ -73,7 +81,7 @@ export const Pesquisar = () => {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (sugestoes.length > 0) {
+        if (sugestoes.length > 0 && isMounted) {
             if (e.key === "ArrowDown") {
                 setActiveSuggestionIndex((prevIndex) => {
                     const nextIndex = (prevIndex + 1) % sugestoes.length;
@@ -87,8 +95,10 @@ export const Pesquisar = () => {
                     return nextIndex;
                 });
             } else if (e.key === "Enter" && activeSuggestionIndex >= 0) {
-                setPesquisarQuery(sugestoes[activeSuggestionIndex].titulo);
-                setSugestoes([]);
+                const obraSelecionada = sugestoes[activeSuggestionIndex];
+                if (obraSelecionada) {
+                    router.push(`/obra/${obraSelecionada.id}`);
+                }
             }
         }
     };
@@ -126,17 +136,19 @@ export const Pesquisar = () => {
                 {sugestoes.length > 0 && (
                     <ul className={style.sugestoesLista} ref={suggestionListRef}>
                         {sugestoes.map((obra, index) => (
-                            <li
-                                key={obra.id}
-                                onClick={() => {
-                                    setPesquisarQuery(obra.titulo);
-                                    setSugestoes([]);
-                                }}
-                                className={`${style.sugestaoItem} ${index === activeSuggestionIndex ? style.sugestaoAtiva : ""}`}
-                            >
-                                {obra.titulo}
-                                <img src={`http://localhost:8000/${obra.capa}`} alt={`Capa de ${obra.titulo}`} className={style.imagemSugestao}/>
-                            </li>
+                            <Link href={`/obra/${obra.id}`} legacyBehavior>
+                                <li
+                                    key={obra.id}
+                                    onClick={() => {
+                                        setPesquisarQuery(obra.titulo);
+                                        setSugestoes([]);
+                                    }}
+                                    className={`${style.sugestaoItem} ${index === activeSuggestionIndex ? style.sugestaoAtiva : ""}`}
+                                >
+                                    {obra.titulo}
+                                    <img src={`http://localhost:8000/${obra.capa}`} alt={`Capa de ${obra.titulo}`} className={style.imagemSugestao}/>
+                                </li>
+                            </Link>
                         ))}
                     </ul>
                 )}

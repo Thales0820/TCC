@@ -46,7 +46,7 @@ export const Carrossel: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndiceAtual((prevIndice) => (prevIndice + 1) % obras.length);
-    }, 10000); // 10 segundos
+    }, 15000); // 10 segundos
 
     return () => clearInterval(interval); // Limpa o timer ao desmontar o componente
   }, [obras.length]);
