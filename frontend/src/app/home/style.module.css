@@ -34,6 +34,7 @@
 .card img {
   width: 100%; /* A imagem ocupa toda a largura do card */
   height: 260px;
+  cursor: pointer;
 }
 
 .card p {

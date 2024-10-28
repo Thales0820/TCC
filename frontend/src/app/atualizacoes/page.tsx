@@ -6,6 +6,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import Pesquisar from "@/components/Pesquisar";
 import { ModalPerfil } from "@/components/ModalPerfil";
 import { useEffect, useState } from "react";
+import CardList from "@/components/CardList";
 
 export default function Atualizacoes() {
     const router = useRouter();
@@ -49,15 +50,7 @@ export default function Atualizacoes() {
                 {loading ? (
                     <p>Carregando...</p> // Mensagem de loading enquanto os dados estão sendo buscados
                 ) : (
-                    <div className={style.cardList}>
-                        {obras.map((obra: any) => (
-                            <div key={obra.id} className={style.card}>
-                                {/* Verificação do caminho da capa */}
-                                <img src={`http://localhost:8000/${obra.capa}`} alt={`Capa de ${obra.titulo}`} />
-                                <p>{obra.titulo}</p>
-                            </div>
-                        ))}
-                    </div>
+                    <CardList data={obras}/>
                 )}
             </div>
         </>

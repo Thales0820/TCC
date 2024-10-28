@@ -13,21 +13,25 @@ export default function MinhasObras() {
 
     const obrasData = [
         {
+          id: 1,
           capa: "https://m.media-amazon.com/capas/I/818KGgapfiL._SL1500_.jpg",
           titulo: "A Garota do Mar",
           estado: "Publicando",
         },
         {
+          id: 2,
           capa: "https://mangadex.org/covers/aa6c76f7-5f5f-46b6-a800-911145f81b9b/2d50161f-e715-4e4f-86bd-d38772823b39.jpg",
           titulo: "Sono Bisque Doll wa Koi o Suru",
           estado: "Pausado",
         },
         {
+          id: 3,
           capa: "https://m.media-amazon.com/capas/I/814zhAWOKBL._AC_UF1000,1000_QL80_.jpg",
           titulo: "Persépolis",
           estado: "Cancelado",
         },
         {
+          id: 4,
           capa: "https://m.media-amazon.com/capas/I/81dQUROWcHL._AC_UF1000,1000_QL80_.jpg",
           titulo: "Adulthood Is a Myth",
           estado: "Finalizado",

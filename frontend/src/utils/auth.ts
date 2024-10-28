@@ -1,5 +1,4 @@
-import { parseCookies, destroyCookie } from 'nookies';
-import { jwtDecode } from 'jwt-decode';
+import { parseCookies } from 'nookies';
 
 interface DecodedToken {
   exp: number;
@@ -31,3 +30,7 @@ export const verificaTokenExpirado = (token: string | undefined): boolean => {
     return true; // Se houver erro ao decodificar, considere o token como expirado
   }
 };
+function jwtDecode<T>(token: string): DecodedToken {
+  throw new Error('Function not implemented.');
+}
+

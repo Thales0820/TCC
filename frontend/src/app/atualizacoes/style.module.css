@@ -23,17 +23,3 @@
 .titulo h1 {
     font-size: 40px;
 }
-.cardList {
-    display: flex; /* Faz com que os cards fiquem lado a lado */
-    flex-wrap: wrap; /* Permite que os cards quebrem para a linha de baixo, se necessário */
-    gap: 20px; /* Espaçamento entre os cards */
-    
-}
-
-.card {
-    background-color: hsl(0, 0%, 89%); /* Cor de fundo opcional */
-    padding: 10px;
-    border-radius: 5px;
-    width: 200px; /* Largura fixa para os cards */
-    text-align: center;
-}

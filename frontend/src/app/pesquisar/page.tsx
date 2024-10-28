@@ -15,7 +15,7 @@ interface Genero {
 }
 
 interface Obra {
-  id: string;
+  id: number;
   capa: string;
   titulo: string;
   tipo_id: string; // Mantém como string
