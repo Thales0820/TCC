@@ -1,4 +1,3 @@
-// ModalGenero.tsx
 import React, { useState } from 'react';
 import style from './style.module.css';
 
@@ -34,28 +33,36 @@ export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGe
     onClose();
   };
 
+  const handleContentClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+  };
+
+  const limparGeneros = () => {
+    setSelectedGenres([]);
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className={style.modalFundo}>
-      <div className={style.modal}>
+    <div className={style.modalFundo} onClick={onClose}>
+      <div className={style.modal} onClick={handleContentClick}>
         <h2 className={style.titulo}>Selecionar Gêneros</h2>
-        <div className={style.genreList}>
+        <div className={style.checklistContainer}>
           {generos.map((genero) => (
-            <div key={genero.id} className={style.checkboxItem}>
+            <label key={genero.id} className={style.checkboxItem}>
               <input
                 type="checkbox"
                 id={genero.id}
                 checked={selectedGenres.includes(genero.id)}
                 onChange={() => handleGenreToggle(genero.id)}
               />
-              <label htmlFor={genero.id}>{genero.nome}</label>
-            </div>
+              {genero.nome}
+            </label>
           ))}
         </div>
         <div className={style.controle}>
           <button onClick={handleConfirm} className={style.botao}>Confirmar</button>
-          <button onClick={onClose} className={style.botao}>Cancelar</button>
+          <button onClick={limparGeneros} className={style.botao}>Limpar</button>
         </div>
       </div>
     </div>
