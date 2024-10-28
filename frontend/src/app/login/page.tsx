@@ -102,7 +102,7 @@ export default function Login() {
                             </div>
                             <button type="submit">Entrar</button>
                         </form>
-                        <Link href="/register" legacyBehavior>
+                        <Link href="/cadastro" legacyBehavior>
                             <a className={style.cadastro}>Não tem Conta? Cadastre-se</a>
                         </Link>
                         <Link href="/home" legacyBehavior>

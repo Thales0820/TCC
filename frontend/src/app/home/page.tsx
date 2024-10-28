@@ -44,13 +44,15 @@ export default function Home() {
     // Função que será chamada quando o usuário clicar em uma obra
     const handleObraClick = (obraId: number) => {
         const token = parseCookies()['obra.token'];
+        
+        // Verifica se o usuário está autenticado e se o token não está expirado
         const authenticated = isAuthenticated() && !verificaTokenExpirado(token);
 
         if (!authenticated) {
             console.log('Redirecionando para o login...');
             router.push('/login');
         } else {
-            router.push(`/obras/${obraId}`);
+            router.push(`/obra/${obraId}`);
         }
     };
 
@@ -75,7 +77,7 @@ export default function Home() {
                             <div
                                 key={obra.id}
                                 className={style.card}
-                                onClick={() => handleObraClick(obra.id)} // Chamando a função de clique
+                                onClick={() => handleObraClick(obra.id)}
                             >
                                 <img src={`http://localhost:8000/${obra.capa}`} alt={`Capa de ${obra.titulo}`} />
                                 <p>{obra.titulo}</p>

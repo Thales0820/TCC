@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 import Comentarios from '@/components/Comentarios';
 import { BsFillChatLeftTextFill } from 'react-icons/bs';
 import { getObraDetails } from '../../api/routes';
+import { isAuthenticated } from '@/utils/auth'; // Import the authentication utility
+import { useRouter } from 'next/navigation';
 
 interface ObraInfo {
     id: number;
@@ -17,7 +19,7 @@ interface ObraInfo {
     sinopse: string;
     capa: string;
     autor: {
-        nome: string; // Ajuste o tipo para aceitar um objeto com nome
+        nome: string;
     };
     dataPublicacao: string;
     tipo: string;
@@ -32,23 +34,29 @@ interface ObraInfo {
 }
 
 export default function Obra({ params } : { params: { id: string } }) {
-
+    const router = useRouter();
     const [ordemCrescente, setOrdemCrescente] = useState(true)
     const [like, setLike] = useState(false);
     const [mostrarComentarios, setMostrarComentarios] = useState(false);
     const [obra, setObra] = useState<ObraInfo | null>(null);
 
     useEffect(() => {
+        // Redirect to login if the user is not authenticated
+        if (!isAuthenticated()) {
+            router.push('/login');
+            return;
+        }
+
+        // Fetch obra details
         const fetchObra = async () => {
             const response = await getObraDetails(parseInt(params.id));
             setObra(response);
         };
 
         fetchObra();
-    }, [params.id]);
+    }, [params.id, router]);
 
-     // Função para alternar entre crescente e decrescente
-     const toggleOrdem = () => {
+    const toggleOrdem = () => {
         if (obra) {
             const novaOrdem = [...obra.capitulos].sort((a, b) =>
               ordemCrescente ? a.numero - b.numero : b.numero - a.numero
@@ -58,8 +66,7 @@ export default function Obra({ params } : { params: { id: string } }) {
         }
     };
 
-    // Função para alternar o estado de visualização de um capítulo
-    const toggleVisualizacao = (numero: number) => { // Tipando o parâmetro como number
+    const toggleVisualizacao = (numero: number) => {
         if (obra) {
             const capitulosAtualizados = obra.capitulos.map(capitulo => 
               capitulo.numero === numero ? { ...capitulo, visualizado: !capitulo.visualizado } : capitulo
@@ -68,15 +75,11 @@ export default function Obra({ params } : { params: { id: string } }) {
         }
     };
 
-    useEffect(() => {
-        console.log(obra); // Verifica a estrutura do objeto obra
-    }, [obra]);
-
     const formatarData = (data: string) => {
         const date = new Date(data);
-        const dia = String(date.getDate()).padStart(2, '0'); // Adiciona zero à esquerda, se necessário
-        const mes = String(date.getMonth() + 1).padStart(2, '0'); // Meses começam em 0
-        const ano = String(date.getFullYear()); // Pega os dois últimos dígitos do ano
+        const dia = String(date.getDate()).padStart(2, '0');
+        const mes = String(date.getMonth() + 1).padStart(2, '0');
+        const ano = String(date.getFullYear());
     
         return `${dia}/${mes}/${ano}`;
     };
@@ -92,6 +95,7 @@ export default function Obra({ params } : { params: { id: string } }) {
     const toggleComentarios = () => {
         setMostrarComentarios(!mostrarComentarios);
     };
+
     return(
         <>
         <Menu />
@@ -111,7 +115,7 @@ export default function Obra({ params } : { params: { id: string } }) {
                     </div>
                     <p>{obra?.sinopse}</p>
                     <div className={style.especificacao}>
-                        <p>{obra?.autor}</p>
+                        <p>{obra?.autor.nome}</p>
                         <p>{obra?.tipo}</p>
                         <p>{obra?.estado}</p>
                         <p>{obra ? formatarData(obra.dataPublicacao) : 'Data não disponível'}</p>
