@@ -4,17 +4,15 @@ import style from "./style.module.css";
 import { getObraDetails, getObraIds } from "@/app/api/routes";
 import Link from "next/link";
 
-interface Autor {
-  nome: string;
-}
-
 interface Obra {
   id: number;
   capa: string;
   titulo: string;
   generos: string[];
   sinopse: string;
-  autor: Autor;
+  autor: {
+    nome: string; // Ajuste o tipo para aceitar um objeto com nome
+  };
 }
 
 export const Carrossel: React.FC = () => {
@@ -92,12 +90,8 @@ export const Carrossel: React.FC = () => {
               <p>Gêneros não disponíveis</p>
             )}
           </div>
-          <p className={style.sinopse}>
-            <strong>{obraAtual.sinopse}</strong>
-          </p>
-          <p>
-            <strong>{obraAtual.autor.nome}</strong>
-          </p>
+          <p className={style.sinopse}><strong>{obraAtual.sinopse}</strong></p>
+          <p><strong>{obraAtual?.autor}</strong></p>
         </div>
       </div>
       <div className={style.navigationContainer}>

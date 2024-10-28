@@ -6,76 +6,88 @@ import { ModalPerfil } from '@/components/ModalPerfil';
 import { BiArrowFromBottom, BiArrowToBottom, BiSolidLike } from 'react-icons/bi';
 import { FaPlus } from 'react-icons/fa';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Comentarios from '@/components/Comentarios';
 import { BsFillChatLeftTextFill } from 'react-icons/bs';
-
-interface Capitulo {
-    numero: number;
-    titulo: string;
-    visualizado: boolean;
-}
+import { getObraDetails } from '../../api/routes';
 
 interface ObraInfo {
+    id: number;
     titulo: string;
-    image: string;
-    estado: string;
-    tipo: string;
-    dataLancamento: string;
-    autor: string;
     sinopse: string;
-    likes: number;
+    capa: string;
+    autor: {
+        nome: string; // Ajuste o tipo para aceitar um objeto com nome
+    };
+    dataPublicacao: string;
+    tipo: string;
+    estado: string;
     generos: string[];
-    capitulos: Capitulo[];
+    likes: number;
+    capitulos: {
+        numero: number;
+        titulo: string;
+        visualizado: boolean;
+    }[];
 }
 
-export default function Obra() {
+export default function Obra({ params } : { params: { id: string } }) {
 
     const [ordemCrescente, setOrdemCrescente] = useState(true)
     const [like, setLike] = useState(false);
     const [mostrarComentarios, setMostrarComentarios] = useState(false);
-    const [obra, setObra] = useState<ObraInfo>({
-        titulo: 'One Piece',
-        image: 'https://mangadex.org/covers/a1c7c817-4e59-43b7-9365-09675a149a6f/c4bdbbc6-f6c1-4fe9-ab28-ff9ab44b6694.png',
-        estado: 'Publicando',
-        tipo: 'Mangá',
-        dataLancamento: '22/07/1997',
-        autor: 'Eiichiro Oda',
-        sinopse: 'One Piece conta a história do jovem Monkey D. Luffy, que ganhou poderes de borracha depois de comer uma fruta do diabo. O enredo mostra as aventuras de Luffy e seu grupo, Os Piratas de Chapéu de Palha, em busca do One Piece, o tesouro mais procurado do mundo.',
-        likes: 100,
-        generos: ['Aventura', 'Ação', 'Comédia', 'Drama', 'Fantasia'],
-        capitulos: [
-            { numero: 1124, titulo: "Melhor Amigo", visualizado: false },
-            { numero: 1123, titulo: "Duas Semanas Perdidas", visualizado: false },
-            { numero: 1122, titulo: "Quando a Hora Chegar", visualizado: false }
-        ]
-    });
+    const [obra, setObra] = useState<ObraInfo | null>(null);
+
+    useEffect(() => {
+        const fetchObra = async () => {
+            const response = await getObraDetails(parseInt(params.id));
+            setObra(response);
+        };
+
+        fetchObra();
+    }, [params.id]);
 
      // Função para alternar entre crescente e decrescente
      const toggleOrdem = () => {
-        setOrdemCrescente(!ordemCrescente);
-        // Ordena os capítulos com base no estado atual
-        const novaOrdem = [...obra.capitulos].sort((a, b) => 
-            ordemCrescente ? a.numero - b.numero : b.numero - a.numero);
-        setObra({ ...obra, capitulos: novaOrdem });
+        if (obra) {
+            const novaOrdem = [...obra.capitulos].sort((a, b) =>
+              ordemCrescente ? a.numero - b.numero : b.numero - a.numero
+            );
+            setObra({ ...obra, capitulos: novaOrdem });
+            setOrdemCrescente(!ordemCrescente);
+        }
     };
 
     // Função para alternar o estado de visualização de um capítulo
     const toggleVisualizacao = (numero: number) => { // Tipando o parâmetro como number
-        const capitulosAtualizados = obra.capitulos.map(capitulo => {
-            if (capitulo.numero === numero) {
-                return { ...capitulo, visualizado: !capitulo.visualizado }; // Alterna o estado de visualizado
-            }
-            return capitulo;
-        });
-        setObra({ ...obra, capitulos: capitulosAtualizados });
+        if (obra) {
+            const capitulosAtualizados = obra.capitulos.map(capitulo => 
+              capitulo.numero === numero ? { ...capitulo, visualizado: !capitulo.visualizado } : capitulo
+            );
+            setObra({ ...obra, capitulos: capitulosAtualizados });
+        }
+    };
+
+    useEffect(() => {
+        console.log(obra); // Verifica a estrutura do objeto obra
+    }, [obra]);
+
+    const formatarData = (data: string) => {
+        const date = new Date(data);
+        const dia = String(date.getDate()).padStart(2, '0'); // Adiciona zero à esquerda, se necessário
+        const mes = String(date.getMonth() + 1).padStart(2, '0'); // Meses começam em 0
+        const ano = String(date.getFullYear()); // Pega os dois últimos dígitos do ano
+    
+        return `${dia}/${mes}/${ano}`;
     };
 
     const toggleLike = () => {
-        setLike(!like);
-        const novoLike = like ? obra.likes - 1 : obra.likes + 1;
-        setObra({ ...obra, likes: novoLike})
-    }
+        if (obra) {
+            setLike(!like);
+            const novoLike = like ? obra.likes - 1 : obra.likes + 1;
+            setObra({ ...obra, likes: novoLike });
+        }
+    };
 
     const toggleComentarios = () => {
         setMostrarComentarios(!mostrarComentarios);
@@ -88,21 +100,21 @@ export default function Obra() {
         <div className={style.containerObra}>
             <div className={style.detalhe}>
                 <div className={style.capa}>
-                    <img src={obra.image} alt={`Capa de ${obra.titulo}`} />
+                    <img src={obra?.capa} alt={`Capa de ${obra?.titulo}`} />
                 </div>
                 <div className={style.informacoes}>
-                    <h1 className={style.titulo}>{obra.titulo}</h1>
+                    <h1 className={style.titulo}>{obra?.titulo}</h1>
                     <div className={style.generos}>
-                        {obra.generos.map((genero, index) => (
+                        {obra?.generos.map((genero, index) => (
                             <div key={index}><p>{genero}</p></div>
                         ))}
                     </div>
-                    <p>{obra.sinopse}</p>
+                    <p>{obra?.sinopse}</p>
                     <div className={style.especificacao}>
-                        <p>{obra.autor}</p>
-                        <p>{obra.tipo}</p>
-                        <p>{obra.estado}</p>
-                        <p>{obra.dataLancamento}</p>
+                        <p>{obra?.autor}</p>
+                        <p>{obra?.tipo}</p>
+                        <p>{obra?.estado}</p>
+                        <p>{obra ? formatarData(obra.dataPublicacao) : 'Data não disponível'}</p>
                     </div>
                 </div>
             </div>
@@ -112,8 +124,8 @@ export default function Obra() {
                     <div className={style.icones}>
                         <div onClick={toggleLike}>
                             <BiSolidLike size={45} className={like ? style.like : style.curtir}/>
-                                {obra.likes > 0 && (
-                                    <span className={like ? style.curtido : style.likesCount}>{obra.likes}</span>
+                                {obra && obra.likes > 0 && (
+                                    <span className={like ? style.curtido : style.likesCount}>{obra?.likes}</span>
                                 )}
                         </div>
                         <BsFillChatLeftTextFill size={45} onClick={toggleComentarios} 
@@ -134,7 +146,7 @@ export default function Obra() {
                             </div>
                         </div>
                         <div className={style.capitulos}>
-                            {obra.capitulos.map(cap => (
+                            {obra?.capitulos.map(cap => (
                                 <div className={style.capitulo} key={cap.numero}>
                                     {cap.visualizado ? (
                                         <IoEyeOff size={25} onClick={() => toggleVisualizacao(cap.numero)} />

@@ -85,29 +85,29 @@ export const getObraIds = async () => {
 
 
 export const getObraDetails = async (id: number) => {
-  const response = await axios.get(`${API_URL}/obras/${id}`);
-  const data = response.data;
-
   try {
-    const response = await axios.get(`${API_URL}/obras/${id}`);
-    const data = response.data;
+      const response = await axios.get(`${API_URL}/obras/${id}`);
+      const data = response.data;
 
-    return {
-      id: data.id,
-      titulo: data.titulo,
-      sinopse: data.sinopse,
-      capa: `http://127.0.0.1:8000/${data.capa}`, // Adicionando o caminho completo da imagem
-      autor: {
-        nome: data.usuario.nome,
-      },
-      dataPublicacao: data.data_publicacao,
-      tipo: data.tipo, // Verifique se data.tipo.nome é correto ou se é apenas data.tipo
-      estado: data.estado,
-      generos: data.generos,
-      likes: data.likes
-    };
+      return {
+          id: data.id,
+          titulo: data.titulo,
+          sinopse: data.sinopse,
+          capa: `http://127.0.0.1:8000/${data.capa}`,
+          autor: data.usuario.nome, // Altere para retornar apenas o nome como string
+          dataPublicacao: data.data_publicacao,
+          tipo: data.tipo,
+          estado: data.estado,
+          generos: data.generos,
+          likes: data.likes,
+          capitulos: data.capitulos || [
+              { numero: 1124, titulo: "Melhor Amigo", visualizado: false },
+              { numero: 1123, titulo: "Duas Semanas Perdidas", visualizado: false },
+              { numero: 1122, titulo: "Quando a Hora Chegar", visualizado: false }
+          ]
+      };
   } catch (error) {
-    console.error("Erro ao buscar detalhes da obra:", error);
-    return null; // Ou trate o erro de outra forma
+      console.error("Erro ao buscar detalhes da obra:", error);
+      return null;
   }
 };
