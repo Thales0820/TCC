@@ -13,7 +13,7 @@ export const Menu = () => {
                 <div>
                     <div className={style.divLogo}>
                         <Link href="/home" legacyBehavior>
-                            <img src="/images/logoDark.png" alt="Logo" title="Indie Comics"/>
+                            <img src="images/logoDark.png" alt="Logo" title="Indie Comics"/>
                         </Link>
                     </div>
                     <ul className={style.ul}>

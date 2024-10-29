@@ -2,15 +2,22 @@
 
 import { useState, useEffect } from "react";
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import style from './style.module.css';
 import { useRouter } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa";
 import { ModalGenero } from "@/components/ModalGenero";
+import Cookies from 'js-cookie';
+import { verificaTokenExpirado, isAuthenticated } from '@/utils/auth';
+import { parseCookies } from "nookies";
 
-// Definindo os tipos de dados para autores, tipos e estados
-interface Autor {
+interface Usuario {
     id: string;
     nome: string;
+    perfil: {
+        id: string;
+        tipo: string;
+    };
 }
 
 interface Tipo {
@@ -28,6 +35,10 @@ interface Genero {
     nome: string;
 }
 
+interface TokenPayload {
+    sub: string; // ID do usuário no token
+}
+
 export default function CriarObra() {
     const [titulo, setTitulo] = useState('');
     const [capa, setCapa] = useState<File | null>(null);
@@ -36,24 +47,81 @@ export default function CriarObra() {
     const [autorId, setAutorId] = useState('');
     const [tipoId, setTipoId] = useState('');
     const [estadoId, setEstadoId] = useState('');
-    const [generoSelecionados, setGeneroSelecionados] = useState<Genero[]>([]); // Mudança aqui
-    const [autores, setAutores] = useState<Autor[]>([]);
+    const [generoSelecionados, setGeneroSelecionados] = useState<Genero[]>([]);
     const [tipos, setTipos] = useState<Tipo[]>([]);
     const [estados, setEstados] = useState<Estado[]>([]);
-    const [generos, setGeneros] = useState<Genero[]>([]); // Adicionando estado para gêneros
+    const [generos, setGeneros] = useState<Genero[]>([]);
     const [error, setError] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
+    const [nomeAutor, setNomeAutor] = useState('');
     const router = useRouter();
 
-    const voltar = () => {
-        router.back();
-    };
+    useEffect(() => {
+        const cookies = parseCookies();
+        const token = cookies['obra.token'];
 
-    const handleCapaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setCapa(e.target.files[0]);
+        // Verifica se o token existe e se é válido
+        if (token && isAuthenticated() && !verificaTokenExpirado(token)) {
+            const decodedToken: TokenPayload = jwtDecode<TokenPayload>(token); // Usando jwtDecode com a importação correta
+            const userId = decodedToken.sub; // Obtendo o ID do usuário a partir do token
+
+            const fetchUserAndOptions = async () => {
+                try {
+                    console.log("ID do usuário:", userId);
+
+                    // Obtendo informações do usuário autenticado
+                    const res = await fetch(`http://127.0.0.1:8000/api/v1/usuarios/${userId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+
+                    if (!res.ok) {
+                        throw new Error("Erro ao buscar dados do usuário.");
+                    }
+
+                    const usuario: Usuario = await res.json();
+
+                    // Verifica se o usuário é um autor
+                    if (!usuario.perfil || usuario.perfil.tipo !== 'Autor') {
+                        router.push('/home');
+                        return;
+                    }
+
+                    setAutorId(usuario.id);
+                    setNomeAutor(usuario.nome); // Armazenar o nome do autor
+
+                    // Carrega tipos, estados e gêneros
+                    const [tiposRes, estadosRes, generosRes] = await Promise.all([
+                        fetch('http://127.0.0.1:8000/api/v1/tipos', { headers: { Authorization: `Bearer ${token}` } }),
+                        fetch('http://127.0.0.1:8000/api/v1/estados', { headers: { Authorization: `Bearer ${token}` } }),
+                        fetch('http://127.0.0.1:8000/api/v1/generos', { headers: { Authorization: `Bearer ${token}` } })
+                    ]);
+
+                    if (!tiposRes.ok || !estadosRes.ok || !generosRes.ok) {
+                        throw new Error("Erro ao buscar dados de tipos, estados ou gêneros.");
+                    }
+
+                    const tipos = await tiposRes.json();
+                    const estados = await estadosRes.json();
+                    const generos = await generosRes.json();
+
+                    setTipos(tipos);
+                    setEstados(estados);
+                    setGeneros(generos);
+                } catch (error) {
+                    console.error('Erro ao carregar dados:', error);
+                    setError('Erro ao carregar dados');
+                }
+            };
+
+            fetchUserAndOptions();
+        } else {
+            router.push('/login');
         }
-    };
+    }, [router]);
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -71,26 +139,19 @@ export default function CriarObra() {
         formData.append('estado_id', estadoId);
 
         generoSelecionados.forEach((genero) => {
-            formData.append('generos[]', genero.id); // Corrigindo para enviar ID do gênero
+            formData.append('generos[]', genero.id);
         });
 
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/v1/obras', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${Cookies.get('obra.token')}`,
                 },
             });
 
             console.log('Obra criada com sucesso:', response.data);
-            setTitulo('');
-            setCapa(null);
-            setSinopse('');
-            setDataPublicacao(new Date().toISOString().substring(0, 10));
-            setAutorId('');
-            setTipoId('');
-            setEstadoId('');
-            setGeneroSelecionados([]); // Limpar gêneros selecionados
-            (e.target as HTMLFormElement).reset();
+            resetForm();
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
                 setError('Erro ao criar obra: ' + (error.response.data.message || error.message));
@@ -101,116 +162,94 @@ export default function CriarObra() {
         }
     };
 
-    const fetchOptions = async () => {
-        try {
-            const [autoresRes, tiposRes, estadosRes, generosRes] = await Promise.all([ // Adicionando a chamada para gêneros
-                axios.get('http://127.0.0.1:8000/api/v1/usuarios'),
-                axios.get('http://127.0.0.1:8000/api/v1/tipos'),
-                axios.get('http://127.0.0.1:8000/api/v1/estados'),
-                axios.get('http://127.0.0.1:8000/api/v1/generos'), // Nova chamada para buscar gêneros
-            ]);
-
-            setAutores(autoresRes.data);
-            setTipos(tiposRes.data);
-            setEstados(estadosRes.data);
-            setGeneros(generosRes.data); // Armazenando a lista de gêneros
-        } catch (error) {
-            console.error('Erro ao buscar opções:', error);
-            setError('Erro ao buscar opções');
-        }
+    const resetForm = () => {
+        setTitulo('');
+        setCapa(null);
+        setSinopse('');
+        setDataPublicacao(new Date().toISOString().substring(0, 10));
+        setTipoId('');
+        setEstadoId('');
+        setGeneroSelecionados([]);
     };
 
-    useEffect(() => {
-        fetchOptions();
-    }, []);
+    const voltar = () => {
+        router.back();
+    };
 
     return (
-        <>
-            <div className={style.container}>
-                <div className={style.titulo}>
-                    <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
-                    <h1>Criando Obra</h1>
-                </div>
-                <br />
-                {error &&
-                    <div role="alert" className="alert alert-error">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current"
-                            fill="none" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{error}</span>
-                    </div>
-                }
-                <br />
-                <form onSubmit={handleSubmit} className={style.form}>
-                    <div className={style.formGroup}>
-                        <label>Título:</label>
-                        <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} required />
-                    </div>
-                    <div className={style.formGroup}>
-                        <label>Capa:</label>
-                        <input type="file" onChange={handleCapaChange} />
-                    </div>
-                    <div className={style.formGroup}>
-                        <label>Sinopse:</label>
-                        <textarea value={sinopse} onChange={(e) => setSinopse(e.target.value)} required />
-                    </div>
-                    <div className={style.formGroup}>
-                        <label>Data de Publicação:</label>
-                        <input type="date" value={dataPublicacao} onChange={(e) => setDataPublicacao(e.target.value)} />
-                    </div>
-                    <div className={style.formGroup}>
-                        <label>Autor:</label>
-                        <select value={autorId} onChange={(e) => setAutorId(e.target.value)} required>
-                            <option value="">Selecione um autor</option>
-                            {autores.map((autor) => (
-                                <option key={autor.id} value={autor.id}>{autor.nome}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className={style.formGroup}>
-                        <label>Tipo:</label>
-                        <select value={tipoId} onChange={(e) => setTipoId(e.target.value)} required>
-                            <option value="">Selecione um tipo</option>
-                            {tipos.map((tipo) => (
-                                <option key={tipo.id} value={tipo.id}>{tipo.nome}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className={style.formGroup}>
-                        <label>Estado:</label>
-                        <select value={estadoId} onChange={(e) => setEstadoId(e.target.value)} required>
-                            <option value="">Selecione um estado</option>
-                            {estados.map((estado) => (
-                                <option key={estado.id} value={estado.id}>{estado.nome}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className={`${style.formGroup} ${style.generosContainer}`}>
-                        <label>Gêneros:</label>
-                        <button
-                            type="button"
-                            className={style.generosButton}
-                            onClick={() => setModalOpen(true)}
-                        >
-                            Selecionar Gêneros
-                        </button>
-                    </div>
-
-                    <button type="submit" className={style.submitButton}>Criar Obra</button>
-                </form>
-                <ModalGenero
-                    isOpen={modalOpen}
-                    onClose={() => setModalOpen(false)}
-                    selecionaGenero={generoSelecionados.map(g => g.id)}
-                    onSelectGenre={(selected) => {
-                        const selecionados = generos.filter(g => selected.includes(g.id));
-                        setGeneroSelecionados(selecionados);
-                    }}
-                    generos={generos} // Assegure-se de que esta linha está presente
-                />
+        <div className={style.container}>
+            <div className={style.titulo}>
+                <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
+                <h1>Criando Obra</h1>
             </div>
-        </>
+            <br />
+            {error && (
+                <div role="alert" className="alert alert-error">
+                    <span>{error}</span>
+                </div>
+            )}
+            <br />
+            <form onSubmit={handleSubmit} className={style.form}>
+                <div className={style.formGroup}>
+                    <label>Título:</label>
+                    <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} required />
+                </div>
+                <div className={style.formGroup}>
+                    <label>Capa:</label>
+                    <input type="file" onChange={(e) => setCapa(e.target.files ? e.target.files[0] : null)} />
+                </div>
+                <div className={style.formGroup}>
+                    <label>Sinopse:</label>
+                    <textarea value={sinopse} onChange={(e) => setSinopse(e.target.value)} required />
+                </div>
+                <div className={style.formGroup}>
+                    <label>Data de Publicação:</label>
+                    <input type="date" value={dataPublicacao} onChange={(e) => setDataPublicacao(e.target.value)} />
+                </div>
+                <div className={style.formGroup}>
+                    <label>Autor:</label>
+                    <input type="text" value={nomeAutor} disabled /> {/* Exibe o nome do autor */}
+                </div>
+                <div className={style.formGroup}>
+                    <label>Tipo:</label>
+                    <select value={tipoId} onChange={(e) => setTipoId(e.target.value)} required>
+                        <option value="">Selecione um tipo</option>
+                        {tipos.map((tipo) => (
+                            <option key={tipo.id} value={tipo.id}>{tipo.nome}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className={style.formGroup}>
+                    <label>Estado:</label>
+                    <select value={estadoId} onChange={(e) => setEstadoId(e.target.value)} required>
+                        <option value="">Selecione um estado</option>
+                        {estados.map((estado) => (
+                            <option key={estado.id} value={estado.id}>{estado.nome}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className={`${style.formGroup} ${style.generosContainer}`}>
+                    <label>Gêneros:</label>
+                    <button
+                        type="button"
+                        className={style.generosButton}
+                        onClick={() => setModalOpen(true)}
+                    >
+                        Selecionar Gêneros
+                    </button>
+                </div>
+                <button type="submit" className={style.submitButton}>Criar Obra</button>
+            </form>
+            <ModalGenero
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                selecionaGenero={generoSelecionados.map(g => g.id)}
+                onSelectGenre={(selected) => {
+                    const selecionados = generos.filter(g => selected.includes(g.id));
+                    setGeneroSelecionados(selecionados);
+                }}
+                generos={generos}
+            />
+        </div>
     );
 }
