@@ -156,21 +156,18 @@ export default function CadastroUsuario() {
                                     className={style.fileInputStyled}
                                 />
                             </div>
-                            <div className={style.formGroup}>
-                                <label htmlFor="perfilId">Selecione o Perfil</label>
-                                <select
-                                    id="perfilId"
-                                    value={perfilId}
-                                    onChange={(e) => setPerfilId(e.target.value)}
-                                    required
-                                >
-                                    <option value="" disabled>Escolha um perfil</option>
-                                    {perfis.map((perfil: any) => (
-                                        <option key={perfil.id} value={perfil.id}>
-                                            {perfil.tipo}
-                                        </option>
-                                    ))}
-                                </select>
+                            <div className={style.rememberMe}>
+                                {perfis.map((perfil: any) => (
+                                    <div key={perfil.id}>
+                                        <input
+                                            type="checkbox"
+                                            id={`perfil-${perfil.id}`}
+                                            checked={perfilId === perfil.id}
+                                            onChange={() => setPerfilId(perfil.id)}
+                                        />
+                                        <label htmlFor={`perfil-${perfil.id}`}>{perfil.tipo}</label>
+                                    </div>
+                                ))}
                             </div>
                             <button type="submit">Cadastrar</button>
                         </form>

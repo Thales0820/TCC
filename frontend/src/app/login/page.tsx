@@ -99,14 +99,18 @@ export default function Login() {
                             <div className={style.rememberMe}>
                                 <input type="checkbox" id="remember" />
                                 <label htmlFor="remember">Lembre-se</label>
+                                <Link href="/updateSenha" legacyBehavior>
+                                    <a className={style.resgate}>Esqueceu sua senha?</a>
+                                </Link>
                             </div>
+                            
                             <button type="submit">Entrar</button>
                         </form>
-                        <Link href="/cadastro" legacyBehavior>
-                            <a className={style.cadastro}>Não tem Conta? Cadastre-se</a>
-                        </Link>
                         <Link href="/home" legacyBehavior>
-                            <a className={style.cadastro}>Quer dar uma olhada antes de se cadastrar? Acesse nossa página!</a>
+                            <a className={style.link}>Acesse nossa página!</a>
+                        </Link>
+                        <Link href="/cadastro" legacyBehavior>
+                            <a className={style.link}>Não tem Conta? Cadastre-se</a>
                         </Link>
                     </div>
                 </div>
