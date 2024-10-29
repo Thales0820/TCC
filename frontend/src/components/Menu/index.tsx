@@ -87,11 +87,13 @@ export const Menu = () => {
                             </Link>
                         </li>
                         <li>
+                        {validaTipo(usuario, ['Leitor', 'Autor']) && ( 
                             <Link href="/lista" legacyBehavior>
                                 <a className={style.link}>
                                     <i className="bi bi-bookmark-fill"></i> <span>Lista</span>
                                 </a>
                             </Link>
+                        )}
                         </li>
                         <li>
                             <Link href="/pesquisar" legacyBehavior>
@@ -101,18 +103,22 @@ export const Menu = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/atualizacoes" legacyBehavior>
-                                <a className={style.link}>
-                                    <GrUpdate /> <span>Atualizações</span>
-                                </a>
-                            </Link>
+                            {validaTipo(usuario, ['Leitor', 'Autor']) && (
+                                <Link href="/atualizacoes" legacyBehavior>
+                                    <a className={style.link}>
+                                        <GrUpdate /> <span>Atualizações</span>
+                                    </a>
+                                </Link>
+                            )}
                         </li>
                         <li>
-                            <Link href="/historico" legacyBehavior>
-                                <a className={style.link}>
-                                    <i className="bi bi-clock-history"></i> <span>Histórico</span>
-                                </a>
-                            </Link>
+                            {validaTipo(usuario, ['Leitor', 'Autor']) && ( //
+                                <Link href="/historico" legacyBehavior>
+                                    <a className={style.link}>
+                                        <i className="bi bi-clock-history"></i> <span>Histórico</span>
+                                    </a>
+                                </Link>
+                            )}
                         </li>
                         <li>
                             <Link href="/obras" legacyBehavior>
