@@ -18,9 +18,7 @@ interface ObraInfo {
     titulo: string;
     sinopse: string;
     capa: string;
-    autor: {
-        nome: string;
-    };
+    autor: string;
     dataPublicacao: string;
     tipo: string;
     estado: string;
@@ -115,7 +113,7 @@ export default function Obra({ params } : { params: { id: string } }) {
                     </div>
                     <p>{obra?.sinopse}</p>
                     <div className={style.especificacao}>
-                        <p>{obra?.autor.nome}</p>
+                        <p>{obra?.autor}</p>
                         <p>{obra?.tipo}</p>
                         <p>{obra?.estado}</p>
                         <p>{obra ? formatarData(obra.dataPublicacao) : 'Data não disponível'}</p>
