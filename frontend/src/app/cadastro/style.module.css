@@ -121,19 +121,49 @@
 
 .rememberMe {
     display: flex;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    align-items: center;
-    text-align: center;
+    margin-bottom: 8px;
+    margin-top: 5px;
     justify-content: space-around;
+    justify-items: center;
+}
+
+.rememberMe div {
+    display: flex;
+    align-items: center; /* Alinha verticalmente o input e label */
 }
 
 .rememberMe input {
-    margin-right: 10px;
+    -webkit-appearance: none; /* Remove a aparência padrão */
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Borda inicial do checkbox */
+    border-radius: 4px; /* Bordas arredondadas */
+    background-color: transparent; /* Fundo transparente inicialmente */
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    margin-right: 10px; /* Espaçamento entre o checkbox e a label */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rememberMe input:checked {
+    background-color: black; /* Fundo preto quando marcado */
+    border-color: black; /* Borda preta ao marcar */
+}
+  
+.rememberMe input:checked::before {
+    content: "✔";
+    color: white;
+    font-size: 28px;
+    display: inline-block;
+    text-align: center;
+    line-height: 20px; /* Alinha o ✔ verticalmente */
 }
 
 .rememberMe label {
-    margin-right: 20px;
+    color: #fff;
+    font-size: 1.2em;
 }
 
 .loginForm button {
