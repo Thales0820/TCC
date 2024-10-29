@@ -107,12 +107,12 @@ export const ModalPerfil = () => {
                                 </Link>
                                 <li><IoMdNotifications size={30} /> Notificações</li>
                                 <li><IoSettingsSharp size={30} /> Configuração</li>
-                                <li onClick={handleLogout}><LuArrowLeftFromLine size={30} /> Sair</li>
                             </ul>
                         </div>
                         <div className={style.barra}></div>
                         <div className={style.opcoes}>
                             <MdWbSunny size={30} />
+                            <LuArrowLeftFromLine onClick={handleLogout} size={30} />
                         </div>
                     </div>
                 </div>
