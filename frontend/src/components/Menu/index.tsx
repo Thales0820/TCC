@@ -86,15 +86,15 @@ export const Menu = () => {
                                 </a>
                             </Link>
                         </li>
-                        <li>
                         {validaTipo(usuario, ['Leitor', 'Autor']) && ( 
+                        <li>
                             <Link href="/lista" legacyBehavior>
                                 <a className={style.link}>
                                     <i className="bi bi-bookmark-fill"></i> <span>Lista</span>
                                 </a>
                             </Link>
-                        )}
                         </li>
+                        )}
                         <li>
                             <Link href="/pesquisar" legacyBehavior>
                                 <a className={style.link}>
@@ -102,24 +102,24 @@ export const Menu = () => {
                                 </a>
                             </Link>
                         </li>
-                        <li>
                             {validaTipo(usuario, ['Leitor', 'Autor']) && (
+                        <li>
                                 <Link href="/atualizacoes" legacyBehavior>
                                     <a className={style.link}>
                                         <GrUpdate /> <span>Atualizações</span>
                                     </a>
                                 </Link>
-                            )}
                         </li>
-                        <li>
+                            )}
                             {validaTipo(usuario, ['Leitor', 'Autor']) && ( //
+                        <li>
                                 <Link href="/historico" legacyBehavior>
                                     <a className={style.link}>
                                         <i className="bi bi-clock-history"></i> <span>Histórico</span>
                                     </a>
                                 </Link>
-                            )}
                         </li>
+                            )}
                         <li>
                             <Link href="/obras" legacyBehavior>
                                 <a className={style.link}>
