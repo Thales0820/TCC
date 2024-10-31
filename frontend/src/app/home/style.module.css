@@ -11,36 +11,10 @@
 .wrapper {
   width: 100%;
   max-width: 1024px;
-}
-  
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 20px;
-  padding: 20px;
-  margin-left: 35px;
+  margin-left: 65px;
 }
 
-.card {
-  display: flex;
-  flex-direction: column; /* Imagem na vertical com texto abaixo */
-  flex-basis: calc(25% - 40px);
-  align-items: center;
-  max-width: 200px; /* Ajuste conforme necessário */
-  padding: 10px;
-}
-
-.card img {
-  width: 100%; /* A imagem ocupa toda a largura do card */
-  height: 260px;
-  cursor: pointer;
-}
-
-.card p {
+.tema {
+  margin-top: 25px;
   color: #ffffff;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 10px;
-  font-size: 20px;
 }

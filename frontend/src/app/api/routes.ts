@@ -47,6 +47,22 @@ export const getGeneros = async () => {
                       .sort((a: string, b: string) => a.localeCompare(b));
 };
 
+export const getGeneroIds = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/generos`); // Suponha que essa rota retorna uma lista de obras
+    const data = response.data;
+
+    // Retorna um array de IDs das obras
+    return data.map((genero: { id: number, nome: string }) => ({
+      id: genero.id,
+      nome: genero.nome
+    }));
+  } catch (error) {
+    console.error("Erro ao buscar IDs de obras:", error);
+    return [];
+  }
+};
+
 export const getEstados = async () => {
   const response = await axios.get(`${API_URL}/estados`);
   return response.data.map((estado: { nome: string }) => estado.nome)
@@ -109,5 +125,48 @@ export const getObraDetails = async (id: number) => {
   } catch (error) {
       console.error("Erro ao buscar detalhes da obra:", error);
       return null;
+  }
+};
+
+export const getObrasLikes = async () => {
+  const response = await axios.get(`${API_URL}/obras?orderBy=likes&order=desc`);
+  const obras = response.data;
+
+  return obras.map((obra: { id: number; capa: string; titulo: string }) => ({
+    id: obra.id,
+    capa: obra.capa,
+    titulo: obra.titulo,
+  }));
+};
+
+export const getObrasRecentes = async () => {
+  const response = await axios.get(`${API_URL}/obras`, {
+    params: {
+      orderBy: 'created_at', // substitua pelo campo correto que indica a data de criação
+      order: 'desc'          // 'desc' para decrescente, 'asc' para crescente
+    }
+  });
+  
+  const obras = response.data;
+
+  return obras.map((obra: { id: number, capa: string, titulo: string }) => ({
+    id: obra.id,
+    capa: obra.capa,
+    titulo: obra.titulo
+  }));
+};
+
+export const getObrasPorGenero = async (generoId: number) => {
+  try {
+      const response = await axios.get(`${API_URL}/obras`);
+      const obras = response.data;
+
+      // Filtrando as obras para incluir apenas as que contêm o gênero desejado
+      return obras.filter((obra: { generos: { id: number }[] }) =>
+          obra.generos.some((genero) => genero.id === generoId)
+      );
+  } catch (error) {
+      console.error("Erro ao buscar obras:", error);
+      throw error;
   }
 };

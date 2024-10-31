@@ -8,28 +8,26 @@ import { ModalPerfil } from '@/components/ModalPerfil';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { verificaTokenExpirado, isAuthenticated } from '@/utils/auth';
-
-async function getObras() {
-    const res = await fetch("http://127.0.0.1:8000/api/v1/obras", { cache: "no-store" });
-
-    if (!res.ok) {
-        throw new Error("Falha ao buscar as obras");
-    }
-
-    return res.json();
-}
+import { CardsHome } from '@/components/CadsHome';
+import { getGeneroIds, getObrasLikes, getObrasPorGenero, getObrasRecentes } from '../api/routes';
 
 export default function Home() {
     const router = useRouter();
-    const [obras, setObras] = useState([]);
+    const [obrasLikes, setObrasLikes] = useState([]);
+    const [obrasNovas, setObrasNovas] = useState([]);
+    const [obrasGenero, setObrasGenero] = useState([]);
+    const [generoNome, setGeneroNome] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchObras = async () => {
+        const fetchObrasNovas = async () => {
             try {
-                const data = await getObras();
-                setObras(data);
+                console.log("Fetching obras...");
+                const data = await getObrasRecentes();
+                setObrasNovas(data);
+                console.log("Fetched obras:", data);
+                setObrasNovas(data);
             } catch (error) {
                 console.error("Erro ao buscar obras:", error);
                 setError((error as Error).message);
@@ -38,7 +36,52 @@ export default function Home() {
             }
         };
 
-        fetchObras();
+        const fetchObrasLike = async () => {
+            try {
+                console.log("Fetching obras...");
+                const data = await getObrasLikes();
+                setObrasLikes(data);
+                console.log("Fetched obras:", data);
+                setObrasLikes(data);
+            } catch (error) {
+                console.error("Erro ao buscar obras:", error);
+                setError((error as Error).message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const fetchObrasGenero = async () => {
+            try {
+                // Obtenha os IDs dos gêneros
+                const generoIds = await getGeneroIds();
+                
+                if (generoIds.length === 0) {
+                    console.warn("Nenhum ID de gênero encontrado.");
+                    return;
+                }
+        
+                // Escolha um ID aleatório da lista
+                const generoIdAleatorio = generoIds[Math.floor(Math.random() * generoIds.length)];
+        
+                // Use o ID aleatório para buscar obras
+                const data = await getObrasPorGenero(generoIdAleatorio.id);
+                setObrasGenero(data);
+
+                setGeneroNome(generoIdAleatorio.nome)
+
+                console.log(`Obras do gênero aleatório ${generoIdAleatorio}:`, data);
+            } catch (error) {
+                console.error("Erro ao buscar obras do gênero aleatório:", error);
+                setError((error as Error).message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchObrasNovas();
+        fetchObrasLike();
+        fetchObrasGenero();
     }, []);
 
     // Função que será chamada quando o usuário clicar em uma obra
@@ -72,18 +115,13 @@ export default function Home() {
                 <ModalPerfil />
                 <Carrossel />
                 <div className={style.wrapper}>
-                    <div className={style.cards}>
-                        {obras.map((obra: any) => (
-                            <div
-                                key={obra.id}
-                                className={style.card}
-                                onClick={() => handleObraClick(obra.id)}
-                            >
-                                <img src={`http://localhost:8000/${obra.capa}`} alt={`Capa de ${obra.titulo}`} />
-                                <p>{obra.titulo}</p>
-                            </div>
-                        ))}
-                    </div>
+                    <h1 className={style.tema}>Novidades:</h1>
+                        <CardsHome data={obrasNovas} />
+                    <h1 className={style.tema}>Mais Curtidos:</h1>
+                        <CardsHome data={obrasLikes} />
+                    <h1 className={style.tema}>Pra quem gosta de {generoNome}:</h1>
+                        <CardsHome data={obrasGenero} />
+                    <br />
                 </div>
             </div>
         </>

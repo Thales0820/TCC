@@ -11,9 +11,25 @@ class ObraController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $obras = Obra::with(['usuario', 'generos', 'estado', 'tipo'])->get(); // Incluindo generos
+        // Define o campo e a direção de ordenação padrão
+    $orderBy = $request->query('orderBy', 'id'); // Campo de ordenação padrão: 'id'
+    $order = $request->query('order', 'asc');    // Direção padrão: 'asc'
+
+    // Validação para garantir que os parâmetros sejam válidos
+    if (!in_array($orderBy, ['id', 'likes', 'titulo'])) {
+        $orderBy = 'id'; // Campo padrão se o parâmetro não for válido
+    }
+
+    if (!in_array($order, ['asc', 'desc'])) {
+        $order = 'asc'; // Direção padrão se o parâmetro não for válido
+    }
+
+        $obras = Obra::with(['usuario', 'generos', 'estado', 'tipo'])
+        ->orderBy($orderBy, $order)
+        ->get(); // Incluindo generos
+
         return response()->json($obras);
     }
 

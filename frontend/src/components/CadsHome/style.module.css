@@ -1,0 +1,52 @@
+.carrosselContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  margin-left: -35px;
+}
+  
+.card {
+  display: flex;
+  flex-direction: column; /* Imagem na vertical com texto abaixo */
+  flex-basis: calc(25% - 40px);
+  align-items: center;
+  max-width: 200px; /* Ajuste conforme necessário */
+  padding: 10px;
+}
+  
+.card img {
+  width: 100%; /* A imagem ocupa toda a largura do card */
+  height: 260px;
+  cursor: pointer;
+}
+  
+.card p {
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.arrowButton {
+  background: none;
+  border: none;
+  font-size: 35px;
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 1;
+}
+  
+.arrowButton:disabled {
+  color: #424242;
+  cursor: not-allowed;
+}

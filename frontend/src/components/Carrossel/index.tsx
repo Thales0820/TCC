@@ -10,9 +10,7 @@ interface Obra {
   titulo: string;
   generos: string[];
   sinopse: string;
-  autor: {
-    nome: string; // Ajuste o tipo para aceitar um objeto com nome
-  };
+  autor: string; // Ajuste o tipo para aceitar um objeto com nome
 }
 
 export const Carrossel: React.FC = () => {
@@ -91,7 +89,7 @@ export const Carrossel: React.FC = () => {
             )}
           </div>
           <p className={style.sinopse}><strong>{obraAtual.sinopse}</strong></p>
-          <p><strong>{obraAtual?.autor}</strong></p>
+          <p><strong>{obraAtual.autor}</strong></p>
         </div>
       </div>
       <div className={style.navigationContainer}>
