@@ -12,6 +12,7 @@ import { BsFillChatLeftTextFill } from 'react-icons/bs';
 import { getObraDetails } from '../../api/routes';
 import { isAuthenticated } from '@/utils/auth'; // Import the authentication utility
 import { useRouter } from 'next/navigation';
+import { PiBookOpenTextBold } from 'react-icons/pi';
 
 interface ObraInfo {
     id: number;
@@ -130,8 +131,14 @@ export default function Obra({ params } : { params: { id: string } }) {
                                     <span className={like ? style.curtido : style.likesCount}>{obra?.likes}</span>
                                 )}
                         </div>
-                        <BsFillChatLeftTextFill size={45} onClick={toggleComentarios} 
-                            className={mostrarComentarios ? style.aberto : style.fechado}/>
+                        {mostrarComentarios ? (
+                            <BsFillChatLeftTextFill size={45} onClick={toggleComentarios} 
+                            className={style.aberto}/>
+                        ) : (
+                            <PiBookOpenTextBold size={45} onClick={toggleComentarios} 
+                            className={style.aberto}/>
+                        )
+                        }
                     </div>
                 </div>
                 {mostrarComentarios ? (

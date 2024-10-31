@@ -97,3 +97,7 @@
     justify-content: space-around; /* Ícones lado a lado com espaçamento */
     padding: 5px 0;
 }
+
+.opcoes svg {
+    cursor: pointer;
+}
