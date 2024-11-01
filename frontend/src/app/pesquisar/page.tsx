@@ -14,12 +14,17 @@ interface Genero {
   nome: string;
 }
 
+interface Tipo_Estado {
+  id: number;
+  nome: string;
+}
+
 interface Obra {
   id: number;
   capa: string;
   titulo: string;
-  tipo_id: string; // Mantém como string
-  estado_id: string; // Mantém como string
+  tipo: Tipo_Estado; // Mantém como string
+  estado: Tipo_Estado; // Mantém como string
   generos: Genero[];
 }
 
@@ -49,19 +54,17 @@ export default function Pesquisar() {
   const handleFilter = () => {
     return obrasData.filter(obra => {
       const matchesSearchTerm = obra.titulo.toLowerCase().includes(pesquisar.toLowerCase());
-      const matchesTipo = tipoObra === "" || obra.tipo_id === tipoObra; // Comparação
-      const matchesEstado = estadoObra === "" || obra.estado_id === estadoObra; // Comparação
-      const matchesGenero = 
-        selecioneGenero.length === 0 ||
-        obra.generos.some(g => selecioneGenero.includes(g.nome));
-
-      console.log(`Obra: ${obra.titulo}, Matches: ${matchesSearchTerm}, ${matchesTipo}, ${matchesEstado}, ${matchesGenero}`);
+      const matchesTipo = tipoObra === "" || obra.tipo.nome === tipoObra; // Comparação
+      const matchesEstado = estadoObra === "" || obra.estado.nome === estadoObra; // Comparação
+      const matchesGenero = selecioneGenero.length === 0 ||
+            obra.generos.some(g => selecioneGenero.includes(g.nome));
   
       return matchesSearchTerm && matchesTipo && matchesEstado && matchesGenero;
     });
   };
 
   const filtroObras = handleFilter();
+  console.log(filtroObras)
 
   const voltar = () => {
     router.back();
