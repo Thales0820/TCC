@@ -132,10 +132,10 @@ export default function Obra({ params } : { params: { id: string } }) {
                                 )}
                         </div>
                         {mostrarComentarios ? (
-                            <BsFillChatLeftTextFill size={45} onClick={toggleComentarios} 
+                            <PiBookOpenTextBold size={45} onClick={toggleComentarios} 
                             className={style.aberto}/>
                         ) : (
-                            <PiBookOpenTextBold size={45} onClick={toggleComentarios} 
+                            <BsFillChatLeftTextFill size={45} onClick={toggleComentarios} 
                             className={style.aberto}/>
                         )
                         }

@@ -155,11 +155,11 @@
 }
 
 .aberto {
-    color: #000000;
+    color: #ffffff;
 }
 
 .aberto:hover {
-    color: #ffffff;
+    color: #000000;
 }
 
 .topoCapitulos {
