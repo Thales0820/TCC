@@ -64,15 +64,27 @@ export const getGeneroIds = async () => {
 };
 
 export const getEstados = async () => {
-  const response = await axios.get(`${API_URL}/estados`);
-  return response.data.map((estado: { nome: string }) => estado.nome)
-                      .sort((a: string, b: string) => a.localeCompare(b));
+  try {
+    const response = await axios.get(`${API_URL}/estados`);
+    // console.log("Qualquer:", response.data);
+    return response.data.map((estado: { nome: string }) => estado.nome)
+                        .sort((a: string, b: string) => a.localeCompare(b));
+  } catch (error) {
+    console.error("Erro ao buscar estados:", error);
+    return [];
+  }
 };
 
 export const getTipos = async () => {
-  const response = await axios.get(`${API_URL}/tipos`);
-  return response.data.map((tipo: { nome: string }) => tipo.nome)
-                      .sort((a: string, b: string) => a.localeCompare(b));
+  try {
+    const response = await axios.get(`${API_URL}/tipos`);
+    //console.log("Dados dos tipos:", response.data);
+    return response.data.map((tipo: { nome: string }) => tipo.nome)
+                        .sort((a: string, b: string) => a.localeCompare(b));
+  } catch (error) {
+    console.error("Erro ao buscar tipos:", error);
+    return [];
+  }
 };
 
 export const getObras = async () => {
