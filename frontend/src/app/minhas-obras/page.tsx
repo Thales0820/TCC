@@ -77,7 +77,7 @@ export default function MinhasObras() {
                         ><p>Cancelado</p></div>
                     </div>
                 </div>
-                <Cards data={filtrarLeitura}/>
+               
                 <Link href="/criar-obra" legacyBehavior>
                   <div className={style.botaoContainer}>
                     <button type="submit" className={style.botao}>Criar Obra</button>
