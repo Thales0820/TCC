@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Usuario extends Authenticatable implements JWTSubject
+class Usuario extends Authenticatable implements JWTSubject, CanResetPassword
 {
-    use HasFactory, HasApiTokens;
+    use HasFactory, HasApiTokens, Notifiable;
 
     protected $fillable = [
         'nome',
@@ -44,9 +46,15 @@ class Usuario extends Authenticatable implements JWTSubject
         return $this->hasMany(Comentario::class);
     }
 
-    // Se você quiser usar o mutator para garantir que a senha seja sempre hashed ao salvar
+    // Mutator para garantir que a senha seja sempre hashed ao salvar
     public function setSenhaAttribute($value)
     {
         $this->attributes['senha'] = bcrypt($value);
+    }
+
+    // Accessor para permitir que o Laravel utilize 'password'
+    public function getPasswordAttribute()
+    {
+        return $this->attributes['senha'];
     }
 }

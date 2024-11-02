@@ -74,36 +74,37 @@ export default function Login() {
                         {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="email">E-mail</label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                placeholder="exemplo@gmail.com" 
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="exemplo@gmail.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                required 
+                                required
                             />
                             <label htmlFor="password">Senha</label>
                             <div className={style.inputSenhaContainer}>
-                                <input 
-                                    type={mostrarSenha ? "text" : "password"} 
-                                    id="password" 
-                                    placeholder="Digite sua Senha" 
+                                <input
+                                    type={mostrarSenha ? "text" : "password"}
+                                    id="password"
+                                    placeholder="Digite sua Senha"
                                     value={senha}
                                     onChange={(e) => setSenha(e.target.value)}
-                                    required 
+                                    required
                                 />
                                 <span onClick={toggleMostrarSenha} className={style.iconeSenha}>
-                                    {mostrarSenha ? <IoEyeOff size={20}/> : <IoEye size={20}/>}
+                                    {mostrarSenha ? <IoEyeOff size={20} /> : <IoEye size={20} />}
                                 </span>
                             </div>
                             <div className={style.rememberMe}>
                                 <input type="checkbox" id="remember" />
                                 <label htmlFor="remember">Lembre-se</label>
-                                <Link href="/updateSenha" legacyBehavior>
+                                <Link href="http://127.0.0.1:8000/forgot-password" legacyBehavior>
                                     <a className={style.resgate}>Esqueceu sua senha?</a>
                                 </Link>
+
                             </div>
-                            
+
                             <button type="submit">Entrar</button>
                         </form>
                         <Link href="/home" legacyBehavior>

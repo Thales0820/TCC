@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -27,13 +26,12 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        // Validação dos dados de entrada
         $request->validate([
             'nome' => 'required|string|max:255',
             'foto_perfil' => 'required|image|mimes:jpeg,png,jpg|max:50000',
             'banner' => 'nullable|string|max:255',
             'email' => 'required|email|unique:usuarios,email',
-            'senha' => 'required|string|min:6',
+            'senha' => 'required|string',
             'perfil_id' => 'required|exists:perfils,id',
         ]);
 
@@ -41,23 +39,22 @@ class UsuarioController extends Controller
         $fileName = time() . '-' . $request->file('foto_perfil')->getClientOriginalName();
         $request->file('foto_perfil')->move(public_path('imagesUser'), $fileName);
 
-        // Criação do usuário
+        // Criação do usuário com senha hashada
         $usuario = Usuario::create([
             'nome' => $request->nome,
             'foto_perfil' => 'imagesUser/' . $fileName,
             'banner' => $request->banner,
             'email' => $request->email,
-            'senha' => $request->senha, // A senha será armazenada como hash via mutator
+            'senha' => $request->senha,
             'perfil_id' => $request->perfil_id,
         ]);
 
         // Gerar o token JWT
         $token = JWTAuth::fromUser($usuario);
 
-        // Resposta JSON com os dados do usuário e o token
         return response()->json([
             'usuario' => $usuario,
-            'token' => $token, // Adicione o token na resposta
+            'token' => $token,
             'image_url' => asset('imagesUser/' . $fileName),
         ], 201);
     }
@@ -89,30 +86,25 @@ class UsuarioController extends Controller
 
         $request->validate([
             'nome' => 'required|string|max:255',
-            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg|max:50000', // Permitir atualização sem uma nova imagem
-            'banner' => 'required|string|max:255',
+            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg|max:50000',
+            'banner' => 'nullable|string|max:255',
             'email' => 'required|email|unique:usuarios,email,' . $id,
             'senha' => 'nullable|string|min:6',
             'perfil_id' => 'required|exists:perfils,id',
         ]);
 
-        $data = $request->only([
-            'nome',
-            'banner',
-            'email',
-            'perfil_id'
-        ]);
+        $data = $request->only(['nome', 'banner', 'email', 'perfil_id']);
 
-        // Handle file upload if a new file is provided
+        // Atualiza a foto de perfil se foi enviada uma nova
         if ($request->hasFile('foto_perfil')) {
             $fileName = time() . '-' . $request->file('foto_perfil')->getClientOriginalName();
             $request->file('foto_perfil')->move(public_path('imagesUser'), $fileName);
-            $data['foto_perfil'] = 'imagesUser/' . $fileName; // Atualiza o caminho da imagem no banco de dados
+            $data['foto_perfil'] = 'imagesUser/' . $fileName;
         }
 
-        // Verifica se a senha foi atualizada
+        // Atualiza a senha se um novo valor foi fornecido
         if ($request->filled('senha')) {
-            $data['senha'] = bcrypt($request->senha); // Usar bcrypt para a nova senha
+            $data['senha'] = bcrypt($request->senha);
         }
 
         $usuario->update($data);
@@ -142,72 +134,26 @@ class UsuarioController extends Controller
     public function login(Request $request)
     {
         try {
-            // Validação dos dados de entrada
             $validated = $request->validate([
                 'email' => 'required|email',
                 'senha' => 'required|string',
             ]);
 
-            // Buscar o usuário pelo email
             $usuario = Usuario::where('email', $validated['email'])->first();
 
-            // Verificar se o usuário foi encontrado e a senha está correta
             if (!$usuario || !Hash::check($validated['senha'], $usuario->senha)) {
                 return response()->json(['error' => 'Credenciais inválidas'], 401);
             }
 
-            // Gerar o token de autenticação
             $token = JWTAuth::fromUser($usuario);
 
-            // Retornar a resposta JSON com o token e os dados do usuário
             return response()->json([
                 'token' => $token,
                 'user' => $usuario,
             ], 200);
         } catch (\Exception $e) {
-            // Log do erro e retorno de mensagem de erro
             Log::error('Erro no login: ' . $e->getMessage());
             return response()->json(['error' => 'Erro no servidor'], 500);
         }
-    }
-
-    // Método para verificar o email e enviar o token
-    public function verificarEmail(Request $request)
-    {
-        $request->validate(['email' => 'required|email']);
-
-        $usuario = Usuario::where('email', $request->email)->first();
-
-        if (!$usuario) {
-            return response()->json(['message' => 'Usuário não encontrado'], 404);
-        }
-
-        // Gerar o token de redefinição de senha e armazená-lo
-        $token = Str::random(60);
-        DB::table('reseta_senha')->insert(['email' => $usuario->email, 'token' => $token]);
-
-        // Aqui você enviaria um e-mail com o link de redefinição de senha
-        return response()->json(['message' => 'Token gerado com sucesso', 'token' => $token]);
-    }
-
-    public function resetarSenha(Request $request)
-    {
-        $request->validate([
-            'token' => 'required|string',
-            'email' => 'required|email',
-            'nova_senha' => 'required|string|min:6|confirmed', // Use 'nova_senha_confirmation' se você tiver esse campo
-        ]);
-
-        // Lógica para resetar a senha aqui
-        $usuario = Usuario::where('email', $request->email)->first();
-        if (!$usuario) {
-            return response()->json(['message' => 'Usuário não encontrado'], 404);
-        }
-
-        // Atualize a senha (supondo que você use bcrypt)
-        $usuario->senha = bcrypt($request->nova_senha);
-        $usuario->save();
-
-        return response()->json(['message' => 'Senha atualizada com sucesso']);
     }
 }

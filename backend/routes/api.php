@@ -36,8 +36,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('/obras/{id}', [ObraController::class, 'show']);
     Route::post('usuario/login', [UsuarioController::class, 'login']);
-    Route::post('usuario/verificar-email', [UsuarioController::class, 'verificarEmail']);
-    Route::post('/usuarios/resetar-senha', [UsuarioController::class, 'resetarSenha']);
+
 });
 
 Route::get('/', function () {
