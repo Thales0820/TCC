@@ -1,3 +1,4 @@
+<link rel="shortcut icon" href="{{ asset('image/logoDark.png') }}" type="image/png">
 <link rel="stylesheet" href="{{ asset('css/reset.style.css') }}">
 <div class="row">
     <!-- @php dump(session()->all()) @endphp -->
