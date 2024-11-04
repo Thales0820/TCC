@@ -68,7 +68,7 @@ export default function CadastroUsuario() {
             setError(''); // Limpar mensagens de erro
     
             (e.target as HTMLFormElement).reset();
-            router.push('/home'); // Redireciona para a página inicial após cadastro bem-sucedido
+            router.push('/login'); // Redireciona para a página inicial após cadastro bem-sucedido
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
                 const message = error.response?.data.message || 'Erro ao cadastrar usuário';

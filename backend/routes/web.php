@@ -106,6 +106,6 @@ Route::post('/reset-password', function (Request $request) {
 
 
     return $status === Password::PASSWORD_RESET
-        ? redirect()->to('http://localhost:3000/home')->with('status', __($status)) // Altere a URL para a sua página inicial
+        ? redirect()->to('http://localhost:3000/login')->with('status', __($status)) // Altere a URL para a sua página inicial
         : back()->withErrors(['email' => [__($status)]]);
 })->middleware('guest')->name('password.update');
