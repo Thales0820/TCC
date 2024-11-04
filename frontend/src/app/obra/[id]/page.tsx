@@ -13,6 +13,7 @@ import { getObraDetails } from '../../api/routes';
 import { isAuthenticated } from '@/utils/auth'; // Import the authentication utility
 import { useRouter } from 'next/navigation';
 import { PiBookOpenTextBold } from 'react-icons/pi';
+import Link from 'next/link';
 
 interface ObraInfo {
     id: number;
@@ -123,7 +124,9 @@ export default function Obra({ params } : { params: { id: string } }) {
             </div>
             <div className={style.acoes}>
                 <div className={style.funcoes}>
-                    <button><FaPlus size={25}/> Adicionar</button>
+                    <Link href='/adiciona-capitulo' legacyBehavior>
+                        <button><FaPlus size={25}/> Adicionar</button>
+                    </Link>
                     <div className={style.icones}>
                         <div onClick={toggleLike}>
                             <BiSolidLike size={45} className={like ? style.like : style.curtir}/>

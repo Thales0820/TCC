@@ -110,7 +110,7 @@
 }
 
 .fileInputStyled::before {
-    content: 'Escolher Arquivo ';
+    content: 'Escolher Arquivo';
     display: inline-block;
     background: #222831;
     color: white;

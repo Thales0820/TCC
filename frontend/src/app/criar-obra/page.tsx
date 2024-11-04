@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
@@ -196,7 +195,7 @@ export default function CriarObra() {
                 </div>
                 <div className={style.formGroup}>
                     <label>Capa:</label>
-                    <input type="file" onChange={(e) => setCapa(e.target.files ? e.target.files[0] : null)} />
+                    <input type="file" onChange={(e) => setCapa(e.target.files ? e.target.files[0] : null)} className={style.fileInputStyled}/>
                 </div>
                 <div className={style.formGroup}>
                     <label>Sinopse:</label>
