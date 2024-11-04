@@ -4,12 +4,74 @@ import style from './style.module.css';
 import { useRouter } from "next/navigation";
 import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Cards } from "@/components/Cards";
 import Pesquisar from "@/components/Pesquisar";
 import { ModalPerfil } from "@/components/ModalPerfil";
+import { parseCookies } from 'nookies';
+import {jwtDecode} from 'jwt-decode';
+import { isAuthenticated, verificaTokenExpirado } from "@/utils/auth"; // Importa do auth.ts
+
+interface TokenPayload {
+    sub: string;
+}
+
+interface Usuario {
+    id: number;
+    nome: string;
+    perfil: {
+        tipo: string;
+    };
+}
 
 export default function MinhasObras() {
+    const router = useRouter();
+    const [selecioneEstado, setSelecioneEstado] = useState<string>("Publicando");
+    const [autorId, setAutorId] = useState<number | null>(null);
+    const [nomeAutor, setNomeAutor] = useState<string>("");
+
+    useEffect(() => {
+        const cookies = parseCookies();
+        const token = cookies['obra.token'];
+
+        if (token && isAuthenticated() && !verificaTokenExpirado(token)) {
+            const decodedToken: TokenPayload = jwtDecode<TokenPayload>(token);
+            const userId = decodedToken.sub;
+
+            const fetchUserAndOptions = async () => {
+                try {
+                    const res = await fetch(`http://127.0.0.1:8000/api/v1/usuarios/${userId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+
+                    if (!res.ok) {
+                        throw new Error("Erro ao buscar dados do usuário.");
+                    }
+
+                    const usuario: Usuario = await res.json();
+
+                    // Verifica se o usuário é um autor
+                    if (!usuario.perfil || usuario.perfil.tipo !== 'Autor') {
+                        router.push('/home');
+                        return;
+                    }
+
+                    setAutorId(usuario.id);
+                    setNomeAutor(usuario.nome);
+                } catch (error) {
+                    console.error("Erro ao verificar o perfil do usuário:", error);
+                    router.push('/home'); // Redireciona se houver erro
+                }
+            };
+
+            fetchUserAndOptions();
+        } else {
+            router.push('/home'); // Redireciona se o token não for válido
+        }
+    }, [router]);
 
     const obrasData = [
         {
@@ -36,21 +98,18 @@ export default function MinhasObras() {
           titulo: "Adulthood Is a Myth",
           estado: "Finalizado",
         },
-      ];
-
-    const router = useRouter();
-    const [selecioneEstado, setSelecioneEstado] = useState<string>("Publicando");
+    ];
 
     const voltar = () => {
         router.back();
     }
 
     const handleStatusClick = (estadoPublicacao: string) => {
-        console.log("Status selecionado: ", estadoPublicacao);
-        setSelecioneEstado(estadoPublicacao)
-      }
-  
-      const filtrarLeitura = obrasData.filter((obra) => obra.estado === selecioneEstado);
+        setSelecioneEstado(estadoPublicacao);
+    }
+
+    const filtrarLeitura = obrasData.filter((obra) => obra.estado === selecioneEstado);
+
     return (
         <>
             <Menu />
@@ -60,6 +119,7 @@ export default function MinhasObras() {
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
                     <h1>Seus Quadrinhos</h1>
+                    <p>Autor: {nomeAutor}</p>
                 </div>
                 <div className={style.listaContainer}>
                     <div className={style.lista}>
