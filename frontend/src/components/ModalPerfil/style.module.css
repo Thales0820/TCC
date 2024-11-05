@@ -29,7 +29,7 @@
     max-width: 400px;
     width: 200px;
     right: 10px;
-    height: 320px;
+    height: 360px;
     margin-top: 50px;
     margin-right: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -81,14 +81,47 @@
     display: flex;
     align-items: center;
     text-align: start;
-    margin: 20px 0;
+    padding: 10px;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
 }
 
+.lista li:hover {
+    background-color: black;
+}
+
 .lista li svg {
     margin-right: 15px; /* Espaçamento entre ícone e texto */
+}
+
+.deslogado {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.deslogado p {
+    margin: 15px;
+    font-size: 20px;
+}
+
+.deslogado button {
+    color: #ffffff;
+    width: 100%;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    height: auto;
+    border: none;
+    background-color: #424242;
+}
+
+.deslogado button:hover {
+    background-color: black;
 }
 
 /* Estilo para a última div com ícones */
