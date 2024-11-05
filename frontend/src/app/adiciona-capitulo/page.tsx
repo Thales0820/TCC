@@ -1,46 +1,44 @@
 "use client";
 import React, { useState } from "react";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import style from "./style.module.css";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
-// Função customizada para mover elementos dentro de um array
-function moveArrayItem(array: string[], fromIndex: number, toIndex: number) {
-    const item = array[fromIndex];
-    const newArray = array.filter((_, index) => index !== fromIndex);
-    newArray.splice(toIndex, 0, item);
-    return newArray;
-}
-
 // Componente para renderizar cada imagem (Página)
-const SortableItem = SortableElement(({ value, onImageClick }: { value: string; 
-                    onImageClick: (image: string) => void }) => {         
-    console.log("SortableItem renderizado com a imagem:", value);           
-    return (
-        <div className={style.imageWrapper}
-        onClick={() => {
-            console.log("Imagem Clicada!"); onImageClick(value); // Chama a função recebida
+const SortableItem = ({
+    value,
+    index,
+    onDragStart,
+    onDragOver,
+    onDrop,
+    onImageClick,
+}: {
+    value: string;
+    index: number;
+    onDragStart: (index: number) => void;
+    onDragOver: (index: number) => void;
+    onDrop: () => void;
+    onImageClick: (image: string) => void;
+}) => (
+    <div
+        className={style.imageWrapper}
+        draggable
+        onDragStart={() => onDragStart(index)}
+        onDragOver={(e) => {
+            e.preventDefault();
+            onDragOver(index);
         }}
+        onDrop={onDrop}
+        onClick={() => onImageClick(value)}
     >
         <img src={value} alt="Página" className={style.imageThumbnail} />
-    </div>            
-    )
-});
-
-// Componente para renderizar a lista de imagens ordenáveis
-const SortableList = SortableContainer(({ items, onImageClick }: { items: string[]; 
-                    onImageClick: (image: string) => void }) => (
-    <div className={style.imagesGrid}>
-        {items.map((value, index) => (
-            <SortableItem key={`item-${index}`} index={index} value={value} onImageClick={onImageClick} />
-        ))}
     </div>
-));
+);
 
 export default function AdicionaCapitulo() {
     const router = useRouter();
     const [imagens, setImagens] = useState<string[]>([]);
+    const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [imagemSelecionada, setImagemSelecionada] = useState<string | null>(null);
 
@@ -55,20 +53,32 @@ export default function AdicionaCapitulo() {
         setImagens((oldImages) => [...oldImages, ...imagensCarregadas]);
     };
 
-    // Função para lidar com a reorganização das imagens
-    const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
-        setImagens((oldImages) => moveArrayItem(oldImages, oldIndex, newIndex));
+    // Funções de arrastar e soltar para reordenar imagens
+    const handleDragStart = (index: number) => {
+        setDraggingIndex(index);
+    };
+
+    const handleDragOver = (index: number) => {
+        if (draggingIndex === null) return;
+        if (index !== draggingIndex) {
+            const newImagens = [...imagens];
+            const [draggedItem] = newImagens.splice(draggingIndex, 1);
+            newImagens.splice(index, 0, draggedItem);
+            setDraggingIndex(index);
+            setImagens(newImagens);
+        }
+    };
+
+    const handleDrop = () => {
+        setDraggingIndex(null);
     };
 
     const handleImageClick = (image: string) => {
-        console.log("Abrindo modal para imagem:", image); // Confirmação da abertura do modal
         setImagemSelecionada(image);
         setModalOpen(true);
-        console.log(`Modal abrindo: ${modalOpen}`)
     };
 
     const closeModal = () => {
-        console.log("Fechando modal.");
         setModalOpen(false);
         setImagemSelecionada(null);
     };
@@ -103,7 +113,19 @@ export default function AdicionaCapitulo() {
                         onChange={handleImages}
                     />
                 </div>
-                <SortableList items={imagens} onSortEnd={onSortEnd} onImageClick={handleImageClick} axis="xy" />
+                <div className={style.imagesGrid}>
+                    {imagens.map((value, index) => (
+                        <SortableItem
+                            key={`item-${index}`}
+                            value={value}
+                            index={index}
+                            onDragStart={handleDragStart}
+                            onDragOver={handleDragOver}
+                            onDrop={handleDrop}
+                            onImageClick={handleImageClick}
+                        />
+                    ))}
+                </div>
                 <div className={style.divBotao}>
                     <button className={style.submitButton}>Lançar Capítulo</button>
                 </div>
