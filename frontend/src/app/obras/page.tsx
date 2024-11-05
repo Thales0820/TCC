@@ -11,7 +11,7 @@ import { getObras } from "../api/routes";
 
 interface Obra {
     id: number;
-    image: string;
+    capa: string;
     titulo: string;
 }
 
