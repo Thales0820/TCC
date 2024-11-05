@@ -4,7 +4,7 @@ import style from "./style.module.css";
 
 interface CardItem {
   id: number;
-  image: string;
+  capa: string;
   titulo: string;
 }
 
@@ -23,7 +23,7 @@ export const Cards: React.FC<CardsProps> = ({ data }) => {
         {data.map((item) => (
           <div key={item.id} className={style.card}>
               <Link href={`obra/${item.id}`} legacyBehavior>
-                <img src={item.image.startsWith("http") ? item.image : `http://localhost:8000/${item.image}`} alt={`image de ${item.titulo}`} />
+                <img src={item.capa.startsWith("http") ? item.capa : `http://localhost:8000/${item.capa}`} alt={`capa de ${item.titulo}`} />
               </Link>
               <p>{item.titulo}</p>
           </div>

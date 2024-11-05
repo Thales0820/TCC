@@ -8,7 +8,7 @@ interface Capitulo {
   
 interface Obra {
     titulo: string;
-    image: string;
+    capa: string;
     capitulos: Capitulo[];
 }
   
@@ -23,7 +23,7 @@ export const CardList: React.FC<CardComponentProps> = ({data}) => {
             <div className={style.row}>
                 {data.map((item, index) => (
                 <div key={index} className={style.card}>
-                    <img src={item.image} alt={`Capa de ${item.titulo}`} className={style.image} />
+                    <img src={item.capa} alt={`Capa de ${item.titulo}`} className={style.capa} />
                     <div className={style.conteudo}>
                         <h2 className={style.nome}>{item.titulo}</h2>
                         <div className={style.barra}></div>

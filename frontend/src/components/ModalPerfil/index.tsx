@@ -95,19 +95,31 @@ export const ModalPerfil = () => {
                                 ) : error ? (
                                     <span>{error}</span>
                                 ) : (
-                                    <span>Carregando...</span>
+                                    <span>Usuário não Logado</span>
                                 )}
                             </div>
                         </div>
                         <div className={style.barra}></div>
                         <div className={style.lista}>
-                            <ul>
-                                <Link href="/lista" legacyBehavior>
-                                    <li><FaBookmark size={30} /> Lista de Leitura</li>
-                                </Link>
-                                <li><IoMdNotifications size={30} /> Notificações</li>
-                                <li><IoSettingsSharp size={30} /> Configuração</li>
-                            </ul>
+                            {usuario ? (
+                                <ul>
+                                    <Link href="/lista" legacyBehavior>
+                                        <li><FaBookmark size={30} /> Lista de Leitura</li>
+                                    </Link>
+                                    <li><IoMdNotifications size={30} /> Notificações</li>
+                                    <li><IoSettingsSharp size={30} /> Configuração</li>
+                                </ul>
+                            ) : (
+                                <div className={style.deslogado}>
+                                    <Link href="/login" legacyBehavior>
+                                        <button>Faça Login</button>
+                                    </Link>
+                                    <p>Ou</p>
+                                    <Link href="/cadastro" legacyBehavior>
+                                        <button>Cadastre-se</button>
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                         <div className={style.barra}></div>
                         <div className={style.opcoes}>
