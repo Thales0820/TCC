@@ -14,6 +14,28 @@ import { isAuthenticated } from '@/utils/auth'; // Import the authentication uti
 import { useRouter } from 'next/navigation';
 import { PiBookOpenTextBold } from 'react-icons/pi';
 import Link from 'next/link';
+import { jwtDecode } from 'jwt-decode';
+import { parseCookies } from 'nookies';
+
+interface TokenPayload {
+    sub: string
+}
+
+function getUserId(): string | null {
+    const cookies = parseCookies();
+    const token = cookies['obra.token'];
+  
+    if (token) {
+      try {
+        const decodedToken = jwtDecode<TokenPayload>(token);
+        return decodedToken.sub;
+      } catch (error) {
+        console.error("Erro ao decodificar o token:", error);
+        return null;
+      }
+    }
+    return null;
+  }
 
 interface ObraInfo {
     id: number;
@@ -21,6 +43,7 @@ interface ObraInfo {
     sinopse: string;
     capa: string;
     autor: string;
+    autor_id: string;
     dataPublicacao: string;
     tipo: string;
     estado: string;
@@ -39,10 +62,11 @@ export default function Obra({ params } : { params: { id: string } }) {
     const [like, setLike] = useState(false);
     const [mostrarComentarios, setMostrarComentarios] = useState(false);
     const [obra, setObra] = useState<ObraInfo | null>(null);
+    const userId = getUserId()
 
     useEffect(() => {
         // Redirect to login if the user is not authenticated
-        if (!isAuthenticated()) {
+        if (!userId) {
             router.push('/login');
             return;
         }
@@ -50,11 +74,12 @@ export default function Obra({ params } : { params: { id: string } }) {
         // Fetch obra details
         const fetchObra = async () => {
             const response = await getObraDetails(parseInt(params.id));
+            console.log("Dados da Obra:", response);
             setObra(response);
         };
 
         fetchObra();
-    }, [params.id, router]);
+    }, [params.id, router, userId]);
 
     const toggleOrdem = () => {
         if (obra) {
@@ -65,6 +90,9 @@ export default function Obra({ params } : { params: { id: string } }) {
             setOrdemCrescente(!ordemCrescente);
         }
     };
+
+    console.log(`Teste : ${userId}`)
+    console.log(`Teste2 : ${obra?.autor_id}`)
 
     const toggleVisualizacao = (numero: number) => {
         if (obra) {
@@ -124,9 +152,15 @@ export default function Obra({ params } : { params: { id: string } }) {
             </div>
             <div className={style.acoes}>
                 <div className={style.funcoes}>
-                    <Link href='/adiciona-capitulo' legacyBehavior>
-                        <button><FaPlus size={25}/> Adicionar</button>
-                    </Link>
+                    {obra && String(obra?.autor_id) === String(userId) ? (
+                        <Link href='/adiciona-capitulo' legacyBehavior>
+                            <button><FaPlus size={25}/> Adicionar Cap.</button>
+                        </Link>
+                    ) : (
+                        <Link href='/home' legacyBehavior>
+                            <button><FaPlus size={25}/> Adicionar</button>
+                        </Link>
+                    )}
                     <div className={style.icones}>
                         <div onClick={toggleLike}>
                             <BiSolidLike size={45} className={like ? style.like : style.curtir}/>

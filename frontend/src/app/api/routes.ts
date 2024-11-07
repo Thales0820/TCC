@@ -122,6 +122,7 @@ export const getObraDetails = async (id: number) => {
           titulo: data.titulo,
           sinopse: data.sinopse,
           capa: `http://127.0.0.1:8000/${data.capa}`,
+          autor_id: data.usuario.autor_id,
           autor: data.usuario.nome, // Altere para retornar apenas o nome como string
           dataPublicacao: data.data_publicacao,
           tipo: data.tipo,

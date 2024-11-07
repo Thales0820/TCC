@@ -171,6 +171,7 @@ class ObraController extends Controller
             'sinopse' => $obra->sinopse,
             'capa' => $obra->capa,
             'usuario' => [
+                'autor_id' => $obra->usuario->id,
                 'nome' => $obra->usuario->nome,
                 'foto_perfil' => $obra->usuario->foto_perfil,
             ],
