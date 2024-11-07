@@ -111,6 +111,22 @@ export const getObraIds = async () => {
   }
 };
 
+export const getObrasPorAutor = async (autorId: number) => {
+  const response = await axios.get(`${API_URL}/obras`);
+  const obras = response.data;
+
+  // Filtra as obras pelo autorId no front-end
+  const obrasDoAutor = obras
+    .filter((obra: { autor_id: number }) => obra.autor_id === autorId)
+    .map((obra: { id: number, capa: string, titulo: string, estado: { nome: string } }) => ({
+      id: obra.id,
+      capa: obra.capa,
+      titulo: obra.titulo,
+      estado: obra.estado.nome,
+    }));
+
+  return obrasDoAutor;
+};
 
 export const getObraDetails = async (id: number) => {
   try {
