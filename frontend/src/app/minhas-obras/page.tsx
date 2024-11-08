@@ -11,6 +11,7 @@ import { ModalPerfil } from "@/components/ModalPerfil";
 import { parseCookies } from 'nookies';
 import {jwtDecode} from 'jwt-decode';
 import { isAuthenticated, verificaTokenExpirado } from "@/utils/auth"; // Importa do auth.ts
+import { getObrasPorAutor } from "../api/routes";
 
 interface TokenPayload {
     sub: string;
@@ -24,11 +25,19 @@ interface Usuario {
     };
 }
 
+interface Obra {
+    id: number
+    titulo: string
+    capa: string
+    estado: string
+}
+
 export default function MinhasObras() {
     const router = useRouter();
     const [selecioneEstado, setSelecioneEstado] = useState<string>("Publicando");
     const [autorId, setAutorId] = useState<number | null>(null);
     const [nomeAutor, setNomeAutor] = useState<string>("");
+    const [obras, setObras] = useState<Obra[]>([])
 
     useEffect(() => {
         const cookies = parseCookies();
@@ -38,7 +47,7 @@ export default function MinhasObras() {
             const decodedToken: TokenPayload = jwtDecode<TokenPayload>(token);
             const userId = decodedToken.sub;
 
-            const fetchUserAndOptions = async () => {
+            const fetchUserObras = async () => {
                 try {
                     const res = await fetch(`http://127.0.0.1:8000/api/v1/usuarios/${userId}`, {
                         method: 'GET',
@@ -61,44 +70,23 @@ export default function MinhasObras() {
 
                     setAutorId(usuario.id);
                     setNomeAutor(usuario.nome);
+
+                    console.log('id: ' + usuario.id )
+
+                    const obrasDoAutor = await getObrasPorAutor(usuario.id)
+                    setObras(obrasDoAutor)                    
+
                 } catch (error) {
                     console.error("Erro ao verificar o perfil do usuário:", error);
                     router.push('/home'); // Redireciona se houver erro
                 }
             };
 
-            fetchUserAndOptions();
+            fetchUserObras();
         } else {
             router.push('/home'); // Redireciona se o token não for válido
         }
     }, [router]);
-
-    const obrasData = [
-        {
-          id: 1,
-          capa: "https://m.media-amazon.com/capas/I/818KGgapfiL._SL1500_.jpg",
-          titulo: "A Garota do Mar",
-          estado: "Publicando",
-        },
-        {
-          id: 2,
-          capa: "https://mangadex.org/covers/aa6c76f7-5f5f-46b6-a800-911145f81b9b/2d50161f-e715-4e4f-86bd-d38772823b39.jpg",
-          titulo: "Sono Bisque Doll wa Koi o Suru",
-          estado: "Pausado",
-        },
-        {
-          id: 3,
-          capa: "https://m.media-amazon.com/capas/I/814zhAWOKBL._AC_UF1000,1000_QL80_.jpg",
-          titulo: "Persépolis",
-          estado: "Cancelado",
-        },
-        {
-          id: 4,
-          capa: "https://m.media-amazon.com/capas/I/81dQUROWcHL._AC_UF1000,1000_QL80_.jpg",
-          titulo: "Adulthood Is a Myth",
-          estado: "Finalizado",
-        },
-    ];
 
     const voltar = () => {
         router.back();
@@ -108,7 +96,7 @@ export default function MinhasObras() {
         setSelecioneEstado(estadoPublicacao);
     }
 
-    const filtrarLeitura = obrasData.filter((obra) => obra.estado === selecioneEstado);
+    const filtrarLeitura = obras.filter((obra) => obra.estado === selecioneEstado);
 
     return (
         <>
@@ -119,7 +107,6 @@ export default function MinhasObras() {
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
                     <h1>Seus Quadrinhos</h1>
-                    <p>Autor: {nomeAutor}</p>
                 </div>
                 <div className={style.listaContainer}>
                     <div className={style.lista}>
@@ -137,7 +124,7 @@ export default function MinhasObras() {
                         ><p>Cancelado</p></div>
                     </div>
                 </div>
-               
+               <Cards data={filtrarLeitura}/>
                 <Link href="/criar-obra" legacyBehavior>
                   <div className={style.botaoContainer}>
                     <button type="submit" className={style.botao}>Criar Obra</button>
@@ -147,6 +134,7 @@ export default function MinhasObras() {
                   </div>
                 </Link>
             </div>
+            <br />
         </>
     );
 }
