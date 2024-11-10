@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
@@ -13,7 +12,8 @@ class CapituloController extends Controller
      */
     public function index()
     {
-        $capitulos = Capitulo::all();
+        // Carregar capítulos com a obra associada
+        $capitulos = Capitulo::with('obra')->get();
         return response()->json($capitulos);
     }
 
@@ -25,10 +25,20 @@ class CapituloController extends Controller
         $request->validate([
             'titulo' => 'required|string',
             'obra_id' => 'required|exists:obras,id',
-            'data_publicacao' => 'required|date',
+            'data_publicacao' => 'required|date_format:Y-m-d', // Validar formato de data
             'numero' => 'required|string',
         ]);
 
+        // Verificar se já existe um capítulo com o mesmo número na obra
+        $existingCapitulo = Capitulo::where('obra_id', $request->obra_id)
+                                    ->where('numero', $request->numero)
+                                    ->first();
+
+        if ($existingCapitulo) {
+            return response()->json(['message' => 'Capítulo com esse número já existe para esta obra.'], 400);
+        }
+
+        // Criar o capítulo
         $capitulo = Capitulo::create([
             'titulo' => $request->titulo,
             'obra_id' => $request->obra_id,
@@ -44,7 +54,7 @@ class CapituloController extends Controller
      */
     public function show(string $id)
     {
-        $capitulo = Capitulo::find($id);
+        $capitulo = Capitulo::with('obra')->find($id); // Carregar obra associada ao capítulo
 
         if (!$capitulo) {
             return response()->json(['message' => 'Capítulo não encontrado'], 404);
@@ -67,10 +77,21 @@ class CapituloController extends Controller
         $request->validate([
             'titulo' => 'required|string',
             'obra_id' => 'required|exists:obras,id',
-            'data_publicacao' => 'required|date',
+            'data_publicacao' => 'required|date', // Validar formato de data
             'numero' => 'required|string',
         ]);
 
+        // Verificar se já existe um capítulo com o mesmo número na obra
+        $existingCapitulo = Capitulo::where('obra_id', $request->obra_id)
+                                    ->where('numero', $request->numero)
+                                    ->where('id', '!=', $id) // Garantir que não está verificando o próprio capítulo
+                                    ->first();
+
+        if ($existingCapitulo) {
+            return response()->json(['message' => 'Capítulo com esse número já existe para esta obra.'], 400);
+        }
+
+        // Atualizar o capítulo
         $capitulo->update([
             'titulo' => $request->titulo,
             'obra_id' => $request->obra_id,
@@ -92,6 +113,12 @@ class CapituloController extends Controller
             return response()->json(['message' => 'Capítulo não encontrado'], 404);
         }
 
+        // Verificar se o capítulo tem páginas associadas
+        if ($capitulo->paginas->count() > 0) {
+            return response()->json(['message' => 'Este capítulo não pode ser excluído porque possui páginas associadas.'], 400);
+        }
+
+        // Excluir o capítulo
         $capitulo->delete();
 
         return response()->json(null, 204);
