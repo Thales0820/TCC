@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\v1\ComentarioController;
 use App\Http\Controllers\Api\v1\GeneroController;
 use App\Http\Controllers\Api\v1\historicoUsuarioController;
 use App\Http\Controllers\Api\v1\LeituraController;
+use App\Http\Controllers\Api\v1\ListaController;
 use App\Http\Controllers\Api\V1\ObraGeneroController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::apiResource('historico', historicoUsuarioController::class);
     Route::apiResource('obragenero', ObraGeneroController::class);
     Route::apiResource('obraslancadas', ObraController::class);
+    Route::apiResource('listas', ListaController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::get('/obras/{id}', [ObraController::class, 'show']);
     Route::post('usuario/login', [UsuarioController::class, 'login']);

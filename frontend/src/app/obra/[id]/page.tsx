@@ -4,17 +4,18 @@ import style from './style.module.css';
 import Pesquisar from '@/components/Pesquisar';
 import { ModalPerfil } from '@/components/ModalPerfil';
 import { BiArrowFromBottom, BiArrowToBottom, BiSolidLike } from 'react-icons/bi';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaRegEdit } from 'react-icons/fa';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import Comentarios from '@/components/Comentarios';
 import { BsFillChatLeftTextFill } from 'react-icons/bs';
-import { getObraDetails } from '../../api/routes';
+import { getLista, getObraDetails } from '../../api/routes';
 import { useRouter } from 'next/navigation';
 import { PiBookOpenTextBold } from 'react-icons/pi';
 import { parseCookies } from 'nookies';
 import {jwtDecode} from 'jwt-decode';
 import Link from 'next/link';
+import { ModalLeitura } from '@/components/ModalLeitura';
 
 interface TokenPayload {
     sub: string;
@@ -58,9 +59,11 @@ function getUserId(): string | null {
 export default function Obra({ params }: { params: { id: string } }) {
     const router = useRouter();
     const [ordemCrescente, setOrdemCrescente] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [like, setLike] = useState(false);
     const [mostrarComentarios, setMostrarComentarios] = useState(false);
     const [obra, setObra] = useState<ObraInfo | null>(null);
+    const [leitura, setLeitura] = useState<string | null>(null);
     const userId = getUserId();
 
     useEffect(() => {
@@ -75,7 +78,16 @@ export default function Obra({ params }: { params: { id: string } }) {
             setObra(response);
         };
 
+        const fetchLeitura = async () => {
+            if (userId) {
+                const leitura = await getLista(parseInt(userId), parseInt(params.id));
+                console.log("Leitura obtida:", leitura); // Console para verificar a resposta
+                setLeitura(leitura);
+            }
+        };
+
         fetchObra();
+        fetchLeitura();
     }, [params.id, router, userId]);
 
     const handleAddChapter = () => {
@@ -95,6 +107,9 @@ export default function Obra({ params }: { params: { id: string } }) {
             setOrdemCrescente(!ordemCrescente);
         }
     };
+
+    const handleOpenModal = () => { setIsModalOpen(true); };
+    const handleCloseModal = () => { setIsModalOpen(false); };
 
     const toggleVisualizacao = (numero: number) => {
         if (obra) {
@@ -156,10 +171,10 @@ export default function Obra({ params }: { params: { id: string } }) {
                     <div className={style.funcoes}>
                         {obra && String(obra.autor_id) === String(userId) ? (
                             <button onClick={handleAddChapter}><FaPlus size={25} /> Adicionar Cap.</button>
+                        ) : leitura ? (
+                            <button><FaRegEdit size={25} /> {leitura}</button>
                         ) : (
-                            <Link href='/home' legacyBehavior>
-                                <button><FaPlus size={25} /> Adicionar</button>
-                            </Link>
+                            <button onClick={handleOpenModal}><FaPlus size={25} /> Adicionar</button>
                         )}
                         <div className={style.icones}>
                             <div onClick={toggleLike}>
@@ -203,6 +218,12 @@ export default function Obra({ params }: { params: { id: string } }) {
                     )}
                 </div>
             </div>
+            <ModalLeitura 
+            isOpen={isModalOpen} 
+            onClose={handleCloseModal}
+            obraId={parseInt(params.id)}
+            usuarioId={userId ? parseInt(userId) : null}
+            />
         </>
     );
 }
