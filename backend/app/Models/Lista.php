@@ -18,18 +18,18 @@ class Lista extends Model
     // Relacionamento com Usuário
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'usuario_id');
+        return $this->belongsTo(Usuario::class);
     }
 
     // Relacionamento com Obra
     public function obra()
     {
-        return $this->belongsTo(Obra::class, 'obra_id');
+        return $this->belongsTo(Obra::class);
     }
 
     // Relacionamento com Leitura (se existir uma tabela de leituras)
     public function leitura()
     {
-        return $this->belongsTo(Leitura::class, 'leitura_id');
+        return $this->belongsTo(Leitura::class);
     }
 }

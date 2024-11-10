@@ -4,18 +4,18 @@ import style from './style.module.css';
 import Pesquisar from '@/components/Pesquisar';
 import { ModalPerfil } from '@/components/ModalPerfil';
 import { BiArrowFromBottom, BiArrowToBottom, BiSolidLike } from 'react-icons/bi';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaRegEdit } from 'react-icons/fa';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import Comentarios from '@/components/Comentarios';
 import { BsFillChatLeftTextFill } from 'react-icons/bs';
-import { getObraDetails } from '../../api/routes';
-import { isAuthenticated } from '@/utils/auth'; // Import the authentication utility
+import { getLista, getObraDetails } from '../../api/routes';
 import { useRouter } from 'next/navigation';
 import { PiBookOpenTextBold } from 'react-icons/pi';
 import Link from 'next/link';
 import { jwtDecode } from 'jwt-decode';
 import { parseCookies } from 'nookies';
+import { ModalLeitura } from '@/components/ModalLeitura';
 
 interface TokenPayload {
     sub: string
@@ -58,10 +58,12 @@ interface ObraInfo {
 
 export default function Obra({ params } : { params: { id: string } }) {
     const router = useRouter();
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [ordemCrescente, setOrdemCrescente] = useState(true)
     const [like, setLike] = useState(false);
     const [mostrarComentarios, setMostrarComentarios] = useState(false);
     const [obra, setObra] = useState<ObraInfo | null>(null);
+    const [leitura, setLeitura] = useState<string | null>(null);
     const userId = getUserId()
 
     useEffect(() => {
@@ -74,11 +76,20 @@ export default function Obra({ params } : { params: { id: string } }) {
         // Fetch obra details
         const fetchObra = async () => {
             const response = await getObraDetails(parseInt(params.id));
-            console.log("Dados da Obra:", response);
+            //console.log("Dados da Obra:", response);
             setObra(response);
         };
 
+        const fetchLeitura = async () => {
+            if (userId) {
+                const leitura = await getLista(parseInt(userId), parseInt(params.id));
+                console.log("Leitura obtida:", leitura); // Console para verificar a resposta
+                setLeitura(leitura);
+            }
+        };
+
         fetchObra();
+        fetchLeitura()
     }, [params.id, router, userId]);
 
     const toggleOrdem = () => {
@@ -91,8 +102,8 @@ export default function Obra({ params } : { params: { id: string } }) {
         }
     };
 
-    console.log(`Teste : ${userId}`)
-    console.log(`Teste2 : ${obra?.autor_id}`)
+    const handleOpenModal = () => { setIsModalOpen(true); };
+    const handleCloseModal = () => { setIsModalOpen(false); };
 
     const toggleVisualizacao = (numero: number) => {
         if (obra) {
@@ -156,10 +167,10 @@ export default function Obra({ params } : { params: { id: string } }) {
                         <Link href='/adiciona-capitulo' legacyBehavior>
                             <button><FaPlus size={25}/> Adicionar Cap.</button>
                         </Link>
-                    ) : (
-                        <Link href='/home' legacyBehavior>
-                            <button><FaPlus size={25}/> Adicionar</button>
-                        </Link>
+                    ) : leitura ? (
+                        <button><FaRegEdit size={25} /> {leitura}</button>
+                    ) : (  
+                        <button onClick={handleOpenModal}><FaPlus size={25}/> Adicionar</button>
                     )}
                     <div className={style.icones}>
                         <div onClick={toggleLike}>
@@ -208,6 +219,12 @@ export default function Obra({ params } : { params: { id: string } }) {
                 )}
             </div>
         </div>
+        <ModalLeitura 
+            isOpen={isModalOpen} 
+            onClose={handleCloseModal}
+            obraId={parseInt(params.id)}
+            usuarioId={userId ? parseInt(userId) : null}
+        />
         </>
     )
 }

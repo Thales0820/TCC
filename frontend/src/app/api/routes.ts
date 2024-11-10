@@ -87,6 +87,69 @@ export const getTipos = async () => {
   }
 };
 
+export const getLeituras = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/leituras`);
+    // console.log('Resposta da API: ', response.data)
+    const leituras = response.data;
+
+    return leituras.map((leitura: { id: number, tipo: string }) => ({
+      id: leitura.id,
+      tipo: leitura.tipo,
+    }));
+  } catch (error) {
+    console.error('Erro ao buscar Leituras:', error)
+    return []
+  }
+};
+
+export const addToLista = async (usuarioId: number, obraId: number, leituraId: number) => {
+    return await axios.post(`${API_URL}/listas`, {
+      usuario_id: usuarioId,
+      obra_id: obraId,
+      leitura_id: leituraId
+    })
+}
+
+// export const updateLista = async (listaId: number, leituraId: number) => {
+//   try {
+//       const response = await axios.put(`${API_URL}/listas/${listaId}`, {
+//           leitura_id: leituraId,
+//       });
+//       return response.data;
+//   } catch (error) {
+//       throw error;
+//   }
+// };
+
+// export const deleteLista = async (listaId: number) => {
+//   try {
+//       const response = await axios.delete(`${API_URL}/listas/${listaId}`);
+//       return response.data;
+//   } catch (error) {
+//       throw error;
+//   }
+// };
+
+export const getLista = async (usuarioId: number, obraId: number) => {
+  try {
+      const response = await fetch(`${API_URL}/listas`);
+      const data = await response.json()
+      
+      // Filtrar a lista para verificar se existe uma entrada com o usuario_id e obra_id fornecidos
+    const lista = data.find(
+      (item: { usuario_id: number; obra_id: number }) =>
+        item.usuario_id === usuarioId && item.obra_id === obraId
+    );
+
+    console.log("Dados da Lista para usuário e obra:", lista);
+    return lista ? lista.leitura.tipo : null;
+  } catch (error) {
+      console.error('Erro ao buscar obra na lista:', error);
+      return null
+  }
+};
+
 export const getObras = async () => {
   const response = await axios.get(`${API_URL}/obras`);
   const obras = response.data;
