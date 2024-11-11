@@ -35,6 +35,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::apiResource('obraslancadas', ObraController::class);
 
     Route::get('/obras/{id}', [ObraController::class, 'show']);
+    Route::get('paginas/{id}',[PaginaController::class, 'show']);
     Route::post('usuario/login', [UsuarioController::class, 'login']);
 
 });

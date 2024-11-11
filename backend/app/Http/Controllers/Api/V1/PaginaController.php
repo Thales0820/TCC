@@ -20,7 +20,17 @@ class PaginaController extends Controller
         return response()->json($paginas);
     }
 
+    public function show($id)
+    {
+        // Busca a obra no banco de dados com o ID fornecido
+        $pagina = Pagina::with(['capitulo']) // Relacionamentos com autor (usuario) e gêneros
+            ->find($id);
 
+        // Verifica se a obra foi encontrada
+        if (!$pagina) {
+            return response()->json(['error' => 'Obra não encontrada'], 404);
+        }
+    }
     /**
      * Store a newly created resource in storage.
      */
