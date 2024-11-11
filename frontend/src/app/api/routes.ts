@@ -142,6 +142,17 @@ export const getLista = async (usuarioId: number, obraId: number) => {
   }
 };
 
+export const deletarLista = async (listaId: number) => {
+  try {
+      const response = await axios.delete(`${API_URL}/listas/${listaId}`);
+      console.log("Obra removida da lista com sucesso!", response.data);
+      return response.data; // Retorna a resposta para confirmação
+  } catch (error) {
+      console.error("Erro ao remover a obra da lista:", error);
+      throw error;
+  }
+};
+
 export const getObras = async () => {
   const response = await axios.get(`${API_URL}/obras`);
   const obras = response.data;

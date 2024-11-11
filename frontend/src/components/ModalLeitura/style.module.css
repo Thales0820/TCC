@@ -113,6 +113,10 @@
     font-weight: bold;
 }
 
-.botao:hover {  
+.botao:hover {
     background-color: #000000;
+}
+
+.excluir {
+    color: #CF0A0A;
 }

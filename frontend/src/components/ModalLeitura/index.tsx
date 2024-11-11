@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import style from './style.module.css';
-import { addToLista, getLeituras, updateLista } from '@/app/api/routes';
+import { addToLista, deletarLista, getLeituras, updateLista } from '@/app/api/routes';
 
 type ModalProps = {
     isOpen: boolean;
@@ -57,6 +57,18 @@ export const ModalLeitura: React.FC<ModalProps> = ({
         }
     };
 
+    const handleDelete = async () => {
+        try {
+            if (listaId) {
+                await deletarLista(listaId);
+                alert('Obra retirada da lista de leitura com sucesso!');
+            }
+            onClose()
+        } catch (error) {
+            console.error("Erro ao tentar excluir a obra da lista:", error);
+        }
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -79,7 +91,7 @@ export const ModalLeitura: React.FC<ModalProps> = ({
                 </div>
                 <div className={style.controle}>
                     <button onClick={handleConfirm} className={style.botao}>Confirmar</button>
-                    <button onClick={onClose} className={style.botao}>Remover da Lista</button>
+                    <button onClick={handleDelete} className={`${style.botao} ${style.excluir}`}>Remover da Lista</button>
                 </div>
             </div>
         </div>
