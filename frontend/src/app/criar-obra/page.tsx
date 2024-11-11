@@ -206,8 +206,7 @@ export default function CriarObra() {
                     <input type="date" value={dataPublicacao} onChange={(e) => setDataPublicacao(e.target.value)} />
                 </div>
                 <div className={style.formGroup}>
-                    <label>Autor:</label>
-                    <input type="text" value={nomeAutor} disabled /> {/* Exibe o nome do autor */}
+                    <input  type="hidden" value={nomeAutor} disabled /> {/* Exibe o nome do autor */}
                 </div>
                 <div className={style.formGroup}>
                     <label>Tipo:</label>
