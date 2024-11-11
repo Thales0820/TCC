@@ -15,7 +15,7 @@ class ListaController extends Controller
                 $query->select('id', 'nome');
             },
             'obra' => function ($query) {
-                $query->select('id', 'titulo');
+                $query->select('id', 'titulo', 'capa');
             },
             'leitura' => function ($query) {
                 $query->select('id', 'tipo');

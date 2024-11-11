@@ -34,8 +34,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::apiResource('historico', historicoUsuarioController::class);
     Route::apiResource('obragenero', ObraGeneroController::class);
     Route::apiResource('obraslancadas', ObraController::class);
-    Route::apiResource('listas', ListaController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::apiResource('listas', ListaController::class)->only(['index', 'store', 'destroy']);
 
+    Route::put('/listas/{id}', [ListaController::class, 'update']);
     Route::get('/obras/{id}', [ObraController::class, 'show']);
     Route::get('paginas/{id}',[PaginaController::class, 'show']);
     Route::post('usuario/login', [UsuarioController::class, 'login']);

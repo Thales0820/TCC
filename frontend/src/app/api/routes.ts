@@ -111,6 +111,18 @@ export const addToLista = async (usuarioId: number, obraId: number, leituraId: n
     })
 }
 
+export const updateLista = async (listaId: number, leituraId: number) => {
+  try {
+    const response = await axios.put(`${API_URL}/listas/${listaId}`, {
+      leitura_id: leituraId,
+    })
+    return response.data
+  } catch (error) {
+    console.error('Erro ao atualizar a lista:', error);
+    throw error;
+  }
+}
+
 export const getLista = async (usuarioId: number, obraId: number) => {
   try {
       const response = await fetch(`${API_URL}/listas`);
@@ -118,12 +130,12 @@ export const getLista = async (usuarioId: number, obraId: number) => {
       
       // Filtrar a lista para verificar se existe uma entrada com o usuario_id e obra_id fornecidos
     const lista = data.find(
-      (item: { usuario_id: number; obra_id: number }) =>
+      (item: { usuario_id: number; obra_id: number; leitura: { id: number; tipo: string } }) =>
         item.usuario_id === usuarioId && item.obra_id === obraId
     );
 
     console.log("Dados da Lista para usuário e obra:", lista);
-    return lista ? lista.leitura.tipo : null;
+    return lista ? { listaId: lista.id, leituraId: lista.leitura.id, tipo: lista.leitura.tipo } : null;
   } catch (error) {
       console.error('Erro ao buscar obra na lista:', error);
       return null

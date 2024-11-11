@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import style from './style.module.css'
-import { addToLista, getLeituras } from '@/app/api/routes';
+import style from './style.module.css';
+import { addToLista, getLeituras, updateLista } from '@/app/api/routes';
 
 type ModalProps = {
     isOpen: boolean;
     onClose: () => void;
     obraId: number;
     usuarioId: number | null;
+    listaId?: number;
+    leituraAtual?: number;
 };
 
-export const ModalLeitura: React.FC<ModalProps> = ({ isOpen, onClose, obraId, usuarioId }) => {
+export const ModalLeitura: React.FC<ModalProps> = ({
+    isOpen,
+    onClose,
+    obraId,
+    usuarioId,
+    listaId = null,
+    leituraAtual = null,
+}) => {
     const [leituras, setLeituras] = useState<{ id: number; tipo: string }[]>([]);
-    const [leituraSelecionada, setLeituraSelecionada] = useState<number | null>(null);
+    const [leituraSelecionada, setLeituraSelecionada] = useState<number | null>(leituraAtual);
 
     useEffect(() => {
         const fetchLeituras = async () => {
             try {
                 const data = await getLeituras();
-                //console.log('Dados da API:', data); // Verifique se os dados são retornados aqui
-                setLeituras(data)
+                setLeituras(data);
             } catch (error) {
                 console.error('Erro ao buscar leituras:', error);
             }
@@ -26,56 +34,54 @@ export const ModalLeitura: React.FC<ModalProps> = ({ isOpen, onClose, obraId, us
 
         if (isOpen && usuarioId) {
             fetchLeituras();
+            setLeituraSelecionada(leituraAtual);
         }
-    }, [isOpen, usuarioId]);
+    }, [isOpen, usuarioId, leituraAtual]);
 
     const handleConfirm = async () => {
-        if (!usuarioId) {
-            console.error('Usuário não autenticado');
+        if (!usuarioId || leituraSelecionada === null) {
+            alert("Selecione uma opção antes de Confirmar");
             return;
         }
-        if (leituraSelecionada) {
-            try {
-                console.log('Enviando dados:', { usuarioId, obraId, leituraSelecionada });
+        try {
+            if (listaId) {
+                await updateLista(listaId, leituraSelecionada);
+                alert('Leitura atualizada com sucesso!');
+            } else {
                 await addToLista(usuarioId, obraId, leituraSelecionada);
                 alert('Obra adicionada à lista de leitura com sucesso!');
-                onClose();
-            } catch (error) {
-                console.error('Erro ao adicionar à lista:', error);
             }
-        } else {
-            alert("Selecione alguma opção antes de Confirmar");
+            onClose();
+        } catch (error) {
+            console.error('Erro ao salvar leitura:', error);
         }
     };
 
     if (!isOpen) return null;
 
-    const handleClickInsideModal = (event: React.MouseEvent) => {
-        event.stopPropagation(); // Impede que o clique no modal feche o modal
-    };
-
-    return(
-        <>
-            <div className={style.modalFundo} onClick={onClose}>
-                <div className={style.modal} onClick={handleClickInsideModal}>
-                    <h2 className={style.titulo}>Selecione para Adicionar a sua Lista</h2>
-                    <div className={style.checklistContainer}>
-                        {leituras.map((leitura) => (
-                            <label key={leitura.id} className={style.checkboxItem}>
-                                <input type="radio" name="status" value={leitura.id} 
-                                    checked={leituraSelecionada === leitura.id} 
-                                    onChange={() => setLeituraSelecionada(leitura.id)}
-                                />
-                                {leitura.tipo}
-                            </label>
-                        ))}
-                    </div>
-                    <div className={style.controle}>
-                        <button onClick={handleConfirm} className={style.botao}>Confirmar</button>
-                        <button onClick={onClose} className={style.botao}>Remover da Lista</button>
-                    </div>
+    return (
+        <div className={style.modalFundo} onClick={onClose}>
+            <div className={style.modal} onClick={(e) => e.stopPropagation()}>
+                <h2 className={style.titulo}>Selecione para Adicionar a sua Lista</h2>
+                <div className={style.checklistContainer}>
+                    {leituras.map((leitura) => (
+                        <label key={leitura.id} className={style.checkboxItem}>
+                            <input
+                                type="radio"
+                                name="status"
+                                value={leitura.id}
+                                checked={leituraSelecionada === leitura.id}
+                                onChange={() => setLeituraSelecionada(leitura.id)}
+                            />
+                            {leitura.tipo}
+                        </label>
+                    ))}
+                </div>
+                <div className={style.controle}>
+                    <button onClick={handleConfirm} className={style.botao}>Confirmar</button>
+                    <button onClick={onClose} className={style.botao}>Remover da Lista</button>
                 </div>
             </div>
-        </>
-    )
-}
+        </div>
+    );
+};

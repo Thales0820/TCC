@@ -104,11 +104,15 @@
 .botao {
     padding: 10px 20px;
     width: 200px;
-    font-size: 16px;
+    font-size: 20px;
     background-color: #222831;
     color: white;
     border: none;
     border-radius: 15px;
     cursor: pointer;
     font-weight: bold;
+}
+
+.botao:hover {  
+    background-color: #000000;
 }

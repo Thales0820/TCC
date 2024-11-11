@@ -63,7 +63,7 @@ export default function Obra({ params }: { params: { id: string } }) {
     const [like, setLike] = useState(false);
     const [mostrarComentarios, setMostrarComentarios] = useState(false);
     const [obra, setObra] = useState<ObraInfo | null>(null);
-    const [leitura, setLeitura] = useState<string | null>(null);
+    const [leitura, setLeitura] = useState<{ listaId: number; leituraId: number; tipo: string } | null>(null);
     const userId = getUserId();
 
     useEffect(() => {
@@ -80,9 +80,9 @@ export default function Obra({ params }: { params: { id: string } }) {
 
         const fetchLeitura = async () => {
             if (userId) {
-                const leitura = await getLista(parseInt(userId), parseInt(params.id));
-                console.log("Leitura obtida:", leitura); // Console para verificar a resposta
-                setLeitura(leitura);
+                const lista = await getLista(parseInt(userId), parseInt(params.id));
+                console.log("Leitura obtida:", lista); // Console para verificar a resposta
+                setLeitura(lista);
             }
         };
 
@@ -172,7 +172,7 @@ export default function Obra({ params }: { params: { id: string } }) {
                         {obra && String(obra.autor_id) === String(userId) ? (
                             <button onClick={handleAddChapter}><FaPlus size={25} /> Adicionar Cap.</button>
                         ) : leitura ? (
-                            <button><FaRegEdit size={25} /> {leitura}</button>
+                            <button onClick={handleOpenModal}><FaRegEdit size={25} /> {leitura.tipo}</button>
                         ) : (
                             <button onClick={handleOpenModal}><FaPlus size={25} /> Adicionar</button>
                         )}
@@ -219,10 +219,12 @@ export default function Obra({ params }: { params: { id: string } }) {
                 </div>
             </div>
             <ModalLeitura 
-            isOpen={isModalOpen} 
-            onClose={handleCloseModal}
-            obraId={parseInt(params.id)}
-            usuarioId={userId ? parseInt(userId) : null}
+                isOpen={isModalOpen} 
+                onClose={handleCloseModal}
+                obraId={parseInt(params.id)}
+                usuarioId={userId ? parseInt(userId) : null}
+                listaId={leitura?.listaId}     
+                leituraAtual={leitura?.leituraId}  
             />
         </>
     );
