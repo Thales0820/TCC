@@ -194,6 +194,34 @@ export const getObrasPorAutor = async (autorId: number) => {
   return obrasDoAutor;
 };
 
+export const getObrasLista = async (usuarioId: number) => {
+  try {
+      // Faz uma requisição para obter todas as listas
+      const response = await axios.get(`${API_URL}/listas`);
+      const listas = response.data;
+
+      // Filtra as obras que pertencem ao usuário específico e extrai apenas os dados necessários
+      const listaUsuario = listas
+          .filter((lista: { usuario_id: number }) => lista.usuario_id === usuarioId)
+          .map((lista: {
+            id: number;
+            obra: { id: number; titulo: string; capa: string };
+            leitura: { tipo: string };
+          }) => ({
+              id: lista.obra.id,
+              titulo: lista.obra.titulo,
+              capa: lista.obra.capa,
+              leitura: lista.leitura.tipo
+          }));
+
+      return listaUsuario;
+
+  } catch (error) {
+      console.error("Erro ao buscar obras na lista do usuário:", error);
+      return [];
+  }
+};
+
 export const getObraDetails = async (id: number) => {
   try {
       const response = await axios.get(`${API_URL}/obras/${id}`);
