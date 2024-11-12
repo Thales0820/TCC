@@ -112,6 +112,13 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
         event.preventDefault();
         setIsSubmitting(true);
 
+        // Verificar se o número do capítulo é negativo
+        if (parseInt(formData.numero) <= 0) {
+            alert("O número do capítulo deve ser um número positivo.");
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
             const form = new FormData();
             form.append("titulo", formData.titulo);
@@ -174,7 +181,15 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
                         id="numero"
                         name="numero"
                         value={formData.numero}
-                        onChange={(e) => setFormData({ ...formData, numero: e.target.value })}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            if (parseInt(value) < 1) {
+                                setFormData({ ...formData, numero: "1" });
+                            } else {
+                                setFormData({ ...formData, numero: value });
+                            }
+                        }}
+                        min="1"
                         required
                     />
                 </div>
@@ -233,3 +248,4 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
         </div>
     );
 }
+

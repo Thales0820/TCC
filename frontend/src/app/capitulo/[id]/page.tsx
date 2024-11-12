@@ -1,9 +1,9 @@
-"use client";
+"use client"
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import axios from 'axios';
 import style from './style.module.css';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 interface Obra {
     id: number;
@@ -27,17 +27,27 @@ interface Capitulo {
     obra: Obra;
 }
 
+interface Pagina {
+    id: number;
+    capitulo_id: number;
+    numero: string;
+    imagem: string;
+}
+
 export default function CapituloPage() {
     const router = useRouter();
-    const { id } = useParams(); // Captura o ID do capítulo a partir da URL
+    const { id } = useParams();
 
     const [capitulo, setCapitulo] = useState<Capitulo | null>(null);
+    const [paginas, setPaginas] = useState<Pagina[]>([]);
+    const [currentPage, setCurrentPage] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null); // Estado para capturar erros
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (typeof id === 'string') {
             fetchCapitulo(id);
+            fetchPaginas(id);
         }
     }, [id]);
 
@@ -48,12 +58,11 @@ export default function CapituloPage() {
                     'Accept': 'application/json'
                 }
             });
-            
-            // Verifica se a resposta da API está correta e se possui dados válidos
+
             if (response.status === 200 && response.data) {
                 setCapitulo(response.data);
             } else {
-                throw new Error('A resposta da API não é válida.');
+                throw new Error('Capítulo não encontrado.');
             }
         } catch (error) {
             console.error('Erro ao carregar capítulo:', error);
@@ -63,44 +72,72 @@ export default function CapituloPage() {
         }
     };
 
-    if (loading) {
-        return <div>Carregando...</div>;
-    }
+    const fetchPaginas = async (capituloId: string) => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/v1/paginas`, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
 
-    if (error) {
-        return <div>{error}</div>;
-    }
+            if (response.status === 200 && response.data) {
+                const paginasFiltradas = response.data.filter((pagina: Pagina) => pagina.capitulo_id === parseInt(capituloId));
+                setPaginas(paginasFiltradas);
+            } else {
+                throw new Error('Páginas não encontradas para este capítulo.');
+            }
+        } catch (error) {
+            console.error('Erro ao carregar páginas:', error);
+            setError('Erro ao carregar páginas. Tente novamente mais tarde.');
+        }
+    };
 
-    if (!capitulo) {
-        return <div>Capítulo não encontrado.</div>;
-    }
+    const handleNextPage = () => {
+        if (currentPage < paginas.length - 1) {
+            setCurrentPage(prevPage => prevPage + 1);
+        }
+    };
 
-    // Verifica se a URL da capa é válida e constrói a URL completa
-    const capaUrl = capitulo.obra.capa ? `http://127.0.0.1:8000/${capitulo.obra.capa}` : '';
+    const handlePreviousPage = () => {
+        if (currentPage > 0) {
+            setCurrentPage(prevPage => prevPage - 1);
+        }
+    };
+
+    if (loading) return <div>Carregando...</div>;
+    if (error) return <div>{error}</div>;
+    if (!capitulo || paginas.length === 0) return <div>Capítulo não encontrado ou não contém páginas.</div>;
 
     return (
-        <div className={style.container}>
+        <div className={style.readerContainer}>
             <div className={style.header}>
-                <FaArrowLeft onClick={() => router.back()} className={style.icon} title="Voltar" />
-                <h1>{capitulo.titulo}</h1>
+                <h1>{capitulo.obra.titulo}</h1>
+                <div className={style.chapterInfo}>
+                    <span>Capítulo {capitulo.numero}</span>
+                    <span>Página {currentPage + 1}/{paginas.length}</span>
+                </div>
             </div>
 
-            <div className={style.capituloDetails}>
-                <h2>Capítulo {capitulo.numero}</h2>
-                <p>Data de Publicação: {capitulo.data_publicacao}</p>
+            <div className={style.pageContainer}>
+                <FaArrowLeft
+                    onClick={handlePreviousPage}
+                    className={`${style.navigationButton} ${style.left} ${currentPage === 0 ? style.disabled : ''}`}
+                    title="Página anterior"
+                />
 
-                <h3>Obra: {capitulo.obra.titulo}</h3>
-                {capaUrl ? (
-                    <img
-                        src={capaUrl}
-                        alt="Capa da Obra"
-                        className={style.coverImage}
-                    />
-                ) : (
-                    <p>Imagem da capa não disponível.</p>
-                )}
-                <p>{capitulo.obra.sinopse}</p>
+                <img
+                    src={`http://127.0.0.1:8000/${paginas[currentPage].imagem}`}
+                    alt={`Página ${currentPage + 1}`}
+                    className={style.mangaPage}
+                />
+
+                <FaArrowRight
+                    onClick={handleNextPage}
+                    className={`${style.navigationButton} ${style.right} ${currentPage === paginas.length - 1 ? style.disabled : ''}`}
+                    title="Próxima página"
+                />
             </div>
         </div>
     );
 }
+
