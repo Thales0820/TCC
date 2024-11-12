@@ -10,14 +10,17 @@
     min-height: 100vh;
 }
 
+/* Header */
 .header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     max-width: 800px;
     padding: 10px;
     border-bottom: 1px solid #ddd;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .icon {
@@ -36,6 +39,19 @@
     font-size: 1.8rem;
     color: #333;
     margin: 0;
+}
+
+.backLink {
+    font-size: 1rem;
+    color: #007bff;
+    margin-left: 10px;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.3s;
+}
+
+.backLink:hover {
+    color: #0056b3;
 }
 
 .capituloDetails {
@@ -71,6 +87,8 @@
     border-radius: 4px;
     margin-top: 15px;
 }
+
+/* Capítulo e páginas */
 .paginas {
     margin-top: 20px;
 }
@@ -92,4 +110,77 @@
 .pagina p {
     font-size: 1rem;
     color: #555;
+}
+
+/* Reader Container */
+.readerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chapterInfo {
+    font-size: 16px;
+    color: #666;
+}
+
+.pageContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 850px;
+    position: relative;
+}
+
+.mangaPage {
+    width: 100%;
+    max-width: 750px; /* Aumentar a largura da imagem */
+    height: 550px; /* Aumentar a altura */
+    object-fit: cover; /* Preencher a área mantendo o aspecto */
+    border-radius: 8px;
+}
+
+/* Número da Página */
+.pageNumber {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 1.2rem;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Navigation Buttons */
+.navigationButton {
+    font-size: 24px;
+    padding: 10px;
+    color: #333;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7); /* Fundo semitransparente */
+    border-radius: 50%;
+    cursor: pointer;
+    transition: color 0.3s, background-color 0.3s;
+    z-index: 1; /* Garantir que fique sobre a imagem */
+}
+
+.navigationButton:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.navigationButton.left {
+    left: 10px;
+}
+
+.navigationButton.right {
+    right: 10px;
+}
+
+.navigationButton.disabled {
+    color: #ccc;
+    cursor: not-allowed;
 }
