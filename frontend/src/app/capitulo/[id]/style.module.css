@@ -1,167 +1,80 @@
-/* style.module.css */
-
-.container {
+.readerContainer {
     display: flex;
     flex-direction: column;
+    color: #ffffff;
     align-items: center;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    min-height: 100vh;
 }
-
 /* Header */
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    max-width: 800px;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.icon {
-    font-size: 1.5rem;
-    color: #007bff;
-    cursor: pointer;
-    margin-right: 15px;
-    transition: color 0.3s;
-}
-
-.icon:hover {
-    color: #0056b3;
-}
-
-.title {
-    font-size: 1.8rem;
-    color: #333;
-    margin: 0;
-}
-
-.backLink {
-    font-size: 1rem;
-    color: #007bff;
-    margin-left: 10px;
-    cursor: pointer;
-    text-decoration: underline;
-    transition: color 0.3s;
-}
-
-.backLink:hover {
-    color: #0056b3;
-}
-
-.capituloDetails {
-    width: 100%;
-    max-width: 800px;
-    background-color: #ffffff;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.subTitle {
-    font-size: 1.5rem;
-    color: #555;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
-.description {
-    color: #666;
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-.sectionTitle {
-    font-size: 1.2rem;
-    color: #333;
-    margin-top: 20px;
-}
-
-.coverImage {
-    width: 100%;
-    max-width: 300px;
-    border-radius: 4px;
-    margin-top: 15px;
-}
-
-/* Capítulo e páginas */
-.paginas {
-    margin-top: 20px;
-}
-
-.pagina {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-}
-
-.pagina h4 {
-    margin-bottom: 5px;
-    font-size: 1.2rem;
-    color: #333;
-}
-
-.pagina p {
-    font-size: 1rem;
-    color: #555;
-}
-
-/* Reader Container */
-.readerContainer {
+.informacoes {
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
-.chapterInfo {
-    font-size: 16px;
-    color: #666;
+.informacoes a {
+    color: #007bff;
+    font-size: 20px;
+}
+
+.header span {
+    font-size: 20px;
+}
+
+.select {
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 15px;
+    background-color: #424242;
+    border: none;
+    width: 170px;
+    color: #ffffff;
+    margin-right: 20px;
+    font-weight: bold;
+    appearance: none; /* Remove a setinha padrão do select */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23ffffff" viewBox="0 0 24 24" width="24" height="24"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 3px center; /* Ajuste a posição do ícone */
+    background-size: 30px; /* Aumente o tamanho do ícone aqui */
+}
+
+.select option {
+    font-weight: bold;
+}
+
+.select option:hover {
+    background-color: #000000;
 }
 
 .pageContainer {
+    width: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    max-width: 850px;
     position: relative;
 }
 
 .mangaPage {
     width: 100%;
-    max-width: 750px; /* Aumentar a largura da imagem */
-    height: 550px; /* Aumentar a altura */
-    object-fit: cover; /* Preencher a área mantendo o aspecto */
-    border-radius: 8px;
-}
-
-/* Número da Página */
-.pageNumber {
-    position: absolute;
-    bottom: 10px;
-    right: 15px;
-    font-size: 1.2rem;
-    color: #333;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 4px 8px;
-    border-radius: 4px;
+    height: 100%; /* Aumentar a altura */
 }
 
 /* Navigation Buttons */
 .navigationButton {
     font-size: 24px;
     padding: 10px;
-    color: #333;
-    position: absolute;
+    color: #ffffff;
+    position: fixed;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.7); /* Fundo semitransparente */
     border-radius: 50%;
     cursor: pointer;
     transition: color 0.3s, background-color 0.3s;
@@ -169,15 +82,15 @@
 }
 
 .navigationButton:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    color: #000000;
 }
 
 .navigationButton.left {
-    left: 10px;
+    left: 15px;
 }
 
 .navigationButton.right {
-    right: 10px;
+    right: 15px;
 }
 
 .navigationButton.disabled {

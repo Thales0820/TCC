@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import axios from 'axios';
 import style from './style.module.css';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import Link from 'next/link';
 
 interface Obra {
     id: number;
@@ -49,7 +50,20 @@ export default function CapituloPage() {
             fetchCapitulo(id);
             fetchPaginas(id);
         }
-    }, [id]);
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'ArrowRight') {
+                handleNextPage();
+            } else if (event.key === 'ArrowLeft') {
+                handlePreviousPage();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [id, currentPage, paginas.length]);
 
     const fetchCapitulo = async (capituloId: string) => {
         try {
@@ -82,6 +96,13 @@ export default function CapituloPage() {
 
             if (response.status === 200 && response.data) {
                 const paginasFiltradas = response.data.filter((pagina: Pagina) => pagina.capitulo_id === parseInt(capituloId));
+                
+                // Pré-carrega as imagens
+                paginasFiltradas.forEach((pagina: Pagina) => {
+                    const img = new Image();
+                    img.src = `http://127.0.0.1:8000/${pagina.imagem}`;
+                });
+
                 setPaginas(paginasFiltradas);
             } else {
                 throw new Error('Páginas não encontradas para este capítulo.');
@@ -104,6 +125,13 @@ export default function CapituloPage() {
         }
     };
 
+    const handlePageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedPage = parseInt(event.target.value);
+        if (!isNaN(selectedPage)) {
+            setCurrentPage(selectedPage);
+        }
+    };
+
     if (loading) return <div>Carregando...</div>;
     if (error) return <div>{error}</div>;
     if (!capitulo || paginas.length === 0) return <div>Capítulo não encontrado ou não contém páginas.</div>;
@@ -111,33 +139,34 @@ export default function CapituloPage() {
     return (
         <div className={style.readerContainer}>
             <div className={style.header}>
-                <h1>{capitulo.obra.titulo}</h1>
-                <div className={style.chapterInfo}>
-                    <span>Capítulo {capitulo.numero}</span>
-                    <span>Página {currentPage + 1}/{paginas.length}</span>
+                <div className={style.informacoes}>
+                    <h3>{capitulo.titulo}</h3>
+                    <Link href={`/obra/${capitulo.obra_id}`} legacyBehavior>
+                        <a>{capitulo.obra.titulo}</a>
+                    </Link>
                 </div>
+                <span>Capítulo {capitulo.numero}</span>
+                <select className={style.select} value={currentPage} onChange={handlePageChange}>
+                    {paginas.map((_, index) => (
+                        <option key={index} value={index}>Página {index + 1} / {paginas.length}</option>
+                    ))}
+                </select>
             </div>
-
             <div className={style.pageContainer}>
-                <FaArrowLeft
+                <FaChevronLeft size={50}
                     onClick={handlePreviousPage}
                     className={`${style.navigationButton} ${style.left} ${currentPage === 0 ? style.disabled : ''}`}
-                    title="Página anterior"
-                />
-
+                    title="Página anterior"/>
                 <img
                     src={`http://127.0.0.1:8000/${paginas[currentPage].imagem}`}
                     alt={`Página ${currentPage + 1}`}
-                    className={style.mangaPage}
-                />
-
-                <FaArrowRight
+                    className={style.mangaPage}/>
+                <FaChevronRight size={50}
                     onClick={handleNextPage}
                     className={`${style.navigationButton} ${style.right} ${currentPage === paginas.length - 1 ? style.disabled : ''}`}
-                    title="Próxima página"
-                />
+                    title="Próxima página"/>
             </div>
+            <br />
         </div>
     );
 }
-
