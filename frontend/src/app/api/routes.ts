@@ -239,15 +239,33 @@ export const getObraDetails = async (id: number) => {
           estado: data.estado,
           generos: data.generos,
           likes: data.likes,
-          capitulos: data.capitulos || [
-              { numero: 1124, titulo: "Melhor Amigo", visualizado: false },
-              { numero: 1123, titulo: "Duas Semanas Perdidas", visualizado: false },
-              { numero: 1122, titulo: "Quando a Hora Chegar", visualizado: false }
-          ]
       };
   } catch (error) {
       console.error("Erro ao buscar detalhes da obra:", error);
       return null;
+  }
+};
+
+export const getCapitulosPorObra = async (obraId: number) => {
+  try {
+    // Faz a requisição para obter todos os capítulos
+    const response = await axios.get(`${API_URL}/capitulos`);
+
+    // Filtra os capítulos para pegar apenas os da obra especificada
+    const capitulos = response.data
+      .filter((capitulo: any) => capitulo.obra_id === obraId)
+      .map((capitulo: any) => ({
+        id: capitulo.id,
+        titulo: capitulo.titulo,
+        numero: capitulo.numero,
+        dataPublicacao: capitulo.data_publicacao,
+        obraId: capitulo.obra.id,
+      }));
+
+    return capitulos;
+  } catch (error) {
+    console.error("Erro ao buscar capítulos da obra:", error);
+    return null;
   }
 };
 

@@ -9,13 +9,13 @@ import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import Comentarios from '@/components/Comentarios';
 import { BsFillChatLeftTextFill } from 'react-icons/bs';
-import { getLista, getObraDetails } from '../../api/routes';
+import { getCapitulosPorObra, getLista, getObraDetails } from '../../api/routes';
 import { useRouter } from 'next/navigation';
 import { PiBookOpenTextBold } from 'react-icons/pi';
 import { parseCookies } from 'nookies';
 import {jwtDecode} from 'jwt-decode';
-import Link from 'next/link';
 import { ModalLeitura } from '@/components/ModalLeitura';
+import Link from 'next/link';
 
 interface TokenPayload {
     sub: string;
@@ -33,11 +33,6 @@ interface ObraInfo {
     estado: string;
     generos: string[];
     likes: number;
-    capitulos: {
-        numero: number;
-        titulo: string;
-        visualizado: boolean;
-    }[];
 }
 
 function getUserId(): string | null {
@@ -58,6 +53,7 @@ function getUserId(): string | null {
 
 export default function Obra({ params }: { params: { id: string } }) {
     const router = useRouter();
+    const [capitulos, setCapitulos] = useState<{ id: number; numero: number; titulo: string; visualizado: boolean }[]>([]);
     const [ordemCrescente, setOrdemCrescente] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [like, setLike] = useState(false);
@@ -74,8 +70,18 @@ export default function Obra({ params }: { params: { id: string } }) {
 
         const fetchObra = async () => {
             const response = await getObraDetails(parseInt(params.id));
-            console.log("Dados da Obra:", response);
             setObra(response);
+        };
+
+        const fetchCapitulos = async () => {
+            const capitulosData = await getCapitulosPorObra(parseInt(params.id));
+            if (capitulosData) {
+                setCapitulos(capitulosData.map(cap => ({ 
+                    numero: cap.numero, 
+                    titulo: cap.titulo, 
+                    visualizado: false // Defina o valor inicial conforme necessário
+                })));
+            }
         };
 
         const fetchLeitura = async () => {
@@ -87,6 +93,7 @@ export default function Obra({ params }: { params: { id: string } }) {
         };
 
         fetchObra();
+        fetchCapitulos();
         fetchLeitura();
     }, [params.id, router, userId]);
 
@@ -96,29 +103,25 @@ export default function Obra({ params }: { params: { id: string } }) {
             router.push(`/adiciona-capitulo/${obra.id}`);
         }
     };
-    
 
     const toggleOrdem = () => {
-        if (obra) {
-            const novaOrdem = [...obra.capitulos].sort((a, b) =>
-                ordemCrescente ? a.numero - b.numero : b.numero - a.numero
-            );
-            setObra({ ...obra, capitulos: novaOrdem });
-            setOrdemCrescente(!ordemCrescente);
-        }
+        const novaOrdem = [...capitulos].sort((a, b) =>
+            ordemCrescente ? a.numero - b.numero : b.numero - a.numero
+        );
+        setCapitulos(novaOrdem);
+        setOrdemCrescente(!ordemCrescente);
     };
+    
+    const toggleVisualizacao = (numero: number) => {
+        const capitulosAtualizados = capitulos.map((capitulo) =>
+            capitulo.numero === numero ? { ...capitulo, visualizado: !capitulo.visualizado } : capitulo
+        );
+        setCapitulos(capitulosAtualizados);
+    };
+    
 
     const handleOpenModal = () => { setIsModalOpen(true); };
     const handleCloseModal = () => { setIsModalOpen(false); };
-
-    const toggleVisualizacao = (numero: number) => {
-        if (obra) {
-            const capitulosAtualizados = obra.capitulos.map((capitulo) =>
-                capitulo.numero === numero ? { ...capitulo, visualizado: !capitulo.visualizado } : capitulo
-            );
-            setObra({ ...obra, capitulos: capitulosAtualizados });
-        }
-    };
 
     const formatarData = (data: string) => {
         const date = new Date(data);
@@ -141,7 +144,7 @@ export default function Obra({ params }: { params: { id: string } }) {
         setMostrarComentarios(!mostrarComentarios);
     };
 
-    return (
+    return(
         <>
             <Menu />
             <Pesquisar />
@@ -151,7 +154,7 @@ export default function Obra({ params }: { params: { id: string } }) {
                     <div className={style.capa}>
                         <img src={obra?.capa} alt={`Capa de ${obra?.titulo}`} />
                     </div>
-                    <div className={style.informacoes}>
+                    <div className={style.informacoes}> 
                         <h1 className={style.titulo}>{obra?.titulo}</h1>
                         <div className={style.generos}>
                             {obra?.generos.map((genero, index) => (
@@ -163,7 +166,7 @@ export default function Obra({ params }: { params: { id: string } }) {
                             <p>{obra?.autor}</p>
                             <p>{obra?.tipo}</p>
                             <p>{obra?.estado}</p>
-                            <p>{obra ? formatarData(obra.dataPublicacao) : 'Data não disponível'}</p>
+                            <p>{obra ? formatarData(obra.dataPublicacao) : ''}</p>
                         </div>
                     </div>
                 </div>
@@ -172,11 +175,14 @@ export default function Obra({ params }: { params: { id: string } }) {
                         {obra && String(obra.autor_id) === String(userId) ? (
                             <button onClick={handleAddChapter}><FaPlus size={25} /> Adicionar Cap.</button>
                         ) : leitura ? (
-                            <button onClick={handleOpenModal}><FaRegEdit size={25} /> {leitura.tipo}</button>
+                            <button onClick={handleOpenModal}>{leitura.tipo}</button>
                         ) : (
                             <button onClick={handleOpenModal}><FaPlus size={25} /> Adicionar</button>
                         )}
                         <div className={style.icones}>
+                            {obra && String(obra.autor_id) === String(userId) && (
+                                <FaRegEdit className={style.icone} size={45} title='Editar Obra'/>
+                            )}
                             <div onClick={toggleLike}>
                                 <BiSolidLike size={45} className={like ? style.like : style.curtir} />
                                 {obra && obra.likes > 0 && (
@@ -202,14 +208,16 @@ export default function Obra({ params }: { params: { id: string } }) {
                                 </div>
                             </div>
                             <div className={style.capitulos}>
-                                {obra?.capitulos.map(cap => (
+                                {capitulos.map((cap) => (
                                     <div className={style.capitulo} key={cap.numero}>
                                         {cap.visualizado ? (
                                             <IoEyeOff size={25} onClick={() => toggleVisualizacao(cap.numero)} />
                                         ) : (
                                             <IoEye size={25} onClick={() => toggleVisualizacao(cap.numero)} />
                                         )}
-                                        <span className={style.numero}>Cap. {cap.numero}</span>
+                                        <Link href={`/capitulo/${cap.id}`} legacyBehavior>
+                                            <span className={style.numero}>Cap. {cap.numero}</span>
+                                        </Link>
                                         <span className={style.tituloCap}>{cap.titulo}</span>
                                     </div>
                                 ))}
