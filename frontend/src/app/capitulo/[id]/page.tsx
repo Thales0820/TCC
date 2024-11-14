@@ -5,6 +5,7 @@ import axios from 'axios';
 import style from './style.module.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Link from 'next/link';
+import { BsFullscreen } from 'react-icons/bs';
 
 interface Obra {
     id: number;
@@ -113,6 +114,19 @@ export default function CapituloPage() {
         }
     };
 
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch((err) => {
+                console.error(`Erro ao tentar entrar em tela cheia: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen().catch((err) => {
+                console.error(`Erro ao tentar sair do modo tela cheia: ${err.message}`);
+            });
+        }
+    };
+    
+
     const handleNextPage = () => {
         if (currentPage < paginas.length - 1) {
             setCurrentPage(prevPage => prevPage + 1);
@@ -153,18 +167,16 @@ export default function CapituloPage() {
                 </select>
             </div>
             <div className={style.pageContainer}>
-                <FaChevronLeft size={50}
-                    onClick={handlePreviousPage}
-                    className={`${style.navigationButton} ${style.left} ${currentPage === 0 ? style.disabled : ''}`}
-                    title="Página anterior"/>
+                <FaChevronLeft size={50} onClick={handlePreviousPage} title="Página anterior"
+                    className={`${style.navigationButton} ${style.left} ${currentPage === 0 ? style.disabled : ''}`}/>
                 <img
                     src={`http://127.0.0.1:8000/${paginas[currentPage].imagem}`}
                     alt={`Página ${currentPage + 1}`}
                     className={style.mangaPage}/>
-                <FaChevronRight size={50}
-                    onClick={handleNextPage}
-                    className={`${style.navigationButton} ${style.right} ${currentPage === paginas.length - 1 ? style.disabled : ''}`}
-                    title="Próxima página"/>
+                <FaChevronRight size={40} onClick={handleNextPage} title="Próxima página"
+                    className={`${style.navigationButton} ${style.right} ${currentPage === paginas.length - 1 ? style.disabled : ''}`}/>
+                <BsFullscreen size={50} className={style.telaFull} title="Abir Tela Cheia" 
+                    onClick={toggleFullscreen}/>
             </div>
             <br />
         </div>
