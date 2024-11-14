@@ -76,13 +76,15 @@ export default function Obra({ params }: { params: { id: string } }) {
         const fetchCapitulos = async () => {
             const capitulosData = await getCapitulosPorObra(parseInt(params.id));
             if (capitulosData) {
-                setCapitulos(capitulosData.map(cap => ({ 
+                setCapitulos(capitulosData.map((cap: { id: number; numero: number; titulo: string; }) => ({ 
+                    id: cap.id, // Adicionando id explicitamente
                     numero: cap.numero, 
                     titulo: cap.titulo, 
                     visualizado: false // Defina o valor inicial conforme necessário
                 })));
             }
         };
+        
 
         const fetchLeitura = async () => {
             if (userId) {
