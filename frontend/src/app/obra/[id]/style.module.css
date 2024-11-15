@@ -218,8 +218,14 @@
 
 .numero {
     text-align: left;
-    width: 250px;
+    width: 150px;
     margin-left: 10px;
+    cursor: pointer;
+}
+
+.numero:hover {
+    color: #000000;
+    text-decoration: underline;
 }
   
 .tituloCap {

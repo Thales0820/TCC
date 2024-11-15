@@ -39,7 +39,7 @@ class PaginaController extends Controller
         $request->validate([
             'capitulo_id' => 'required|exists:capitulos,id',
             'numero' => 'required|string|max:255',
-            'imagem' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'imagem' => 'required|image|mimes:jpeg,png,jpg,gif|max:100000',
         ]);
 
         // Armazenar a imagem

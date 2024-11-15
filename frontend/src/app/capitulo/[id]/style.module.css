@@ -23,6 +23,12 @@
 .informacoes a {
     color: #007bff;
     font-size: 20px;
+    text-decoration: none;
+    width: fit-content;
+}
+
+.informacoes a:hover {
+    text-decoration: underline;
 }
 
 .header span {
@@ -48,6 +54,10 @@
 
 .select option {
     font-weight: bold;
+}
+
+.select::-webkit-scrollbar {
+    display: none; /* Para Chrome, Safari e Edge */
 }
 
 .select option:hover {

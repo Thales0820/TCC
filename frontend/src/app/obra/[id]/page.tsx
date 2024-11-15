@@ -218,7 +218,7 @@ export default function Obra({ params }: { params: { id: string } }) {
                                             <IoEye size={25} onClick={() => toggleVisualizacao(cap.numero)} />
                                         )}
                                         <Link href={`/capitulo/${cap.id}`} legacyBehavior>
-                                            <span className={style.numero}>Cap. {cap.numero}</span>
+                                            <span className={style.numero} title={`Ler o Capítulo ${cap.numero}`}> Cap. {cap.numero}</span>
                                         </Link>
                                         <span className={style.tituloCap}>{cap.titulo}</span>
                                     </div>

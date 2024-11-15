@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import axios from 'axios';
@@ -6,6 +6,7 @@ import style from './style.module.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Link from 'next/link';
 import { BsFullscreen } from 'react-icons/bs';
+import { getCapitulosPorObra } from '@/app/api/routes';
 
 interface Obra {
     id: number;
@@ -41,6 +42,7 @@ export default function CapituloPage() {
     const { id } = useParams();
 
     const [capitulo, setCapitulo] = useState<Capitulo | null>(null);
+    const [capitulos, setCapitulos] = useState<Array<{ id: number; numero: number; }>>([]);
     const [paginas, setPaginas] = useState<Pagina[]>([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -65,6 +67,26 @@ export default function CapituloPage() {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [id, currentPage, paginas.length]);
+
+    useEffect(() => {
+        if (capitulo?.obra_id) {
+            fetchCapitulos(capitulo.obra_id);
+        }
+    }, [capitulo]);
+
+    const fetchCapitulos = async (obraId: number) => {
+        try {
+            const capitulosData = await getCapitulosPorObra(obraId);
+            if (capitulosData) {
+                setCapitulos(capitulosData.map((cap: { id: number; numero: number; }) => ({
+                    id: cap.id,
+                    numero: cap.numero,
+                })));
+            }
+        } catch (error) {
+            console.error('Erro ao carregar capítulos:', error);
+        }
+    };
 
     const fetchCapitulo = async (capituloId: string) => {
         try {
@@ -125,7 +147,6 @@ export default function CapituloPage() {
             });
         }
     };
-    
 
     const handleNextPage = () => {
         if (currentPage < paginas.length - 1) {
@@ -159,7 +180,19 @@ export default function CapituloPage() {
                         <a>{capitulo.obra.titulo}</a>
                     </Link>
                 </div>
-                <span>Capítulo {capitulo.numero}</span>
+                <select className={style.select} onChange={(event) => {
+                    const selectedCapituloId = event.target.value;
+                    if (selectedCapituloId) {
+                        router.push(`/capitulo/${selectedCapituloId}`);
+                    }
+                }}>
+                    <option disabled selected>Capítulo {capitulo.numero}</option>
+                    {capitulos.map((cap) => (
+                        <option key={cap.id} value={cap.id}>
+                            Capítulo {cap.numero}
+                        </option>
+                    ))}
+                </select>
                 <select className={style.select} value={currentPage} onChange={handlePageChange}>
                     {paginas.map((_, index) => (
                         <option key={index} value={index}>Página {index + 1} / {paginas.length}</option>
@@ -173,9 +206,9 @@ export default function CapituloPage() {
                     src={`http://127.0.0.1:8000/${paginas[currentPage].imagem}`}
                     alt={`Página ${currentPage + 1}`}
                     className={style.mangaPage}/>
-                <FaChevronRight size={40} onClick={handleNextPage} title="Próxima página"
+                <FaChevronRight size={50} onClick={handleNextPage} title="Próxima página"
                     className={`${style.navigationButton} ${style.right} ${currentPage === paginas.length - 1 ? style.disabled : ''}`}/>
-                <BsFullscreen size={50} className={style.telaFull} title="Abir Tela Cheia" 
+                <BsFullscreen size={40} className={style.telaFull} title="Abir Tela Cheia" 
                     onClick={toggleFullscreen}/>
             </div>
             <br />
