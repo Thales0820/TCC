@@ -183,7 +183,9 @@ export default function Obra({ params }: { params: { id: string } }) {
                         )}
                         <div className={style.icones}>
                             {obra && String(obra.autor_id) === String(userId) && (
-                                <FaRegEdit className={style.icone} size={45} title='Editar Obra'/>
+                                <Link href={`/criar-obra?id=${obra.id}`} legacyBehavior>
+                                    <FaRegEdit className={style.icone} size={45} title='Editar Obra'/>
+                                </Link>
                             )}
                             <div onClick={toggleLike}>
                                 <BiSolidLike size={45} className={like ? style.like : style.curtir} />

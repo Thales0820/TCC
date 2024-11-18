@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import style from './style.module.css';
 
-// Defina a interface Genero
 interface Genero {
   id: string;
   nome: string;
@@ -12,20 +11,31 @@ interface ModalProps {
   onClose: () => void;
   selecionaGenero: string[];
   onSelectGenre: (selected: string[]) => void;
-  generos: Genero[]; // Adicione esta linha para incluir generos
+  generos: Genero[];
 }
 
-export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGenero, onSelectGenre, generos }) => {
-  const [selectedGenres, setSelectedGenres] = useState<string[]>(selecionaGenero);
+export const ModalGenero: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  selecionaGenero,
+  onSelectGenre,
+  generos,
+}) => {
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+
+  // Atualiza os gêneros selecionados ao abrir o modal
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedGenres(selecionaGenero);
+    }
+  }, [isOpen, selecionaGenero]);
 
   const handleGenreToggle = (id: string) => {
-    setSelectedGenres((prevSelected) => {
-      if (prevSelected.includes(id)) {
-        return prevSelected.filter(g => g !== id);
-      } else {
-        return [...prevSelected, id];
-      }
-    });
+    setSelectedGenres((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((g) => g !== id)
+        : [...prevSelected, id]
+    );
   };
 
   const handleConfirm = () => {
@@ -60,6 +70,7 @@ export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGe
             </label>
           ))}
         </div>
+        <br />
         <div className={style.controle}>
           <button onClick={handleConfirm} className={style.botao}>Confirmar</button>
           <button onClick={limparGeneros} className={style.botao}>Limpar</button>
@@ -67,5 +78,4 @@ export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGe
       </div>
     </div>
   );
-  
 };

@@ -34,6 +34,11 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.inputs {
+    display: flex;
+    gap: 10px;
+}
+
 .formGroup {
     display: flex;
     flex-direction: column;
@@ -53,13 +58,26 @@
 }
 
 .formGroup input,
-.formGroup select,
+.formGroup select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ffffff;
+    background-color: #222831;
+    border-radius: 5px;
+    color: #ffffff;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: "Comic Neue", system-ui;
+}
+
 .formGroup textarea {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ffffff;
     background-color: #222831;
     border-radius: 5px;
+    height: 100px;
+    resize: vertical;
     color: #ffffff;
     width: 100%;
     box-sizing: border-box;
@@ -72,6 +90,7 @@
     color: #fff;
     border: none;
     cursor: pointer;
+    align-items: center;
 }
 
 .fileInputStyled::-webkit-file-upload-button {
@@ -80,6 +99,7 @@
 
 .fileInputStyled::before {
     content: 'Escolher Arquivo ';
+    align-items: center;
     display: inline-block;
     background: #222831;
     color: white;
@@ -88,13 +108,17 @@
     cursor: pointer;
 }
 
-.verticalBar {
-    width: 2px;
-    background-color: #ffffff; /* Cor da barra vertical */
-    height: 100%; /* Para ajustar à altura do input */
-    margin-left: 10px; /* Espaço entre o botão e a barra */
-    position: absolute;
-    right: 330px;
+.capa {
+    display: flex;
+    gap: 3px;
+}
+
+.previewImagem {
+    max-width: 50px;
+    max-height: 50px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .formGroup input::placeholder {
@@ -110,9 +134,37 @@
     font-family: "Comic Neue", system-ui;
 }
 
-.formGroup textarea {
-    height: 100px;
-    resize: vertical;
+.formGroup input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+.formGroup textarea::-webkit-scrollbar {
+    display: none; /* Para Chrome, Safari e Edge */
+}
+
+/* Estilo para o botão Selecionar Gêneros */
+.generosButton {
+    padding: 10px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #222831; /* Mesmo fundo do .submitButton */
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 98%; /* Torna o botão responsivo como os outros elementos */
+    height: 100%;
+}
+
+.generosButton:hover {
+    background-color: #000000; /* Mesmo efeito de hover do .submitButton */
+}
+
+/* Container opcional para melhor alinhamento */
+
+.botao {
+    text-align: center;
 }
 
 .submitButton {
@@ -127,31 +179,27 @@
     margin-top: 20px;
     width: 30%;
 }
-
+    
 .submitButton:hover {
     background-color: #000000;
 }
-/* Estilo para o botão Selecionar Gêneros */
-.generosButton {
-    padding: 10px 15px;
-    font-size: 18px;
-    color: #fff;
-    background-color: #222831; /* Mesmo fundo do .submitButton */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px; /* Adiciona um espaçamento acima */
-    width: 100%; /* Torna o botão responsivo como os outros elementos */
-}
 
-.generosButton:hover {
-    background-color: #000000; /* Mesmo efeito de hover do .submitButton */
-}
-
-/* Container opcional para melhor alinhamento */
-.generosContainer {
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.modalImage {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
 }
