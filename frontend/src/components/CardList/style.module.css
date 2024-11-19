@@ -1,83 +1,127 @@
 .containerCard {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
     gap: 20px;
+    padding: 20px;
     margin: auto;
-    margin-left: -42px;
-    margin-right: 10px;
+    max-width: 1200px;
 }
-  
+
 .row {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    gap: 20px;
+    width: 100%;
 }
-  
+
 .card {
     display: flex;
-    width: 49%;
-    background-color: transparent;
+    flex-direction: column;
+    width: 48%;
+    background-color: #1a1a1a;
+    border-radius: 10px;
     overflow: hidden;
-    margin-bottom: 20px;
-    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
-  
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
 .image {
-    width: 35%;
-    height: auto; /* Mantém a proporção da imagem */
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
 }
-  
+
 .conteudo {
-    width: 70%;
-    position: relative;
+    padding: 15px;
     display: flex;
     flex-direction: column;
-    border: 5px solid #424242;
-    border-radius: 0 5px 5px 0;
-    z-index: 1;
-    border-left: 0;
+    background-color: #2c2c2c;
+    border-radius: 0 0 10px 10px;
 }
-  
+
 .nome {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
-    padding: 10px;
     color: #ffffff;
     text-align: center;
+    margin-bottom: 10px;
 }
-  
+
 .barra {
     width: 100%;
-    height: 5px;
-    background-color: #424242;
-    margin-bottom: 15px;
+    height: 3px;
+    background-color: #ff6f61;
+    margin: 10px 0;
 }
-  
+
 .capitulos {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 10px;
 }
-  
+
 .informacoes {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: #424242;
-    border-radius: 15px;
+    border-radius: 8px;
     padding: 10px;
     color: #ffffff;
-    align-items: center;
+    transition: background-color 0.2s;
 }
-  
+
+.informacoes:hover {
+    background-color: #ff6f61;
+}
+
 .capitulo {
     text-align: left;
+    font-weight: bold;
 }
-  
+
 .tituloCap {
     text-align: left;
-    margin-left: 50px;
+    margin-left: 10px;
     flex: 1;
     word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+    }
+
+    .image {
+        height: 150px;
+    }
+
+    .nome {
+        font-size: 18px;
+    }
+
+    .capitulos {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .image {
+        height: 120px;
+    }
+
+    .nome {
+        font-size: 16px;
+    }
+
+    .capitulos {
+        gap: 6px;
+    }
 }
