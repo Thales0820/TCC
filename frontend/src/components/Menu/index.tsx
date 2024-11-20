@@ -7,6 +7,7 @@ import { SiBookstack } from 'react-icons/si';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
+import { useTheme } from "@/hooks/useTheme";
 
 interface Perfil {
     id: number;
@@ -52,8 +53,13 @@ const buscarUsuarioPorId = async (id: number): Promise<Usuario | null> => {
 };
 
 export const Menu = () => {
+    const {theme} = useTheme()
     const [token, setToken] = useState<string | undefined>(undefined);
     const [usuario, setUsuario] = useState<Usuario | null>(null);
+
+    const logoSrc = theme === "dark" 
+    ? "/images/logoDark.png" 
+    : "/images/logoLight.png";
 
     useEffect(() => {
         const retrievedToken = Cookies.get('obra.token');
@@ -75,7 +81,7 @@ export const Menu = () => {
                 <div>
                     <div className={style.divLogo}>
                         <Link href="/home" legacyBehavior>
-                            <img src="/images/logoDark.png" alt="Logo" title="Indie Comics" />
+                            <img src={logoSrc} alt="Logo" title="Indie Comics" key={logoSrc}/>
                         </Link>
                     </div>
                     <ul className={style.ul}>

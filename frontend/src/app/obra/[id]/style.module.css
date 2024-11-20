@@ -17,9 +17,9 @@
 .informacoes {
     position: relative;
     display: flex;
-    background-color: #424242;
+    background-color: var(--box-color);
     padding: 20px;
-    color: #ffffff;
+    color: var(--text-color);
     flex-direction: column; /* Faz os textos ficarem um abaixo do outro */
     flex: 1; /* Faz as informações ocuparem o espaço restante */
     border-radius: 0 15px 15px 0;
@@ -31,7 +31,7 @@
 }
 
 .icone:hover {
-    color: #000000;
+    color: var(--elements);
 }
 
 .titulo {
@@ -53,7 +53,7 @@
     justify-content: center;
     margin-right: 20px;
     height: 10px;
-    background-color: rgba(34, 40, 49, 0.9);
+    background-color: var(--opacity);
     padding: 13px;
     border-radius: 40px;
 }
@@ -91,7 +91,7 @@
     margin-top: -4px;
     display: flex;
     gap: 50px;
-    color: #ffffff;
+    color: var(--text-color);
     padding: 0 20px 20px 20px;
 }
 
@@ -107,13 +107,13 @@
     justify-content: center; /* Centraliza o ícone e o texto horizontalmente */
     width: 100%;
     margin-bottom: 35px;
-    background-color: #424242;
+    background-color: var(--box-color);
     border: 0;
     padding: 15px;
     font-size: 25px;
     font-weight: bold;
     cursor: pointer;
-    color: #ffffff;
+    color: var(--text-color);
 }
 
 .funcoes button svg {
@@ -148,7 +148,7 @@
     font-size: 17px;
     font-weight: bold;
     margin-top: 5px;
-    color: #ffffff;
+    color: var(--text-color);
 }
 
 .curtido {
@@ -159,7 +159,7 @@
 }
 
 .aberto:hover {
-    color: #000000;
+    color: var(--elements);
 }
 
 .topoCapitulos {
@@ -178,7 +178,7 @@
 }
 
 .mudarOrdem svg {
-    border: 1px solid #ffffff;
+    border: 1px solid var(--text-color);
     margin-left: 0.29px;
 }
 
@@ -202,11 +202,11 @@
 .capitulo {
     display: flex;
     justify-content: space-around;
-    background-color: #424242;
+    background-color: var(--box-color);
     width: 800px;
     border-radius: 15px;
     padding: 10px;
-    color: #ffffff;
+    color: var(--text-color);
     align-items: center;
     justify-content: space-around;
     font-size: 25px;
@@ -224,7 +224,7 @@
 }
 
 .numero:hover {
-    color: #000000;
+    color: var(--elements);
     text-decoration: underline;
 }
   

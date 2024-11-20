@@ -5,7 +5,7 @@
 
 .titulo {
     display: flex;
-    color: #ffffff;
+    color: var(--text-color);
     align-items: center;
     justify-content: start;
     margin-left: 180px;
@@ -29,7 +29,7 @@
     max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #424242;
+    background-color: var(--box-color);
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -48,7 +48,7 @@
 .formGroup label {
     font-weight: bold;
     margin-bottom: 5px;
-    color: #ffffff;
+    color: var(--text-color);
     margin-top: 10px;
     font-size: 35px;
 }
@@ -61,10 +61,10 @@
 .formGroup select {
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ffffff;
-    background-color: #222831;
+    border: 1px solid var(--text-color);
+    background-color: var(--background);
     border-radius: 5px;
-    color: #ffffff;
+    color: var(--text-color);
     width: 100%;
     box-sizing: border-box;
     font-family: "Comic Neue", system-ui;
@@ -73,12 +73,12 @@
 .formGroup textarea {
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ffffff;
-    background-color: #222831;
+    border: 1px solid var(--text-color);
+    background-color: var(--background);
     border-radius: 5px;
     height: 100px;
     resize: vertical;
-    color: #ffffff;
+    color: var(--text-color);
     width: 100%;
     box-sizing: border-box;
     font-family: "Comic Neue", system-ui;
@@ -87,7 +87,7 @@
 .fileInputStyled {
     padding: 10px 15px;
     font-size: 16px;
-    color: #fff;
+    color: var(--text-color);
     border: none;
     cursor: pointer;
     align-items: center;
@@ -101,8 +101,8 @@
     content: 'Escolher Arquivo ';
     align-items: center;
     display: inline-block;
-    background: #222831;
-    color: white;
+    background: var(--background);
+    color: var(--text-color);
     border: none;
     font-size: 16px;
     cursor: pointer;
@@ -116,21 +116,21 @@
 .previewImagem {
     max-width: 50px;
     max-height: 50px;
-    border: 1px solid #ffffff;
+    border: 1px solid var(--text-color);
     border-radius: 5px;
     cursor: pointer;
 }
 
 .formGroup input::placeholder {
-    color: #ffffff;
+    color: var(--text-color);
     font-family: "Comic Neue", system-ui;
 }
 .formGroup select::placeholder {
-    color: #ffffff;
+    color: var(--text-color);
     font-family: "Comic Neue", system-ui;
 }
 .formGroup textarea::placeholder {
-    color: #ffffff;
+    color: var(--text-color);
     font-family: "Comic Neue", system-ui;
 }
 
@@ -147,9 +147,9 @@
 .generosButton {
     padding: 10px;
     font-size: 18px;
-    color: #fff;
-    background-color: #222831; /* Mesmo fundo do .submitButton */
-    border: 1px solid #ffffff;
+    color: var(--text-color);
+    background-color: var(--background); /* Mesmo fundo do .submitButton */
+    border: 1px solid var(--text-color);
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -158,7 +158,7 @@
 }
 
 .generosButton:hover {
-    background-color: #000000; /* Mesmo efeito de hover do .submitButton */
+    background-color: var(--elements); /* Mesmo efeito de hover do .submitButton */
 }
 
 /* Container opcional para melhor alinhamento */
@@ -170,8 +170,8 @@
 .submitButton {
     padding: 10px 15px;
     font-size: 18px;
-    color: #fff;
-    background-color: #222831;
+    color: var(--text-color);
+    background-color: var(--background);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -181,7 +181,7 @@
 }
     
 .submitButton:hover {
-    background-color: #000000;
+    background-color: var(--elements);
 }
 
 .modal {

@@ -1,7 +1,7 @@
 .profileIcon {
     position: absolute;
     top: 10px;
-    color: #ffffff;
+    color: var(--text-color);
     right: 10px;
     cursor: pointer;
     z-index: 15;
@@ -22,8 +22,8 @@
 .modalContent {
     display: flex;
     flex-direction: column;
-    background-color: #222831;
-    color: #ffffff;
+    background-color: var(--background);
+    color: var(--text-color);
     padding: 20px 20px 0 20px;
     border-radius: 8px;
     max-width: 400px;
@@ -59,14 +59,14 @@
 
 .usuario {
     font-size: 0.9rem;
-    color: #ffffff; /* Tom mais claro */
+    color: var(--text-color); /* Tom mais claro */
 }
 
 /* Barra logo abaixo da div perfil */
 .barra {
     width: calc(100% + 40px); /* Aumenta a largura para compensar o padding */
     height: 2px;
-    background-color: #ffffff;
+    background-color: var(--text-color);
     margin: 10px 0 10px -20px; /* Remove a margem à esquerda */
 }
 
@@ -88,7 +88,7 @@
 }
 
 .lista li:hover {
-    background-color: black;
+    background-color: var(--elements);
 }
 
 .lista li svg {
@@ -109,7 +109,7 @@
 }
 
 .deslogado button {
-    color: #ffffff;
+    color: var(--text-color);
     width: 100%;
     font-weight: bold;
     font-size: 20px;
@@ -117,11 +117,11 @@
     border-radius: 15px;
     height: auto;
     border: none;
-    background-color: #424242;
+    background-color: var(--box-color);
 }
 
 .deslogado button:hover {
-    background-color: black;
+    background-color: var(--elements);
 }
 
 /* Estilo para a última div com ícones */

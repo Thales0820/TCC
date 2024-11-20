@@ -8,6 +8,7 @@ import axios from 'axios';
 import { setCookie } from 'nookies';
 import { Loading } from '@/components/Loading';
 import { Toast } from '@/components/Toast';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -17,6 +18,11 @@ export default function Login() {
     const [toast, setToast] = useState(false);
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const router = useRouter();
+    const {theme} = useTheme()
+
+    const logoSrc = theme === "dark" 
+    ? "/images/logoDark.png" 
+    : "/images/logoLight.png";
 
     const toggleMostrarSenha = () => {
         setMostrarSenha(!mostrarSenha);
@@ -63,7 +69,7 @@ export default function Login() {
             />
             <div className={style.loginContainer}>
                 <div className={style.logo}>
-                    <img src="/images/logoDark.png" alt="Logo" />
+                    <img src={logoSrc} alt="Logo" title="Indie Comics" key={logoSrc}/>
                 </div>
                 <div className={style.content}>
                     <div className={style.imageSection}>

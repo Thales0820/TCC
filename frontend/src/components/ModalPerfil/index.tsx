@@ -8,6 +8,8 @@ import { IoSettingsSharp } from "react-icons/io5";
 import Link from "next/link";
 import { parseCookies, destroyCookie } from 'nookies';
 import { jwtDecode } from "jwt-decode"; // Corrige para "jwtDecode"
+import { useTheme } from "@/hooks/useTheme";
+import { RiMoonClearFill } from "react-icons/ri";
 
 // Interface do payload do token
 interface TokenPayload {
@@ -26,6 +28,7 @@ interface Usuario {
 }
 
 export const ModalPerfil = () => {
+    const { theme, toggleTheme } = useTheme();
     const [isOpen, setIsOpen] = useState(false);
     const [usuario, setUsuario] = useState<Usuario | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -123,7 +126,14 @@ export const ModalPerfil = () => {
                         </div>
                         <div className={style.barra}></div>
                         <div className={style.opcoes}>
-                            <MdWbSunny size={30} />
+                        {theme === "dark" ? (
+                            <MdWbSunny size={30} onClick={toggleTheme} 
+                                title="Alterar para o tema claro" 
+                            /> ) : (
+                            <RiMoonClearFill size={30} onClick={toggleTheme} 
+                                title="Alterar para o tema escuro" 
+                            />
+                        )}
                             <LuArrowLeftFromLine onClick={handleLogout} size={30} />
                         </div>
                     </div>

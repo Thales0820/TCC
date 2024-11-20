@@ -1,7 +1,7 @@
 .container {
     margin-top: 132px;
     min-height: 100vh;
-    background-color: #222831;
+    background-color: var(--background);
     display: flex;
     flex-direction: column;
     padding-left: calc(180px + 60px);
@@ -10,7 +10,7 @@
 
 .titulo {
     display: flex;
-    color: #ffffff;
+    color: var(--text-color);
     align-items: center;
 }
 

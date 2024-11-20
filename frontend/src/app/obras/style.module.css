@@ -1,7 +1,7 @@
 .container {
     margin-top: 132px;
     min-height: 100vh;
-    background-color: #222831;
+    background-color: var(--background);
     display: flex;
     flex-direction: column;
     padding-left: calc(180px + 60px);
@@ -10,7 +10,7 @@
 
 .titulo {
     display: flex;
-    color: #ffffff;
+    color: var(--text-color);
     align-items: center;
 }
 
@@ -38,12 +38,12 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    border: 3px solid #ffffff;
+    border: 3px solid var(--text-color);
 }
 
 .letra {
     flex: 1;
-    color: white;
+    color: var(--text-color);
     text-align: center;
     height: 50px;
     display: flex;
@@ -51,13 +51,13 @@
     justify-content: center;
     position: relative;
     cursor: pointer;
-    background-color: #424242;
+    background-color: var(--box-color);
     transition: background-color 0.3s ease; /* Animação suave na mudança de cor */
 }
 
 .letraSelecionada {
     flex: 1;
-    color: white;
+    color: var(--text-color);
     text-align: center;
     height: 50px;
     display: flex;
@@ -65,7 +65,7 @@
     justify-content: center;
     position: relative;
     cursor: pointer;
-    background-color: #000000;
+    background-color: var(--elements);
     /* Garantir que padding, margin, etc. não sejam alterados */
 }
 
@@ -76,7 +76,7 @@
     top: 0;
     height: 100%;
     width: 2px;
-    background-color: #ffffff;
+    background-color: var(--text-color);
 }
 
 .letraSelecionada:not(:last-child)::after {
@@ -86,11 +86,11 @@
     top: 0;
     height: 100%;
     width: 2px;
-    background-color: #ffffff;
+    background-color: var(--text-color);
 }
 
 .letra:hover {
-    background-color: #333333;
+    background-color: var(--elements);
 }
 
 .letra p {

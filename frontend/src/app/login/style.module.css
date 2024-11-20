@@ -31,7 +31,7 @@
 }
 
 .loginForm {
-    background-color: #424242;
+    background-color: var(--box-color);
     padding: 7px 40px 7px 40px;
     border-radius: 0 15px 15px 0;
     width: 450px;
@@ -39,7 +39,7 @@
 }
 
 .loginForm h2 {
-    color: #ffffff;
+    color: var(--text-color);
     text-align: center;
     font-weight: bold;
     font-size: 60px;
@@ -48,7 +48,7 @@
 
 .loginForm form {
     display: flex;
-    color: #ffffff;
+    color: var(--text-color);
     flex-direction: column;
 }
 
@@ -66,9 +66,9 @@
 .inputSenhaContainer input {
     padding: 10px;
     margin-bottom: 15px;
-    background-color: #222831;
-    border: 1px solid #ffffff;
-    color: #ffffff;
+    background-color: var(--background);
+    border: 1px solid var(--text-color);
+    color: var(--text-color);
     border-radius: 5px;
     font-size: 16px;
     width: 100%;
@@ -79,21 +79,21 @@
     right: 10px;
     top: 9px;
     cursor: pointer;
-    color: #ffffff;
+    color: var(--text-color);
 }
 
 .loginForm input {
     padding: 10px;
     margin-bottom: 15px;
-    background-color: #222831;
-    border: 1px solid #ffffff;
-    color: #ffffff;
+    background-color: var(--background);
+    border: 1px solid var(--text-color);
+    color: var(--text-color);
     border-radius: 5px;
     font-size: 16px;
 }
 
 .loginForm input::placeholder {
-    color: #ffffff;
+    color: var(--text-color);
 }
 
 .rememberMe {
@@ -118,13 +118,13 @@
 }
 
 .rememberMe input:checked {
-    background-color: black; /* Fundo preto quando marcado */
-    border-color: black; /* Borda preta ao marcar */
+    background-color: var(--elements); /* Fundo preto quando marcado */
+    border-color: var(--elements); /* Borda preta ao marcar */
 }
   
 .rememberMe input:checked::before {
     content: "✔";
-    color: white;
+    color: var(--text-color);
     font-size: 28px;
     display: inline-block;
     text-align: center;
@@ -132,14 +132,14 @@
 }
 
 .rememberMe label {
-    color: #fff;
+    color: var(--text-color);
     font-size: 1.2em;
 }
 
 .loginForm button {
     padding: 10px;
-    background-color: #222831;
-    color: white;
+    background-color: var(--background);
+    color: var(--text-color);
     border: none;
     border-radius: 15px;
     font-size: 16px;
@@ -149,7 +149,7 @@
 }
 
 .loginForm button:hover {
-    background-color: #000000;
+    background-color: var(--elements);
 }
 
 .resgate {

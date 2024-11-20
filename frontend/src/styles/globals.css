@@ -1,6 +1,23 @@
-/* @tailwind base; */
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+
+:root {
+    --background: #222831;
+    --text-color: #ffffff;
+    --box-color: #424242;
+    --elements: #000000;
+    --opacity: rgba(34, 40, 49, 0.9);
+}
+  
+[data-theme='light'] {
+    --background: #EFECEC;
+    --text-color: #000000;
+    --box-color: #adb5bd;
+    --elements: #ffffff;
+    --opacity: rgba(239, 236, 236, 0.9);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -10,5 +27,5 @@
 
 body {
     height: 100%;
-    background-color: #222831;
+    background-color: var(--background);
 }
