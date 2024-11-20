@@ -16,14 +16,14 @@
 .pesquisarInput {
   padding: 5px;
   font-size: 16px;
-  border: 1px solid #ffffff;
+  border: 1px solid var(--text-color);
   border-right: none;
   border-radius: 20px 0 0 20px;
   outline: none;
   width: 200px;
   height: 50px;
-  background-color: #222831;
-  color: #ffffff;
+  background-color: var(--background);
+  color: var(--text-color);
   opacity: 70%;
 }
 
@@ -33,13 +33,13 @@
 } 
 
 .pesquisarInput::placeholder {
-  color: #FFFFFF; /* Cor do placeholder */
+  color: var(--text-color); /* Cor do placeholder */
 }
 
 .divBotao {
-  background-color: #222831;
+  background-color: var(--background);
   border-radius: 0 20px 20px 0;
-  border: 1px solid #ffffff;
+  border: 1px solid var(--text-color);
   height: auto;
 }
 
@@ -52,11 +52,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--text-color);
 }
 
 .pesquisarBotao:hover {
-  color: #000000; /* Cor ao passar o mouse */
+  color: var(--elements); /* Cor ao passar o mouse */
 }
 
 .sugestoesLista {
@@ -66,8 +66,8 @@
   width: 500px;
   max-height: 500px; /* Define o tamanho máximo da lista */
   overflow-y: auto;
-  background-color: #222831;
-  border: 1px solid #ffffff;
+  background-color: var(--background);
+  border: 1px solid var(--text-color);
   border-radius: 5px;
   list-style: none;
   padding: 0;
@@ -84,18 +84,18 @@
   align-items: center;
   padding: 15px;
   cursor: pointer;
-  color: #ffffff;
-  border-bottom: 1px solid #ffffff;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--text-color);
   font-size: 20px;
   font-weight: bold;
 }
   
 .sugestaoItem:hover {
-  background-color: #000000;
+  background-color: var(--elements);
 }
   
 .sugestaoAtiva {
-  background-color: #000000;
+  background-color: var(--elements);
 }
   
 .imagemSugestao {

@@ -3,7 +3,7 @@
     max-width: 800px;
     padding: 10px;
     border-radius: 10px;
-    color: #fff;
+    color: var(--text-color);
 }
   
 .comentarios h1 {
@@ -20,7 +20,7 @@
 }
 
 .iconeUsuario {
-    color: #ffffff;
+    color: var(--text-color);
 }
   
 .novoComentario input {
@@ -30,20 +30,20 @@
     border: 0;
     outline: none;
     background-color: transparent;
-    color: #fff;
+    color: var(--text-color);
     font-size: 16px;
-    border-bottom: 2px solid #ffffff;
+    border-bottom: 2px solid var(--text-color);
 }
 
 .novoComentario input::placeholder {
-    color: #fff; /* Cor do placeholder */
+    color: var(--text-color); /* Cor do placeholder */
     font-size: 20px;
 }
   
 .comentario {
     display: flex;
     align-items: flex-start;
-    background-color: #424242; /* Fundo dos comentários */
+    background-color: var(--box-color); /* Fundo dos comentários */
     padding: 10px;
     border-radius: 15px;
     margin-bottom: 10px;
@@ -62,11 +62,11 @@
 .usuario {
     font-weight: bold;
     margin-bottom: 5px;
-    color: #ffffff;
+    color: var(--text-color);
 }
   
 .texto {
-    color: #ffffff; /* Texto dos comentários */
+    color: var(--text-color); /* Texto dos comentários */
     width: 95%;
 }
   
@@ -75,7 +75,7 @@
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    color: #ffffff;
+    color: var(--text-color);
     cursor: pointer;
 }
   

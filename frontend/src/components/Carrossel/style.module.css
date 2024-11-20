@@ -9,6 +9,7 @@
 .images {
   display: flex;
   width: 100%;
+  background-color: #222831;
   height: 100%;
   transition: transform 0.5s ease;
 }
@@ -42,7 +43,7 @@
 .informacoes {
   max-width: 80%;
   text-align: start;
-  color: #ffffff;
+  color: var(--text-color);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -53,10 +54,10 @@
   font-size: 60px;
   font-weight: bold;
   text-shadow: 
-    -1px -1px 0px black,  
-    1px -1px 0px black,
-    -1px  1px 0px black,
-    1px  1px 0px black;
+    -1px -1px 0px var(--elements),  
+    1px -1px 0px var(--elements),
+    -1px  1px 0px var(--elements),
+    1px  1px 0px var(--elements);
 }
   
 .generos {
@@ -88,10 +89,10 @@
   letter-spacing: normal;
   font-weight: bold;
   text-shadow: 
-    -1px -1px 0px black,  
-    1px -1px 0px black,
-    -1px  1px 0px black,
-    1px  1px 0px black;
+    -1px -1px 0px var(--elements),  
+    1px -1px 0px var(--elements),
+    -1px  1px 0px var(--elements),
+    1px  1px 0px var(--elements);
 }
   
 .navigationContainer {
@@ -106,7 +107,7 @@
   background-color: transparent;
   border: none;
   font-weight: bold;
-  color: white;
+  color: var(--text-color);
   font-size: 24px;
   cursor: pointer;
   padding: 10px;
@@ -128,5 +129,5 @@
 
 .progressBar.active {
   height: 10px;
-  background-color: #ffffff;
+  background-color: var(--text-color);
 }

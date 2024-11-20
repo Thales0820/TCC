@@ -1,7 +1,7 @@
 .container {
     margin-top: 132px;
     min-height: 100vh;
-    background-color: #222831;
+    background-color: var(--background);
     display: flex;
     flex-direction: column;
     padding-left: calc(180px + 60px);
@@ -10,7 +10,7 @@
 
 .titulo {
     display: flex;
-    color: #ffffff;
+    color: var(--text-color);
     align-items: center;
 }
 
@@ -35,12 +35,12 @@
     display: flex;
     justify-content: space-between; /* Espaçamento entre os leituras */
     width: 100%; /* Ajuste de largura conforme necessário */
-    border: 3px solid #000000;
+    border: 3px solid var(--elements);
 }
 
 .leitura {
     flex: 1; /* Cada leitura ocupa espaço igual */
-    color: white;
+    color: var(--text-color);
     text-align: center;
     height: 50px;
     display: flex;
@@ -50,7 +50,7 @@
 }
 
 .leitura.selecionado {
-    background-color: #000000; /* ou qualquer cor desejada */
+    background-color: var(--elements); /* ou qualquer cor desejada */
 }
 
 .leitura:not(:last-child)::after {
@@ -60,11 +60,11 @@
     top: 0;
     height: 100%;
     width: 2px;
-    background-color: #000000; /* Barra separadora */
+    background-color: var(--elements); /* Barra separadora */
 }
 
 .leitura:hover {
-    background-color: #000000; /* Cor ao passar o mouse */
+    background-color: var(--elements); /* Cor ao passar o mouse */
 }
 
 .leitura p {
@@ -80,11 +80,11 @@
 }
 
 .botao {
-    background-color: #424242;
-    color: #ffffff;
+    background-color: var(--box-color);
+    color: var(--text-color);
     width: 150px;
     border: 0;
-    border-right: 2px solid #ffffff;
+    border-right: 2px solid var(--text-color);
     border-radius: 15px 0 0 15px;
     padding: 15px;
     justify-items: center;
@@ -98,11 +98,11 @@
 }
 
 .iconebotao {
-    background-color: #424242;
+    background-color: var(--box-color);
     height: 53px;
     width: 50px;
     border-radius: 0 15px 15px 0;
-    color: #ffffff;
+    color: var(--text-color);
     cursor: pointer;
     display: flex;
     justify-content: center;
