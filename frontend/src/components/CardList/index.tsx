@@ -34,29 +34,18 @@ export const CardList: React.FC<CardComponentProps> = ({ data }) => {
         <div className={style.containerCard}>
             <div className={style.row}>
                 {data.map((obra) => (
-                    <div
-                        key={obra.id}
-                        className={style.card}
-                        onClick={() => handleObraClick(obra.id)} // Clique na obra
-                    >
-                        <img
-                            src={obra.capa.startsWith("http") ? obra.capa : `http://localhost:8000/${obra.capa}`}
-                            alt={`Capa da obra ${obra.titulo}`}
-                            className={style.image}
-                        />
+                    <div key={obra.id} className={style.card}>
+                        <img src={obra.capa.startsWith("http") ? obra.capa : `http://localhost:8000/${obra.capa}`}
+                            alt={`Capa da obra ${obra.titulo}`} className={style.image} 
+                            onClick={() => handleObraClick(obra.id)}/>
                         <div className={style.conteudo}>
-                            <h2 className={style.nome}>{obra.titulo}</h2>
+                            <h2 className={style.nome} onClick={() => handleObraClick(obra.id)}>{obra.titulo}</h2>
                             <div className={style.barra}></div>
                             <div className={style.capitulos}>
                                 {obra.capitulos.map((cap) => (
-                                    <div
-                                        key={cap.id}
-                                        className={style.informacoes}
-                                        onClick={(e) => {
-                                            e.stopPropagation(); // Impede o clique de acionar o evento da obra
-                                            handleCapituloClick(cap.id); // Clique no capítulo
-                                        }}
-                                    >
+                                    <div key={cap.id} className={style.informacoes}
+                                        onClick={(e) => { e.stopPropagation(); // Impede o clique de acionar o evento da obra
+                                            handleCapituloClick(cap.id);}}>  {/* Clique no capítulo */}
                                         <span className={style.capitulo}>Cap. {cap.numero}</span>
                                         <span className={style.tituloCap}>{cap.titulo}</span>
                                     </div>

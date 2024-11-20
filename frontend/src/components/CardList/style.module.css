@@ -1,95 +1,96 @@
 .containerCard {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 20px;
-    padding: 20px;
     margin: auto;
-    max-width: 1200px;
+    margin-left: -42px;
+    margin-right: 10px;
 }
 
 .row {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 20px;
-    width: 100%;
 }
 
 .card {
     display: flex;
-    flex-direction: column;
-    width: 48%;
-    background-color: #1a1a1a;
-    border-radius: 10px;
+    width: 49%;
+    background-color: transparent;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
-    transform: scale(1.03);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    position: relative;
 }
 
 .image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+    width: 35%;
+    height: auto;
+    cursor: pointer;
 }
 
 .conteudo {
-    padding: 15px;
+    width: 70%;
+    position: relative;
     display: flex;
     flex-direction: column;
-    background-color: #2c2c2c;
-    border-radius: 0 0 10px 10px;
+    border: 5px solid var(--box-color);
+    border-radius: 0 5px 5px 0;
+    z-index: 1;
+    border-left: 0;
 }
 
 .nome {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
-    color: #ffffff;
+    padding: 10px;
+    color: var(--text-color);
     text-align: center;
-    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.nome:hover {
+    color: var(--elements);
+    text-decoration: underline;
 }
 
 .barra {
     width: 100%;
-    height: 3px;
-    background-color: #ff6f61;
-    margin: 10px 0;
+    height: 5px;
+    background-color: var(--box-color);
+    margin-bottom: 15px;
 }
 
 .capitulos {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 10px;
 }
 
 .informacoes {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #424242;
-    border-radius: 8px;
+    background-color: var(--box-color);
+    border-radius: 15px;
     padding: 10px;
-    color: #ffffff;
-    transition: background-color 0.2s;
-}
-
-.informacoes:hover {
-    background-color: #ff6f61;
+    color: var(--text-color);
 }
 
 .capitulo {
     text-align: left;
-    font-weight: bold;
+    cursor: pointer;
+}
+
+.capitulo:hover {
+    color: var(--elements);
+    text-decoration: underline;
 }
 
 .tituloCap {
     text-align: left;
-    margin-left: 10px;
+    margin-left: 50px;
     flex: 1;
     word-wrap: break-word;
 }

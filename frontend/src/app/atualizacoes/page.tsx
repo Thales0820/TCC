@@ -6,6 +6,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import Pesquisar from "@/components/Pesquisar";
 import { useEffect, useState } from "react";
 import CardList from "@/components/CardList";
+import { ModalPerfil } from "@/components/ModalPerfil";
 
 export default function Atualizacoes() {
     const router = useRouter();
@@ -58,6 +59,7 @@ export default function Atualizacoes() {
         <>
             <Menu />
             <Pesquisar />
+            <ModalPerfil />
             <div className={style.container}>
                 <div className={style.titulo}>
                     <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
