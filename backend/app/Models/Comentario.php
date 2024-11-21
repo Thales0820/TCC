@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comentario extends Model
 {
-    protected $fillable = ['conteudo', 'user_id', 'obra_id'];
+    use HasFactory;
+
+    protected $fillable = ['texto', 'usuario_id', 'obra_id'];
 
     public function usuario()
     {

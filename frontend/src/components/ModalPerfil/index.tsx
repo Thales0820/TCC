@@ -56,7 +56,7 @@ export const ModalPerfil = () => {
 
                     if (res.ok) {
                         const data: Usuario = await res.json();
-                        console.log('Dados do usuário:', data);
+                        //console.log('Dados do usuário:', data);
                         setUsuario(data);
                     } else {
                         setError("Erro ao buscar dados do usuário.");

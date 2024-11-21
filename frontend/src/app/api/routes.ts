@@ -311,3 +311,29 @@ export const getObrasPorGenero = async (generoId: number) => {
       throw error;
   }
 };
+
+export const getComentariosPorObra = async (obraId: number) => {
+  try {
+      const response = await axios.get(`${API_URL}/comentarios`);
+      const comentarios = response.data; // Retorna os comentários da API
+
+      return comentarios.filter((comentario: { obra_id: number }) => comentario.obra_id === obraId)
+  } catch (error) {
+      console.error('Erro ao buscar comentários:', error);
+      throw error;
+  }
+};
+
+export const adicionarComentario = async (userId: number, obraId: number, texto: string) => {
+  try {
+      const response = await axios.post(`${API_URL}/comentarios`, {
+          usuario_id: userId,
+          obra_id: obraId,
+          texto,
+      });
+      return response.data; // Retorna o comentário recém-criado
+  } catch (error) {
+      console.error('Erro ao adicionar comentário:', error);
+      throw error;
+  }
+};

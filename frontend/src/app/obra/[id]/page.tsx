@@ -89,7 +89,7 @@ export default function Obra({ params }: { params: { id: string } }) {
         const fetchLeitura = async () => {
             if (userId) {
                 const lista = await getLista(parseInt(userId), parseInt(params.id));
-                console.log("Leitura obtida:", lista); // Console para verificar a resposta
+                //console.log("Leitura obtida:", lista); // Console para verificar a resposta
                 setLeitura(lista);
             }
         };
@@ -201,7 +201,7 @@ export default function Obra({ params }: { params: { id: string } }) {
                         </div>
                     </div>
                     {mostrarComentarios ? (
-                        <Comentarios />
+                        <Comentarios obraId={parseInt(params.id)} userId={userId ? parseInt(userId) : null} />
                     ) : (
                         <div className={style.capitulosContainer}>
                             <div className={style.topoCapitulos}>

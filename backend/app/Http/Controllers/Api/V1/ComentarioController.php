@@ -13,7 +13,15 @@ class ComentarioController extends Controller
      */
     public function index()
     {
-        $comentarios = Comentario::all();
+        $comentarios = Comentario::with([
+            'usuario' => function ($query) {
+                $query->select('id', 'nome');
+            },
+            'obra' => function ($query) {
+                $query->select('id', 'titulo');
+            },
+        ])->get();
+
         return response()->json($comentarios);
     }
 
@@ -23,17 +31,13 @@ class ComentarioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'texto' => 'required|string',
-            'usuario_id' => 'required|exists:usuarios,id',
-            'obra_id' => 'required|exists:obras,id',
+            'usuario_id' => 'required|integer|exists:usuarios,id',
+            'obra_id' => 'required|integer|exists:obras,id',
+            'texto' => 'required|string|min:1|max:500',
         ]);
 
-        $comentario = Comentario::create([
-            'texto' => $request->texto,
-            'usuario_id' => $request->usuario_id,
-            'obra_id' => $request->obra_id,
-        ]);
-
+        $comentario = Comentario::create($request->all());
+        $comentario->load('usuario');
         return response()->json($comentario, 201);
     }
 

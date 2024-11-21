@@ -39,6 +39,15 @@
     color: var(--text-color); /* Cor do placeholder */
     font-size: 20px;
 }
+
+.enviar {
+    color: var(--text-color);
+    cursor: pointer;
+}
+  
+.enviar:hover {
+    color: var(--elements);
+}
   
 .comentario {
     display: flex;
@@ -48,6 +57,7 @@
     border-radius: 15px;
     margin-bottom: 10px;
     position: relative;
+    align-items: center;
 }
 
 .iconeUsuarioComentario {
@@ -69,17 +79,12 @@
     color: var(--text-color); /* Texto dos comentários */
     width: 95%;
 }
-  
-.like {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-color);
+
+.opcao {
     cursor: pointer;
+    color: var(--text-color);
 }
-  
-.like:hover {
-    color: #007bff;
+
+.opcao:hover {
+    color: var(--elements);
 }
-  
