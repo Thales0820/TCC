@@ -238,6 +238,7 @@ export default function Obra({ params }: { params: { id: string } }) {
                 listaId={leitura?.listaId}     
                 leituraAtual={leitura?.leituraId}  
             />
+            <br />
         </>
     );
 }

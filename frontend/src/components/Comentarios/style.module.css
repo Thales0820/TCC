@@ -23,7 +23,7 @@
     color: var(--text-color);
 }
   
-.novoComentario input {
+.novoComentario textarea {
     margin-top: 15px;
     margin-left: 10px;
     width: 100%;
@@ -33,11 +33,16 @@
     color: var(--text-color);
     font-size: 16px;
     border-bottom: 2px solid var(--text-color);
+    resize: none; /* Desativa o redimensionamento */
 }
 
-.novoComentario input::placeholder {
+.novoComentario textarea::placeholder {
     color: var(--text-color); /* Cor do placeholder */
     font-size: 20px;
+}
+
+.novoComentario textarea::-webkit-scrollbar {
+    display: none; /* Para Chrome, Safari e Edge */
 }
 
 .enviar {
@@ -47,6 +52,46 @@
   
 .enviar:hover {
     color: var(--elements);
+}
+
+.inputEdicao {
+    width: 100%;
+    border: 0;
+    outline: none;
+    background-color: transparent;
+    color: var(--text-color);
+    font-size: 16px;
+    border-bottom: 2px solid var(--text-color);
+    resize: none; /* Desativa o redimensionamento */
+}
+
+.inputEdicao::-webkit-scrollbar {
+    display: none; /* Para Chrome, Safari e Edge */
+}
+
+.buttonSalvar {
+    margin-top: 5px;
+    margin-right: 5px;
+    padding: 5px 10px;
+    background-color: var(--background);
+    color: #06D001;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.buttonCancelar {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background-color: var(--background);
+    color: #CF0A0A;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.buttonCancelar:hover, .buttonSalvar:hover {
+    background-color: var(--elements);
 }
   
 .comentario {
@@ -80,11 +125,31 @@
     width: 95%;
 }
 
-.opcao {
+.opcao svg {
     cursor: pointer;
     color: var(--text-color);
 }
 
-.opcao:hover {
+.opcao svg:hover {
     color: var(--elements);
+}
+
+.dropdown {
+    position: absolute;
+    background-color: var(--box-color);
+    border-radius: 5px;
+    border: 1px solid var(--elements);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    padding: 5px;
+    list-style: none;
+}
+
+.dropdown li {
+    padding: 5px 10px;
+    font-weight: bold;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: space-between;
 }
