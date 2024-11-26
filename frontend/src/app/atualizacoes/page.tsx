@@ -7,53 +7,101 @@ import Pesquisar from "@/components/Pesquisar";
 import { useEffect, useState } from "react";
 import CardList from "@/components/CardList";
 import { ModalPerfil } from "@/components/ModalPerfil";
+import axios from "axios";
+import { getObrasLista } from "../api/routes";
+import { parseCookies } from "nookies";
+import { jwtDecode } from "jwt-decode";
+
+interface TokenPayload {
+    sub: number;
+}
 
 export default function Atualizacoes() {
     const router = useRouter();
-    const [obrasAgrupadas, setObrasAgrupadas] = useState([]); // Estado para obras e capítulos agrupados
+    const [obras, setObras] = useState([]); // Estado para obras e capítulos atualizacoes
     const [loading, setLoading] = useState(true); // Estado para controle de loading
+    const [usuarioId, setUsuarioId] = useState<number | null>(null);
 
     const voltar = () => {
         router.back();
     };
 
     useEffect(() => {
-        const fetchCapitulos = async () => {
-            try {
-                const response = await fetch("http://127.0.0.1:8000/api/v1/capitulos"); // Ajuste a URL conforme necessário
-                if (!response.ok) {
-                    throw new Error("Erro ao buscar capítulos");
-                }
-                const data = await response.json();
+        const cookies = parseCookies();
+        const token = cookies["obra.token"];
+        
+        if (token) {
+          try {
+            const decodedToken: TokenPayload = jwtDecode<TokenPayload>(token);
+            setUsuarioId(decodedToken.sub);
+          } catch (error) {
+            console.error("Erro ao decodificar o token:", error);
+          }
+        }
+      }, []);
 
-                // Agrupando capítulos por obra
-                const agrupados = data.reduce((acc: any, capitulo: any) => {
+    useEffect(() => {
+        const fetchAtualizacao = async () => {
+            try {
+                const listaObras: { id: number; titulo: string; capa: string; leitura: string }[] =
+                    await getObrasLista(Number(usuarioId));
+                const listaObrasId = listaObras.map((obra) => obra.id);
+        
+                const response = await axios.get("http://127.0.0.1:8000/api/v1/capitulos");
+                const capitulos = response.data;
+        
+                // Verifica se a resposta tem dados válidos
+                if (!capitulos || !Array.isArray(capitulos)) {
+                    throw new Error("Capítulos inválidos ou vazios.");
+                }
+        
+                // Agrupa capítulos por obra e mantém apenas os 3 últimos
+                const atualizacoes = capitulos.reduce((acc: any, capitulo: any) => {
                     const obraId = capitulo.obra_id;
+        
+                    // Ignora capítulos de obras que não estão na lista do usuário
+                    if (!listaObrasId.includes(obraId)) {
+                        return acc;
+                    }
+        
+                    // Garante que a propriedade 'obra' existe
+                    if (!capitulo.obra) {
+                        console.warn(`Capítulo com ID ${capitulo.id} não possui informações da obra.`);
+                        return acc;
+                    }
+        
                     if (!acc[obraId]) {
                         acc[obraId] = {
                             ...capitulo.obra,
                             capitulos: [],
                         };
                     }
+        
                     acc[obraId].capitulos.push({
                         id: capitulo.id,
                         titulo: capitulo.titulo,
                         numero: capitulo.numero,
-                        data_publicacao: capitulo.data_publicacao,
                     });
+        
+                    // Ordena capítulos por número e mantém apenas os 3 últimos
+                    acc[obraId].capitulos = acc[obraId].capitulos
+                        .sort((a: any, b: any) => b.numero - a.numero)
+                        .slice(0, 3);
+        
                     return acc;
                 }, {});
-
-                setObrasAgrupadas(Object.values(agrupados)); // Converte objetos agrupados em array
+        
+                setObras(Object.values(atualizacoes)); // Converte objetos atualizacoes em array
             } catch (error) {
-                console.error("Erro:", error);
+                console.error("Erro ao buscar capítulos:", error);
             } finally {
                 setLoading(false); // Define loading como false após a chamada
             }
-        };
-
-        fetchCapitulos(); // Chama a função fetchCapitulos
-    }, []); // O array vazio [] faz com que o efeito rode apenas na montagem do componente
+        };        
+        if (usuarioId) {
+            fetchAtualizacao(); // Chama a função fetchAtualizacao quando usuarioId está disponível
+        }
+    }, [usuarioId]); // O array vazio [] faz com que o efeito rode apenas na montagem do componente
 
     return (
         <>
@@ -69,7 +117,7 @@ export default function Atualizacoes() {
                 {loading ? (
                     <p>Carregando...</p> // Mensagem de loading enquanto os dados estão sendo buscados
                 ) : (
-                    <CardList data={obrasAgrupadas} /> // Passando os dados agrupados para o CardList
+                    <CardList data={obras} /> // Passando os dados atualizacoes para o CardList
                 )}
             </div>
         </>
