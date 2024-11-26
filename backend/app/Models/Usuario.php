@@ -57,4 +57,9 @@ class Usuario extends Authenticatable implements JWTSubject, CanResetPassword
     {
         return $this->attributes['senha'];
     }
+
+    public function likedObras()
+    {
+        return $this->belongsToMany(Obra::class, 'obra_likes', 'usuario_id', 'obra_id')->withTimestamps();
+    }
 }

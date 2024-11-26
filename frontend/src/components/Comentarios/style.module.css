@@ -34,6 +34,7 @@
     font-size: 16px;
     border-bottom: 2px solid var(--text-color);
     resize: none; /* Desativa o redimensionamento */
+    height: 28px;
 }
 
 .novoComentario textarea::placeholder {
@@ -63,6 +64,7 @@
     font-size: 16px;
     border-bottom: 2px solid var(--text-color);
     resize: none; /* Desativa o redimensionamento */
+    height: 28px;
 }
 
 .inputEdicao::-webkit-scrollbar {

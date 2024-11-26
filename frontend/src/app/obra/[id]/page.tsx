@@ -16,6 +16,7 @@ import { parseCookies } from 'nookies';
 import {jwtDecode} from 'jwt-decode';
 import { ModalLeitura } from '@/components/ModalLeitura';
 import Link from 'next/link';
+import axios from 'axios';
 
 interface TokenPayload {
     sub: string;
@@ -94,6 +95,21 @@ export default function Obra({ params }: { params: { id: string } }) {
             }
         };
 
+        const fetchLikeStatus = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/v1/obras/${params.id}/like-status`, {
+                    params: { userId },
+                });
+    
+                if (response.data?.liked) {
+                    setLike(true);
+                }
+            } catch (error) {
+                console.error("Erro ao buscar status de like:", error);
+            }
+        };
+    
+        fetchLikeStatus();
         fetchObra();
         fetchCapitulos();
         fetchLeitura();
@@ -134,17 +150,39 @@ export default function Obra({ params }: { params: { id: string } }) {
         return `${dia}/${mes}/${ano}`;
     };
 
-    const toggleLike = () => {
-        if (obra) {
+    const handleLikeToggle = async () => {
+        if (!obra) return;
+    
+        // Atualiza visualmente
+        setLike(!like);
+        const novoLike = like ? obra.likes - 1 : obra.likes + 1;
+        setObra({ ...obra, likes: novoLike });
+    
+        try {
+            // Chamada à API
+            const response = await axios.post(`http://127.0.0.1:8000/api/v1/obras/${obra.id}/like`, {
+                usuario_id: parseInt(userId ?? '0'), // Passe o ID do usuário logado, se necessário
+            });
+    
+            // Atualiza com os dados retornados pelo servidor
+            if (response.data) {
+                setObra({ ...obra, likes: response.data.likesCount });
+                setLike(response.data.status === "liked");
+            }
+        } catch (error) {
+            console.error("Erro ao atualizar like:", error);
+    
+            // Reverte a mudança visual em caso de erro
             setLike(!like);
-            const novoLike = like ? obra.likes - 1 : obra.likes + 1;
-            setObra({ ...obra, likes: novoLike });
+            setObra({ ...obra, likes: like ? obra.likes + 1 : obra.likes - 1 });
         }
     };
 
     const toggleComentarios = () => {
         setMostrarComentarios(!mostrarComentarios);
     };
+
+    console.log('Teste', like)
 
     return(
         <>
@@ -187,7 +225,7 @@ export default function Obra({ params }: { params: { id: string } }) {
                                     <FaRegEdit className={style.icone} size={45} title='Editar Obra'/>
                                 </Link>
                             )}
-                            <div onClick={toggleLike}>
+                            <div onClick={handleLikeToggle }>
                                 <BiSolidLike size={45} className={like ? style.like : style.curtir} />
                                 {obra && obra.likes > 0 && (
                                     <span className={like ? style.curtido : style.likesCount}>{obra.likes}</span>

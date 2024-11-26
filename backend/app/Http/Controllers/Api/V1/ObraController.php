@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Obra;
+use App\Models\ObraLikes;
+use Illuminate\Support\Facades\Auth;
 
 class ObraController extends Controller
 {
@@ -144,6 +146,7 @@ class ObraController extends Controller
 
         return response()->json(null, 204);
     }
+
     public function obrasLancadasRecentes()
     {
         $dataLimite = now()->subDays(5); // Define a data limite para 5 dias atrás
@@ -181,5 +184,47 @@ class ObraController extends Controller
             'generos' => $obra->generos->pluck('nome'), // Retorna apenas os nomes dos gêneros
             'likes' => $obra->likes, // Quantidade de likes, se houver
         ]);
+    }
+
+    public function like(Request $request, $id)
+    {
+        $usuarioId = $request->input('usuario_id');
+        $obra = Obra::find($id);
+
+        if (!$obra) {
+            return response()->json(['message' => 'Obra não encontrada'], 404);
+        }
+
+        $jaCurtido = $obra->likes()->where('usuario_id', $usuarioId)->exists();
+
+        if ($jaCurtido) {
+            // Remover like
+            $obra->likes()->detach($usuarioId);
+            $obra->decrement('likes');
+            return response()->json([
+                'status' => 'unliked',
+                'likesCount' => $obra->likes,
+            ]);
+        } else {
+            // Adicionar like
+            $obra->likes()->attach($usuarioId);
+            $obra->increment('likes');
+            return response()->json([
+                'status' => 'liked',
+                'likesCount' => $obra->likes,
+            ]);
+        }
+    }
+
+    public function getLikeStatus($id, Request $request)
+    {
+        $usuarioId = $request->query('userId');
+
+        // Verifica se o usuário já deu like
+        $jaCurtido = ObraLikes::where('obra_id', $id)
+            ->where('usuario_id', $usuarioId)
+            ->exists();
+
+        return response()->json(['liked' => $jaCurtido]);
     }
 }

@@ -11,9 +11,9 @@
 }
   
 [data-theme='light'] {
-    --background: #EFECEC;
+    --background: #9FAABC;
     --text-color: #000000;
-    --box-color: #adb5bd;
+    --box-color: #C4C4C4;
     --elements: #ffffff;
     --opacity: rgba(239, 236, 236, 0.9);
 }
