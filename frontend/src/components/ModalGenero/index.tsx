@@ -9,9 +9,9 @@ interface Genero {
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selecionaGenero: string[];
-  onSelectGenre: (selected: string[]) => void;
-  generos: Genero[];
+  selecionaGenero: string[]; // Gêneros selecionados passados como array de strings
+  onSelectGenre: (selected: string[]) => void; // Função para passar os gêneros selecionados de volta
+  generos: Genero[]; // Lista de gêneros disponíveis
 }
 
 export const ModalGenero: React.FC<ModalProps> = ({
@@ -39,19 +39,19 @@ export const ModalGenero: React.FC<ModalProps> = ({
   };
 
   const handleConfirm = () => {
-    onSelectGenre(selectedGenres);
-    onClose();
+    onSelectGenre(selectedGenres); // Passa os gêneros selecionados de volta para o componente pai
+    onClose(); // Fecha o modal
   };
 
   const handleContentClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Impede o clique de fechar o modal ao clicar dentro do conteúdo
   };
 
   const limparGeneros = () => {
-    setSelectedGenres([]);
+    setSelectedGenres([]); // Limpa a seleção
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) return null; // Não renderiza o modal se não estiver aberto
 
   return (
     <div className={style.modalFundo} onClick={onClose}>

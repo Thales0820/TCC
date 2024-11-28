@@ -40,6 +40,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/obras/{id}', [ObraController::class, 'show']);
     Route::get('paginas/{id}',[PaginaController::class, 'show']);
     Route::post('usuario/login', [UsuarioController::class, 'login']);
+    Route::post('/usuarios/{id}', [UsuarioController::class, 'update']);
+
 
 });
 

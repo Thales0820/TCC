@@ -61,7 +61,7 @@ export default function Historico() {
                     <h1>Histórico</h1>
                 </div>
                 <br />
-                <CardList data={obrasData}/>
+                
             </div>
         </>
     )

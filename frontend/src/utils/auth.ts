@@ -29,3 +29,17 @@ export const verificaTokenExpirado = (token: string | undefined): boolean => {
     return true;
   }
 };
+export const getUserIdFromToken = (): string | null => {
+  const cookies = parseCookies();
+  const token = cookies['obra.token'];
+
+  if (!token) return null;
+
+  try {
+    const decodedToken: DecodedToken = jwtDecode<DecodedToken>(token);
+    return decodedToken.sub || null; // Retorna o ID do usuário
+  } catch (error) {
+    console.error('Erro ao decodificar o token:', error);
+    return null;
+  }
+};
