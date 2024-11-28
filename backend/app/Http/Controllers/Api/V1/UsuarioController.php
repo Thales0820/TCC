@@ -21,47 +21,6 @@ class UsuarioController extends Controller
         return response()->json($usuarios);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nome' => 'required|string|max:255',
-            'foto_perfil' => 'required|image|mimes:jpeg,png,jpg|max:50000',
-            'banner' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:usuarios,email',
-            'senha' => 'required|string',
-            'perfil_id' => 'required|exists:perfils,id',
-        ]);
-
-        // Processamento do upload da foto de perfil
-        $fileName = time() . '-' . $request->file('foto_perfil')->getClientOriginalName();
-        $request->file('foto_perfil')->move(public_path('imagesUser'), $fileName);
-
-        // Criação do usuário com senha hashada
-        $usuario = Usuario::create([
-            'nome' => $request->nome,
-            'foto_perfil' => 'imagesUser/' . $fileName,
-            'banner' => $request->banner,
-            'email' => $request->email,
-            'senha' => $request->senha,
-            'perfil_id' => $request->perfil_id,
-        ]);
-
-        // Gerar o token JWT
-        $token = JWTAuth::fromUser($usuario);
-
-        return response()->json([
-            'usuario' => $usuario,
-            'token' => $token,
-            'image_url' => asset('imagesUser/' . $fileName),
-        ], 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $usuario = Usuario::with('perfil')->find($id);
@@ -73,9 +32,49 @@ class UsuarioController extends Controller
         return response()->json($usuario);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'foto_perfil' => 'required|image|mimes:jpeg,png,jpg|max:50000',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg|max:50000',
+            'email' => 'required|email|unique:usuarios,email',
+            'senha' => 'required|string',
+            'perfil_id' => 'required|exists:perfils,id',
+        ]);
+
+        // Processamento do upload da foto de perfil
+        $fotoPerfilName = time() . '-' . $request->file('foto_perfil')->getClientOriginalName();
+        $request->file('foto_perfil')->move(public_path('imagesUser'), $fotoPerfilName);
+
+        // Processamento do upload do banner, se fornecido
+        $bannerName = null;
+        if ($request->hasFile('banner')) {
+            $bannerName = time() . '-' . $request->file('banner')->getClientOriginalName();
+            $request->file('banner')->move(public_path('imageBanner'), $bannerName);
+        }
+
+        // Criação do usuário com senha hashada
+        $usuario = Usuario::create([
+            'nome' => $request->nome,
+            'foto_perfil' => 'imagesUser/' . $fotoPerfilName,
+            'banner' => $bannerName ? 'imageBanner/' . $bannerName : null,
+            'email' => $request->email,
+            'senha' => $request->senha,
+            'perfil_id' => $request->perfil_id,
+        ]);
+
+        // Gerar o token JWT
+        $token = JWTAuth::fromUser($usuario);
+
+        return response()->json([
+            'usuario' => $usuario,
+            'token' => $token,
+            'image_url' => asset('imagesUser/' . $fotoPerfilName),
+            'banner_url' => $bannerName ? asset('imageBanner/' . $bannerName) : null,
+        ], 201);
+    }
+
     public function update(Request $request, string $id)
     {
         $usuario = Usuario::find($id);
@@ -85,32 +84,40 @@ class UsuarioController extends Controller
         }
 
         $request->validate([
-            'nome' => 'required|string|max:255',
+            'nome' => 'nullable|string|max:255',
             'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg|max:50000',
-            'banner' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:usuarios,email,' . $id,
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg|max:50000',
+            'email' => 'nullable|email|unique:usuarios,email,' . $id,
             'senha' => 'nullable|string|min:6',
-            'perfil_id' => 'required|exists:perfils,id',
+            'perfil_id' => 'nullable|exists:perfils,id',
         ]);
 
-        $data = $request->only(['nome', 'banner', 'email', 'perfil_id']);
+        $data = $request->only(['nome', 'email', 'perfil_id']);
 
         // Atualiza a foto de perfil se foi enviada uma nova
         if ($request->hasFile('foto_perfil')) {
-            $fileName = time() . '-' . $request->file('foto_perfil')->getClientOriginalName();
-            $request->file('foto_perfil')->move(public_path('imagesUser'), $fileName);
-            $data['foto_perfil'] = 'imagesUser/' . $fileName;
+            $fotoPerfilName = time() . '-' . $request->file('foto_perfil')->getClientOriginalName();
+            $request->file('foto_perfil')->move(public_path('imagesUser'), $fotoPerfilName);
+            $data['foto_perfil'] = 'imagesUser/' . $fotoPerfilName;
+        }
+
+        // Atualiza o banner se foi enviado um novo
+        if ($request->hasFile('banner')) {
+            $bannerName = time() . '-' . $request->file('banner')->getClientOriginalName();
+            $request->file('banner')->move(public_path('imageBanner'), $bannerName);
+            $data['banner'] = 'imageBanner/' . $bannerName;
         }
 
         // Atualiza a senha se um novo valor foi fornecido
         if ($request->filled('senha')) {
-            $data['senha'] = bcrypt($request->senha);
+            $data['senha'] = $request->senha;
         }
 
         $usuario->update($data);
 
         return response()->json($usuario);
     }
+
 
     /**
      * Remove the specified resource from storage.
