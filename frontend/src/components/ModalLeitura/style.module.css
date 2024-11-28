@@ -13,7 +13,7 @@
 }
     
 .modal {
-    background: #424242;
+    background: var(--box-color);
     padding: 20px;
     border-radius: 8px;
     width: 500px;
@@ -21,7 +21,7 @@
     overflow-y: auto;
     z-index: 101;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    color: #ffffff;
+    color: var(text-color);
     scrollbar-width: none; /* Para Firefox */
     -ms-overflow-style: none;
 }
@@ -74,14 +74,14 @@
 }
   
 .checkboxItem input:checked {
-    background-color: black; /* Fundo preto quando marcado */
-    border-color: black; /* Borda preta ao marcar */
+    background-color: var(--elements); /* Fundo preto quando marcado */
+    border-color: var(--elements); /* Borda preta ao marcar */
 }
   
 .checkboxItem input:checked::before {
     content: "✔";
     display: block;
-    color: white;
+    color: var(text-color);
     text-align: center;
     line-height: 19px;
     font-size: 23px;
@@ -105,8 +105,8 @@
     padding: 10px 20px;
     width: 200px;
     font-size: 20px;
-    background-color: #222831;
-    color: white;
+    background-color: var(--background);
+    color: var(text-color);
     border: none;
     border-radius: 15px;
     cursor: pointer;
@@ -114,7 +114,7 @@
 }
 
 .botao:hover {
-    background-color: #000000;
+    background-color: var(--elements);
 }
 
 .excluir {

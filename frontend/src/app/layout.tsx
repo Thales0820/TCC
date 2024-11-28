@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "../styles/globals.css"
+import { ThemeProvider } from "@/context/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Indie Comic",
@@ -15,7 +16,9 @@ export default function RootLayout({ children}: Readonly<{ children: React.React
         <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet"></link>
       </head>
       <body>
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

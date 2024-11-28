@@ -1,7 +1,7 @@
 .container {
     margin-top: 132px;
     min-height: 100vh;
-    background-color: #222831;
+    background-color: var(--background);
     display: flex;
     flex-direction: column;
     padding-left: calc(180px + 60px);
@@ -10,7 +10,7 @@
 
 .titulo {
     display: flex;
-    color: #ffffff;
+    color: var(--text-color);
     align-items: start;
 }
 
@@ -37,24 +37,24 @@
     font-size: 16px;
     width: 500px;
     border-radius: 25px;
-    background-color: #222831;
-    border: 2px solid #ffffff;
-    color: #ffffff;
+    background-color: var(--background);
+    border: 2px solid var(--text-color);
+    color: var(--text-color);
     margin-right: 20px;
 }
 
 .pesquisa::placeholder {
-    color: #ffffff;
+    color: var(--text-color);
 }
 
 .select {
     padding: 10px;
     font-size: 16px;
     border-radius: 15px;
-    background-color: #424242;
+    background-color: var(--box-color);
     border: none;
     width: 170px;
-    color: #ffffff;
+    color: var(--text-color);
     margin-right: 20px;
     font-weight: bold;
     appearance: none; /* Remove a setinha padrão do select */
@@ -69,15 +69,15 @@
 }
 
 .select option:hover {
-    background-color: #000000;
+    background-color: var(--elements);
 }
 
 .generos {
     padding: 10px 20px;
     width: 210px;
     font-size: 16px;
-    background-color: #424242;
-    color: white;
+    background-color: var(--box-color);
+    color: var(--text-color);
     border: none;
     border-radius: 15px;
     cursor: pointer;

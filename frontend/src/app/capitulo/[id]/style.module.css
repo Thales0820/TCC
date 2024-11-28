@@ -1,7 +1,7 @@
 .readerContainer {
     display: flex;
     flex-direction: column;
-    color: #ffffff;
+    color: var(--text-color);
     align-items: center;
 }
 /* Header */
@@ -39,10 +39,10 @@
     padding: 10px;
     font-size: 20px;
     border-radius: 15px;
-    background-color: #424242;
+    background-color: var(--box-color);
     border: none;
     width: 170px;
-    color: #ffffff;
+    color: var(--text-color);
     margin-right: 20px;
     font-weight: bold;
     appearance: none; /* Remove a setinha padrão do select */
@@ -61,7 +61,7 @@
 }
 
 .select option:hover {
-    background-color: #000000;
+    background-color: var(--elements);
 }
 
 .pageContainer {
@@ -81,7 +81,7 @@
 .navigationButton {
     font-size: 24px;
     padding: 10px;
-    color: #ffffff;
+    color: var(--text-color);
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
@@ -91,7 +91,7 @@
 }
 
 .navigationButton:hover {
-    color: #000000;
+    color: var(--elements);
 }
 
 .navigationButton.left {
@@ -109,7 +109,7 @@
 
 .telaFull {
     padding: 10px;
-    color: #ffffff;
+    color: var(--text-color);
     position: fixed;
     bottom: 1px;
     cursor: pointer;

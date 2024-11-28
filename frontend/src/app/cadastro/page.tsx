@@ -5,6 +5,7 @@ import style from './style.module.css';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { IoEyeOff, IoEye } from "react-icons/io5";
+import { useTheme } from "@/hooks/useTheme";
 
 export default function CadastroUsuario() {
     // Definindo estados para os campos
@@ -18,6 +19,11 @@ export default function CadastroUsuario() {
     const [error, setError] = useState(''); // Erros
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const router = useRouter();
+    const {theme} = useTheme()
+
+    const logoSrc = theme === "dark" 
+    ? "/images/logoDark.png" 
+    : "/images/logoLight.png";
 
     const toggleMostrarSenha = () => {
         setMostrarSenha(!mostrarSenha); // Alterna entre true e false
@@ -106,6 +112,7 @@ export default function CadastroUsuario() {
     }, []);
 
     return (
+
         <div className={style.loginContainer}>
             <div className={style.logo}>
                 <img src="/images/logoDark.png" alt="Logo" />
@@ -113,6 +120,12 @@ export default function CadastroUsuario() {
             <div className={style.content}>
                 <div className={style.imageSection}>
                     <img src="/images/Login.png" alt="Sobre" />
+
+        <>
+            <div className={style.loginContainer}>
+                <div className={style.logo}>
+                    <img src={logoSrc} alt="Logo" title="Indie Comics" key={logoSrc}/>
+
                 </div>
                 <div className={style.loginForm}>
                     <h2>Cadastro</h2>

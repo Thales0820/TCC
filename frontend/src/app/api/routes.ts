@@ -134,7 +134,7 @@ export const getLista = async (usuarioId: number, obraId: number) => {
         item.usuario_id === usuarioId && item.obra_id === obraId
     );
 
-    console.log("Dados da Lista para usuário e obra:", lista);
+    // console.log("Dados da Lista para usuário e obra:", lista);
     return lista ? { listaId: lista.id, leituraId: lista.leitura.id, tipo: lista.leitura.tipo } : null;
   } catch (error) {
       console.error('Erro ao buscar obra na lista:', error);
@@ -145,7 +145,7 @@ export const getLista = async (usuarioId: number, obraId: number) => {
 export const deletarLista = async (listaId: number) => {
   try {
       const response = await axios.delete(`${API_URL}/listas/${listaId}`);
-      console.log("Obra removida da lista com sucesso!", response.data);
+      // console.log("Obra removida da lista com sucesso!", response.data);
       return response.data; // Retorna a resposta para confirmação
   } catch (error) {
       console.error("Erro ao remover a obra da lista:", error);
@@ -308,6 +308,32 @@ export const getObrasPorGenero = async (generoId: number) => {
       );
   } catch (error) {
       console.error("Erro ao buscar obras:", error);
+      throw error;
+  }
+};
+
+export const getComentariosPorObra = async (obraId: number) => {
+  try {
+      const response = await axios.get(`${API_URL}/comentarios`);
+      const comentarios = response.data; // Retorna os comentários da API
+
+      return comentarios.filter((comentario: { obra_id: number }) => comentario.obra_id === obraId)
+  } catch (error) {
+      console.error('Erro ao buscar comentários:', error);
+      throw error;
+  }
+};
+
+export const adicionarComentario = async (userId: number, obraId: number, texto: string) => {
+  try {
+      const response = await axios.post(`${API_URL}/comentarios`, {
+          usuario_id: userId,
+          obra_id: obraId,
+          texto,
+      });
+      return response.data; // Retorna o comentário recém-criado
+  } catch (error) {
+      console.error('Erro ao adicionar comentário:', error);
       throw error;
   }
 };

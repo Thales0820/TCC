@@ -30,7 +30,7 @@
 }
   
 .card p {
-  color: #ffffff;
+  color: var(--text-color);
   font-weight: bold;
   text-align: center;
   margin-top: 10px;
@@ -41,12 +41,12 @@
   background: none;
   border: none;
   font-size: 35px;
-  color: #ffffff;
+  color: var(--text-color);
   cursor: pointer;
   z-index: 1;
 }
   
 .arrowButton:disabled {
-  color: #424242;
+  color: var(--box-color);
   cursor: not-allowed;
 }

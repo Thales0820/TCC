@@ -1,6 +1,5 @@
 .container {
   min-height: 100vh;
-  background-color: #222831;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,5 +15,5 @@
 
 .tema {
   margin-top: 25px;
-  color: #ffffff;
+  color: var(--text-color);
 }
