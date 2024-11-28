@@ -19,11 +19,11 @@ export default function CadastroUsuario() {
     const [error, setError] = useState(''); // Erros
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const router = useRouter();
-    const {theme} = useTheme()
+    const { theme } = useTheme()
 
-    const logoSrc = theme === "dark" 
-    ? "/images/logoDark.png" 
-    : "/images/logoLight.png";
+    const logoSrc = theme === "dark"
+        ? "/images/logoDark.png"
+        : "/images/logoLight.png";
 
     const toggleMostrarSenha = () => {
         setMostrarSenha(!mostrarSenha); // Alterna entre true e false
@@ -112,7 +112,6 @@ export default function CadastroUsuario() {
     }, []);
 
     return (
-
         <div className={style.loginContainer}>
             <div className={style.logo}>
                 <img src="/images/logoDark.png" alt="Logo" />
@@ -120,92 +119,94 @@ export default function CadastroUsuario() {
             <div className={style.content}>
                 <div className={style.imageSection}>
                     <img src="/images/Login.png" alt="Sobre" />
-
-        <>
-            <div className={style.loginContainer}>
-                <div className={style.logo}>
-                    <img src={logoSrc} alt="Logo" title="Indie Comics" key={logoSrc}/>
-
                 </div>
-                <div className={style.loginForm}>
-                    <h2>Cadastro</h2>
-                    {error && (
-                        <div role="alert" className="alert alert-error">
-                            <span>{error}</span>
+
+                <>
+                    <div className={style.loginContainer}>
+                        <div className={style.logo}>
+                            <img src={logoSrc} alt="Logo" title="Indie Comics" key={logoSrc} />
                         </div>
-                    )}
-                    <form onSubmit={handleSubmit} className={style.form}>
-                        <label htmlFor="nome">Nome</label>
-                        <input
-                            type="text"
-                            id="nome"
-                            placeholder="Digite seu nome de Usuário"
-                            value={nome}
-                            onChange={(e) => setNome(e.target.value)}
-                            required
-                        />
-                        <label htmlFor="email">E-mail</label>
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="exemplo@gmail.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                        <label htmlFor="senha">Senha</label>
-                        <div className={style.inputSenhaContainer}>
-                            <input
-                                type={mostrarSenha ? "text" : "password"}
-                                id="senha"
-                                value={senha}
-                                placeholder="Digite sua Senha"
-                                onChange={(e) => setSenha(e.target.value)}
-                                required
-                            />
-                            <span onClick={toggleMostrarSenha} className={style.iconeSenha}>
-                                {mostrarSenha ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-                            </span>
-                        </div>
-                        <div className={style.formGroup}>
-                            <label htmlFor="fotoPerfil">Foto de Perfil</label>
-                            <input
-                                type="file"
-                                id="fotoPerfil"
-                                accept="image/*"
-                                onChange={handleFotoChange}
-                                className={style.fileInputStyled}
-                            />
-                        </div>
-                        <div className={style.formGroup}>
-                            <label htmlFor="banner">Banner</label>
-                            <input
-                                type="file"
-                                id="banner"
-                                accept="image/*"
-                                onChange={handleBannerChange}
-                                className={style.fileInputStyled}
-                            />
-                        </div>
-                        <div className={style.rememberMe}>
-                            {perfis.map((perfil: any) => (
-                                <div key={perfil.id}>
-                                    <input
-                                        type="checkbox"
-                                        id={`perfil-${perfil.id}`}
-                                        checked={perfilId === perfil.id}
-                                        onChange={() => setPerfilId(perfil.id)}
-                                    />
-                                    <label htmlFor={`perfil-${perfil.id}`}>{perfil.tipo}</label>
+                        <div className={style.loginForm}>
+                            <h2>Cadastro</h2>
+                            {error && (
+                                <div role="alert" className="alert alert-error">
+                                    <span>{error}</span>
                                 </div>
-                            ))}
+                            )}
+                            <form onSubmit={handleSubmit} className={style.form}>
+                                <label htmlFor="nome">Nome</label>
+                                <input
+                                    type="text"
+                                    id="nome"
+                                    placeholder="Digite seu nome de Usuário"
+                                    value={nome}
+                                    onChange={(e) => setNome(e.target.value)}
+                                    required
+                                />
+                                <label htmlFor="email">E-mail</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    placeholder="exemplo@gmail.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                                <label htmlFor="senha">Senha</label>
+                                <div className={style.inputSenhaContainer}>
+                                    <input
+                                        type={mostrarSenha ? "text" : "password"}
+                                        id="senha"
+                                        value={senha}
+                                        placeholder="Digite sua Senha"
+                                        onChange={(e) => setSenha(e.target.value)}
+                                        required
+                                    />
+                                    <span onClick={toggleMostrarSenha} className={style.iconeSenha}>
+                                        {mostrarSenha ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+                                    </span>
+                                </div>
+                                <div className={style.formGroup}>
+                                    <label htmlFor="fotoPerfil">Foto de Perfil</label>
+                                    <input
+                                        type="file"
+                                        id="fotoPerfil"
+                                        accept="image/*"
+                                        onChange={handleFotoChange}
+                                        className={style.fileInputStyled}
+                                    />
+                                </div>
+                                <div className={style.formGroup}>
+                                    <label htmlFor="banner">Banner</label>
+                                    <input
+                                        type="file"
+                                        id="banner"
+                                        accept="image/*"
+                                        onChange={handleBannerChange}
+                                        className={style.fileInputStyled}
+                                    />
+                                </div>
+                                <div className={style.rememberMe}>
+                                    {perfis.map((perfil: any) => (
+                                        <div key={perfil.id}>
+                                            <input
+                                                type="checkbox"
+                                                id={`perfil-${perfil.id}`}
+                                                checked={perfilId === perfil.id}
+                                                onChange={() => setPerfilId(perfil.id)}
+                                            />
+                                            <label htmlFor={`perfil-${perfil.id}`}>{perfil.tipo}</label>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button type="submit">Cadastrar</button>
+                            </form>
+                            <Link href="/login" legacyBehavior>
+                                <a className={style.cadastro}>Já tem Conta? Faça Login</a>
+                            </Link>
                         </div>
-                        <button type="submit">Cadastrar</button>
-                    </form>
-                    <Link href="/login" legacyBehavior>
-                        <a className={style.cadastro}>Já tem Conta? Faça Login</a>
-                    </Link>
-                </div>
+                    </div>
+                </>
             </div>
         </div>
     );
