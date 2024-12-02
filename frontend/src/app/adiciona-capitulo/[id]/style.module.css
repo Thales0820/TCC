@@ -1,5 +1,5 @@
 .container {
-    margin-top: 50px;
+    margin-top: 40px;
     font-family: "Comic Neue", system-ui;
 }
 
@@ -9,6 +9,7 @@
     align-items: center;
     justify-content: start;
     margin-left: 180px;
+    margin-bottom: 20px;
 }
 
 .icone {
@@ -25,7 +26,7 @@
 .form {
     display: flex;
     flex-direction: column;
-    width: 700px;
+    width: 60%;
     max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
@@ -156,4 +157,52 @@
     max-width: 90%;
     max-height: 90%;
     border-radius: 8px;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        margin-top: 200px;
+    }
+
+    .modalImage {
+        max-width: 80%;
+        max-height: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-top: 100px;
+    }
+    
+    .titulo {
+        margin-bottom: 30px;
+        margin-left: 5px;
+        width: 100%;
+    }
+
+    .icone {
+        font-size: 30px;
+    }
+
+    .titulo h1 {
+        font-size: 30px;
+    }
+
+    .form {
+        width: 90%;
+    }
+
+    .imagesGrid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    }
+
+    .imageWrapper {
+        width: 100px;
+        height: 100px;
+    }
+
+    .modal {
+        height: 105vh;
+    }
 }

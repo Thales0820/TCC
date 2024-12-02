@@ -123,16 +123,15 @@ export const Comentarios: React.FC<ComentariosProps> = ({ obraId, userId }) => {
             <div className={style.comentarios}>
                 <h1>Comentários:</h1>
                 <div className={style.novoComentario}>
-                    <FaUser className={style.iconeUsuario} size={35}/>
+                    <FaUser className={style.iconeUsuario} />
                         <textarea placeholder="Faça seu Comentário" value={novoComentario} 
                         onChange={(e) => { setNovoComentario(e.target.value); ajustarAltura(e);}}/>
-                    <IoSend onClick={enviarComentario} title={"Enviar Comentário"} size={25} 
-                            className={style.enviar}/>
+                    <IoSend onClick={enviarComentario} title={"Enviar Comentário"} className={style.enviar}/>
                 </div>
                 {comentarios.map((comentario) => (
                     <div key={comentario.id} className={style.comentario}>
                         <div className={style.iconeUsuarioComentario}>
-                            <FaUser className={style.iconeUsuario} size={35} />
+                            <FaUser className={style.iconeUsuario} />
                         </div>
                         <div className={style.conteudoComentario}>
                             <div className={style.usuario}>{comentario.usuario?.nome || "Desconhecido"}</div>

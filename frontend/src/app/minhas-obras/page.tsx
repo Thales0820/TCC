@@ -109,22 +109,25 @@ export default function MinhasObras() {
                     <h1>Seus Quadrinhos</h1>
                 </div>
                 <div className={style.listaContainer}>
-                    <div className={style.lista}>
-                        <div onClick={() => handleStatusClick('Publicando')} 
-                        className={`${style.leitura} ${selecioneEstado === 'Publicando' ? style.selecionado : ''}`} 
-                        ><p>Publicando</p></div>
-                        <div onClick={() => handleStatusClick('Pausado')} 
-                        className={`${style.leitura} ${selecioneEstado === 'Pausado' ? style.selecionado : ''}`}
-                        ><p>Pausado</p></div>
-                        <div onClick={() => handleStatusClick('Finalizado')} 
-                        className={`${style.leitura} ${selecioneEstado === 'Finalizado' ? style.selecionado : ''}`}
-                        ><p>Finalizado</p></div>
-                        <div onClick={() => handleStatusClick('Cancelado')} 
-                        className={`${style.leitura} ${selecioneEstado === 'Cancelado' ? style.selecionado : ''}`}
-                        ><p>Cancelado</p></div>
+                    <div className={style.listagem}>
+                        <div className={style.lista}>
+                            <div onClick={() => handleStatusClick('Publicando')} 
+                            className={`${style.leitura} ${selecioneEstado === 'Publicando' ? style.selecionado : ''}`} 
+                            ><p>Publicando</p></div>
+                            <div onClick={() => handleStatusClick('Pausado')} 
+                            className={`${style.leitura} ${selecioneEstado === 'Pausado' ? style.selecionado : ''}`}
+                            ><p>Pausado</p></div>
+                            <div onClick={() => handleStatusClick('Finalizado')} 
+                            className={`${style.leitura} ${selecioneEstado === 'Finalizado' ? style.selecionado : ''}`}
+                            ><p>Finalizado</p></div>
+                            <div onClick={() => handleStatusClick('Cancelado')} 
+                            className={`${style.leitura} ${selecioneEstado === 'Cancelado' ? style.selecionado : ''}`}
+                            ><p>Cancelado</p></div>
+                        </div>
                     </div>
                 </div>
                <Cards data={filtrarLeitura}/>
+               <br />
                 <Link href="/criar-obra" legacyBehavior>
                   <div className={style.botaoContainer}>
                     <button type="submit" className={style.botao}>Criar Obra</button>

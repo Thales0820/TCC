@@ -114,3 +114,29 @@
 .botao:hover {
   background-color: var(--elements);
 }
+
+@media (max-width: 768px) {
+
+  .modalFundo {
+      justify-content: center;
+  }
+
+  .modal {
+      width: 330px;
+      margin-left: -15px;
+  }
+
+  .checkboxItem {
+      width: 50%;
+      font-size: 15px;
+  }
+
+  .controle {
+      justify-content: center;
+      gap: 25px;
+  }
+
+  .botao {
+      width: 150px;
+  }
+}

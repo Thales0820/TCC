@@ -175,58 +175,58 @@ export default function Obra({ params }: { params: { id: string } }) {
                 <div className={style.acoes}>
                     <div className={style.funcoes}>
                         {obra && String(obra.autor_id) === String(userId) ? (
-                            <button onClick={handleAddChapter}><FaPlus size={25} /> Adicionar Cap.</button>
+                            <button onClick={handleAddChapter}><FaPlus /> Adicionar Cap.</button>
                         ) : leitura ? (
                             <button onClick={handleOpenModal}>{leitura.tipo}</button>
                         ) : (
-                            <button onClick={handleOpenModal}><FaPlus size={25} /> Adicionar</button>
+                            <button onClick={handleOpenModal}><FaPlus /> Adicionar</button>
                         )}
                         <div className={style.icones}>
                             {obra && String(obra.autor_id) === String(userId) && (
                                 <Link href={`/criar-obra?id=${obra.id}`} legacyBehavior>
-                                    <FaRegEdit className={style.icone} size={45} title='Editar Obra'/>
+                                    <FaRegEdit className={style.icone} title='Editar Obra'/>
                                 </Link>
                             )}
                             <div onClick={toggleLike}>
-                                <BiSolidLike size={45} className={like ? style.like : style.curtir} />
+                                <BiSolidLike className={like ? style.like : style.curtir} />
                                 {obra && obra.likes > 0 && (
                                     <span className={like ? style.curtido : style.likesCount}>{obra.likes}</span>
                                 )}
                             </div>
                             {mostrarComentarios ? (
-                                <PiBookOpenTextBold size={45} onClick={toggleComentarios} className={style.aberto} />
+                                <PiBookOpenTextBold onClick={toggleComentarios} className={style.aberto} />
                             ) : (
-                                <BsFillChatLeftTextFill size={45} onClick={toggleComentarios} className={style.aberto} />
+                                <BsFillChatLeftTextFill onClick={toggleComentarios} className={style.aberto} />
                             )}
                         </div>
                     </div>
                     {mostrarComentarios ? (
                         <Comentarios obraId={parseInt(params.id)} userId={userId ? parseInt(userId) : null} />
                     ) : (
-                        <div className={style.capitulosContainer}>
-                            <div className={style.topoCapitulos}>
-                                <h1>Capítulos: </h1>
-                                <div className={style.mudarOrdem}>
-                                    <BiArrowToBottom size={45} className={ordemCrescente ? style.selecionado : ''} onClick={toggleOrdem} />
-                                    <BiArrowFromBottom size={45} className={!ordemCrescente ? style.selecionado : ''} onClick={toggleOrdem} />
-                                </div>
-                            </div>
-                            <div className={style.capitulos}>
-                                {capitulos.map((cap) => (
-                                    <div className={style.capitulo} key={cap.numero}>
-                                        {cap.visualizado ? (
-                                            <IoEyeOff size={25} onClick={() => toggleVisualizacao(cap.numero)} />
-                                        ) : (
-                                            <IoEye size={25} onClick={() => toggleVisualizacao(cap.numero)} />
-                                        )}
-                                        <Link href={`/capitulo/${cap.id}`} legacyBehavior>
-                                            <span className={style.numero} title={`Ler o Capítulo ${cap.numero}`}> Cap. {cap.numero}</span>
-                                        </Link>
-                                        <span className={style.tituloCap}>{cap.titulo}</span>
-                                    </div>
-                                ))}
+                    <div className={style.capitulosContainer}>
+                        <div className={style.topoCapitulos}>
+                            <h1>Capítulos: </h1>
+                            <div className={style.mudarOrdem}>
+                                <BiArrowToBottom className={ordemCrescente ? style.selecionado : ''} onClick={toggleOrdem} />
+                                <BiArrowFromBottom className={!ordemCrescente ? style.selecionado : ''} onClick={toggleOrdem} />
                             </div>
                         </div>
+                        <div className={style.capitulos}>
+                            {capitulos.map((cap) => (
+                                <div className={style.capitulo} key={cap.numero}>
+                                    {cap.visualizado ? (
+                                        <IoEyeOff size={25} onClick={() => toggleVisualizacao(cap.numero)} />
+                                    ) : (
+                                        <IoEye size={25} onClick={() => toggleVisualizacao(cap.numero)} />
+                                    )}
+                                    <Link href={`/capitulo/${cap.id}`} legacyBehavior>
+                                        <span className={style.numero} title={`Ler o Capítulo ${cap.numero}`}> Cap. {cap.numero}</span>
+                                    </Link>
+                                    <span className={style.tituloCap}>{cap.titulo}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                     )}
                 </div>
             </div>

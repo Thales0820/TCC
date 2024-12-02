@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import style from "./style.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface CardItem {
   id: number;
@@ -14,16 +14,30 @@ interface CardsProps {
 }
 
 export const CardsHome: React.FC<CardsProps> = ({ data }) => {
-  const maxItems = 10; // Limite máximo de obras no carrossel
-  const itemsPerPage = 4; // Número de itens exibidos por vez
-  const itemsToSlide = 2; // Número de itens que deslizam por clique
+  const [itemsPerPage, setItemsPerPage] = useState(4); // Valor padrão
   const [startIndex, setStartIndex] = useState(0);
+  const maxItems = 10;
+  const itemsToSlide = 2;
 
   // Limitar o número de itens ao máximo permitido
   const limitedData = data.slice(0, maxItems);
 
   // Obter o subconjunto de obras a serem exibidas com base no índice inicial
   const visibleData = limitedData.slice(startIndex, startIndex + itemsPerPage);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width <= 768) setItemsPerPage(2); // Mobile
+      else if (width <= 1024) setItemsPerPage(3); // Tablet
+      else setItemsPerPage(4); // Desktop
+    };
+
+    handleResize(); // Ajusta ao carregar
+    window.addEventListener("resize", handleResize); // Atualiza ao redimensionar
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleNext = () => {
     setStartIndex((prevIndex) => Math.min(prevIndex + itemsToSlide, limitedData.length - itemsPerPage));

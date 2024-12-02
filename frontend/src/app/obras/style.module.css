@@ -1,7 +1,6 @@
 .container {
     margin-top: 132px;
     min-height: 100vh;
-    background-color: var(--background);
     display: flex;
     flex-direction: column;
     padding-left: calc(180px + 60px);
@@ -44,7 +43,6 @@
 .letra {
     flex: 1;
     color: var(--text-color);
-    text-align: center;
     height: 50px;
     display: flex;
     align-items: center;
@@ -58,7 +56,6 @@
 .letraSelecionada {
     flex: 1;
     color: var(--text-color);
-    text-align: center;
     height: 50px;
     display: flex;
     align-items: center;
@@ -105,12 +102,65 @@
     transition: none; /* Impede mudanças visuais ao clicar */
 }
 
+@media (max-width: 1024px) {
+    .container {
+        margin-top: 106px;
+    }
+
+    .listaContainer {
+        margin-left: -35px;
+    }
+}
+
 @media (max-width: 768px) {
-    .letra p {
-        font-size: 16px;
+    .container {
+        padding-left: 0; /* Menu ficará por cima no mobile */
+        margin-top: 50px;
+    }
+
+    .titulo {
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .icone {
+        font-size: 30px;
+    }
+
+    .titulo h1 {
+        font-size: 30px;
+    }
+
+    .listaContainer {
+        margin-left: 0px;
+        padding: 5px;
+    }
+
+    .lista {
+        border: 1px solid var(--text-color);
     }
 
     .letra {
-        height: 40px;
+        height: 20px;
+    }
+
+    .letraSelecionada {
+        height: 20px;
+    }
+
+    .letra:not(:last-child)::after {
+        width: 1px;
+    }
+
+    .letraSelecionada:not(:last-child)::after {
+        width: 1px;
+    }
+
+    .letra p {
+        font-size: 12px;
+    }
+
+    .letraSelecionada p {
+        font-size: 12px;
     }
 }

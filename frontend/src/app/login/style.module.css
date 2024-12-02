@@ -96,46 +96,6 @@
     color: var(--text-color);
 }
 
-.rememberMe {
-    display: flex;
-    align-items: center; /* Alinha verticalmente o input e label */
-    margin-bottom: 10px;
-}
-
-.rememberMe input {
-    -webkit-appearance: none; /* Remove a aparência padrão */
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.5); /* Borda inicial do checkbox */
-    border-radius: 4px; /* Bordas arredondadas */
-    background-color: transparent; /* Fundo transparente inicialmente */
-    cursor: pointer;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-    margin-right: 10px; /* Espaçamento entre o checkbox e a label */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.rememberMe input:checked {
-    background-color: var(--elements); /* Fundo preto quando marcado */
-    border-color: var(--elements); /* Borda preta ao marcar */
-}
-  
-.rememberMe input:checked::before {
-    content: "✔";
-    color: var(--text-color);
-    font-size: 28px;
-    display: inline-block;
-    text-align: center;
-    line-height: 20px; /* Alinha o ✔ verticalmente */
-}
-
-.rememberMe label {
-    color: var(--text-color);
-    font-size: 1.2em;
-}
-
 .loginForm button {
     padding: 10px;
     background-color: var(--background);
@@ -154,10 +114,11 @@
 
 .resgate {
     display: block;
-    margin-left: 60px;
     color: #007bff;
     font-size: 20px;
+    text-align: start;
     text-decoration: none;
+    margin-bottom: 20px;
 }
 
 .resgate:hover {
@@ -177,15 +138,62 @@
     text-decoration: underline;
 }
 
+@media (max-width: 1024px) {
+    .content {
+        flex-direction: column;
+    }
+
+    .logo img {
+        max-width: 300px; /* Ajuste conforme necessário */
+        margin-bottom: 5px;
+    }
+
+    .imageSection {
+        width: 550px;
+        height: 350px;
+    }
+
+    .imageSection img {
+        border-radius: 15px 15px 0 0;
+    }
+
+    .loginForm {
+        width: 550px;
+        height: 420px;
+        border-radius: 0 0 15px 15px;
+    }
+
+    .loginForm h2 {
+        font-size: 40px;
+    }
+}
+
 @media (max-width: 768px) {
     .content {
         flex-direction: column;
-        text-align: center;
     }
 
-    .login-form {
-        margin-left: 0;
-        width: 100%;
-        max-width: none;
+    .logo img {
+        max-width: 100px; /* Ajuste conforme necessário */
+        margin-bottom: 5px;
+    }
+
+    .imageSection {
+        width: 400px;
+        height: 270px;
+    }
+
+    .imageSection img {
+        border-radius: 15px 15px 0 0;
+    }
+
+    .loginForm {
+        width: 400px;
+        height: 420px;
+        border-radius: 0 0 15px 15px;
+    }
+
+    .loginForm h2 {
+        font-size: 40px;
     }
 }

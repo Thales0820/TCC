@@ -1,7 +1,6 @@
 .container {
     margin-top: 132px;
     min-height: 100vh;
-    background-color: var(--background);
     display: flex;
     flex-direction: column;
     padding-left: calc(180px + 60px);
@@ -22,4 +21,30 @@
 
 .titulo h1 {
     font-size: 40px;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        margin-top: 106px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 0; /* Menu ficará por cima no mobile */
+        margin-top: 50px;
+    }
+
+    .titulo {
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .icone {
+        font-size: 30px;
+    }
+
+    .titulo h1 {
+        font-size: 30px;
+    }
 }
