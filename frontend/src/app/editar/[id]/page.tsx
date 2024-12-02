@@ -92,59 +92,39 @@ const EditarUsuario = ({ params }: { params: { id: string } }) => {
     if (loading) return <p className={styles.loading}>Carregando...</p>;
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>Editar Usuário</h1>
-            <form onSubmit={handleSubmit} className={styles.form}>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>Nome:</label>
-                    <input
-                        type="text"
-                        name="nome"
-                        value={usuario.nome}
-                        onChange={handleInputChange}
-                        required
-                        className={styles.input}
-                    />
-                </div>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>Foto de Perfil:</label>
-                    {fotoPerfilPreview && (
-                        <img
-                            src={fotoPerfilPreview}
-                            alt="Foto de Perfil"
-                            className={styles.previewImage}
-                        />
-                    )}
-                    <input
-                        type="file"
-                        name="foto_perfil"
-                        onChange={handleFileChange}
-                        accept="image/*"
-                        className={styles.fileInput}
-                    />
-                </div>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>Banner:</label>
-                    {bannerPreview && (
-                        <img
-                            src={bannerPreview}
-                            alt="Banner"
-                            className={styles.previewImage}
-                        />
-                    )}
-                    <input
-                        type="file"
-                        name="banner"
-                        onChange={handleFileChange}
-                        accept="image/*"
-                        className={styles.fileInput}
-                    />
-                </div>
-                <button type="submit" className={styles.submitButton}>
-                    Salvar
-                </button>
-            </form>
-        </div>
+        <>
+            <br />
+            <div className={styles.container}>
+                <h1 className={styles.title}>Editar Usuário</h1>
+                <form onSubmit={handleSubmit} className={styles.form}>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Nome:</label>
+                        <input type="text" name="nome" value={usuario.nome} onChange={handleInputChange}
+                            required className={styles.input}/>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Foto de Perfil:</label>
+                        <input type="file" name="foto_perfil" onChange={handleFileChange} accept="image/*"
+                            className={styles.fileInput}/>
+                        {fotoPerfilPreview && (
+                            <img src={fotoPerfilPreview} alt="Foto de Perfil" className={styles.previewImage} />
+                        )}
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Banner:</label>
+                        <input type="file" name="banner" onChange={handleFileChange} accept="image/*"
+                            className={styles.fileInput}/>
+                        {bannerPreview && (
+                            <img src={bannerPreview} alt="Banner" className={styles.previewBanner} />
+                        )}
+                    </div>
+                    <button type="submit" className={styles.submitButton}>
+                        Salvar
+                    </button>
+                </form>
+            </div>
+            <br />
+        </>
     );
 };
 

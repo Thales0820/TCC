@@ -21,7 +21,7 @@
 
 .imageSection {
     width: 750px;
-    height: 500px;
+    height: 600px;
 }
 
 .imageSection img {
@@ -35,7 +35,7 @@
     padding: 7px 40px 7px 40px;
     border-radius: 0 15px 15px 0;
     width: 450px;
-    height: 500px;
+    height: 600px;
 }
 
 .loginForm h2 {
