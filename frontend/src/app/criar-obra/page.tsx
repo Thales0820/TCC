@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import style from './style.module.css';
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa";
 import { ModalGenero } from "@/components/ModalGenero";
 import Cookies from 'js-cookie';
@@ -53,24 +53,7 @@ export default function CriarObra() {
     const [error, setError] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [nomeAutor, setNomeAutor] = useState('');
-    const [capaPreview, setCapaPreview] = useState<string | null>(null);
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const obraId = searchParams.get("id");
-    const [imagemModalAberto, setImagemModalAberto] = useState(false); // Controle do modal
-
-    const handleCapaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0] || null;
-        setCapa(file);
-
-        // Gerar URL de preview
-        if (file) {
-            const fileURL = URL.createObjectURL(file);
-            setCapaPreview(fileURL);
-        } else {
-            setCapaPreview(null);
-        }
-    };
 
     useEffect(() => {
         const cookies = parseCookies();
@@ -138,101 +121,45 @@ export default function CriarObra() {
         }
     }, [router]);
 
-    useEffect(() => {
-        if (obraId) {
-            const fetchObra = async () => {
-                try {
-                    const token = Cookies.get("obra.token");
-                    const response = await axios.get(`http://127.0.0.1:8000/api/v1/obras/${obraId}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-                    const obra = response.data;
-    
-                    const tipoCorrespondente = tipos.find((tipo) => tipo.nome === obra.tipo);
-                    const estadoCorrespondente = estados.find((estado) => estado.nome === obra.estado);
-    
-                    setTitulo(obra.titulo);
-                    setSinopse(obra.sinopse);
-                    setDataPublicacao(obra.data_publicacao);
-                    setTipoId(tipoCorrespondente?.id || "");
-                    setEstadoId(estadoCorrespondente?.id || "");
-                    setGeneroSelecionados(obra.generos);
-                    setCapaPreview(`http://127.0.0.1:8000/${obra.capa}`); // Caminho da capa para preview
-                } catch (error) {
-                    console.error("Erro ao carregar obra:", error);
-                }
-            };
-    
-            if (obraId && tipos.length && estados.length) {
-                fetchObra();
-            }
-        }
-    }, [obraId, tipos, estados]);
-
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setError("");
-    
+        setError('');
+
         const formData = new FormData();
-        formData.append("titulo", titulo);
+        formData.append('titulo', titulo);
         if (capa) {
-            formData.append("capa", capa);
+            formData.append('capa', capa);
         }
-        formData.append("sinopse", sinopse);
-        formData.append("data_publicacao", dataPublicacao);
-        formData.append("autor_id", autorId);
-        formData.append("tipo_id", tipoId);
-        formData.append("estado_id", estadoId);
-    
+        formData.append('sinopse', sinopse);
+        formData.append('data_publicacao', dataPublicacao);
+        formData.append('autor_id', autorId);
+        formData.append('tipo_id', tipoId);
+        formData.append('estado_id', estadoId);
+
         generoSelecionados.forEach((genero) => {
-            formData.append("generos[]", genero.id);
+            formData.append('generos[]', genero.id);
         });
-    
+
         try {
-            const token = Cookies.get("obra.token");
-            if (obraId) {
-                // Atualiza obra existente
-                const response = await axios.put(
-                    `http://127.0.0.1:8000/api/v1/obras/${obraId}`,
-                    formData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                console.log("Obra atualizada com sucesso:", response.data);
-            } else {
-                // Cria nova obra
-                const response = await axios.post(
-                    "http://127.0.0.1:8000/api/v1/obras",
-                    formData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                console.log("Obra criada com sucesso:", response.data);
-            }
+            const response = await axios.post('http://127.0.0.1:8000/api/v1/obras', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${Cookies.get('obra.token')}`,
+                },
+            });
+
+            console.log('Obra criada com sucesso:', response.data);
             resetForm();
-            router.push("/minhas-obras");
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
-                setError(
-                    "Erro ao salvar obra: " + (error.response.data.message || error.message)
-                );
+                setError('Erro ao criar obra: ' + (error.response.data.message || error.message));
             } else {
-                setError("Erro inesperado: " + (error as Error).message);
+                setError('Erro inesperado: ' + (error as Error).message);
             }
-            console.error("Erro ao salvar obra:", error);
+            console.error('Erro ao criar obra:', error);
         }
-    };    
+    };
 
     const resetForm = () => {
         setTitulo('');
@@ -248,118 +175,80 @@ export default function CriarObra() {
         router.back();
     };
 
-    console.log('Generos da Obra:', generoSelecionados)
-    //console.log('Teste3:', generoSelecionados)
-    
     return (
-        <>
-            <div className={style.container}>
-                <div className={style.titulo}>
-                    <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
-                    <h1>{obraId ? "Editando Obra" : "Criando Obra"}</h1>
-                </div>
-                <br />
-                {error && (
-                    <div role="alert" className="alert alert-error">
-                        <span>{error}</span>
-                    </div>
-                )}
-                <br />
-                <form onSubmit={handleSubmit} className={style.form}>
-                    <div className={style.inputs}>
-                        <div className={style.formGroup}>
-                            <label>Título:</label>
-                            <input type="text" placeholder="Digite o Nome da Obra" value={titulo} 
-                            onChange={(e) => setTitulo(e.target.value)} required />
-                        </div>
-                        <div className={style.formGroup}>
-                            <label>Capa:</label>
-                            <div className={style.capa}>
-                                <input type="file" className={style.fileInputStyled} 
-                                onChange={(e) => { setCapa(e.target.files ? e.target.files[0] : null);
-                                setCapaPreview(e.target.files ? URL.createObjectURL(e.target.files[0]) : null);}}/>
-                                {capaPreview && (
-                                    <img src={capaPreview} alt="Capa da Obra" className={style.previewImagem} 
-                                        onClick={() => setImagemModalAberto(true)} title="Clique para Ver"/>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    <div className={style.formGroup}>
-                        <input  type="hidden" value={nomeAutor} disabled /> {/* Exibe o nome do autor */}
-                    </div>
-                    <div className={style.inputs}>
-                        <div className={style.formGroup}>
-                            <label>Tipo:</label>
-                            <select value={tipoId} onChange={(e) => setTipoId(e.target.value)} required>
-                                <option value="">Selecione um tipo</option>
-                                {tipos.map((tipo) => (
-                                    <option key={tipo.id} value={tipo.id}>{tipo.nome}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className={style.formGroup}>
-                            <label>Estado:</label>
-                            <select value={estadoId} onChange={(e) => setEstadoId(e.target.value)} required>
-                                <option value="">Selecione um estado</option>
-                                {estados.map((estado) => (
-                                    <option key={estado.id} value={estado.id}>{estado.nome}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                    <div className={style.inputs}>
-                        <div className={style.formGroup}>
-                            <label>Data de Publicação:</label>
-                            <input type="date" value={dataPublicacao} 
-                                   onChange={(e) => setDataPublicacao(e.target.value)}/>
-                        </div>
-                        <div className={`${style.formGroup} ${style.generosContainer}`}>
-                            <label>Gêneros:</label>
-                            <button
-                                type="button"
-                                className={style.generosButton}
-                                onClick={() => setModalOpen(true)}
-                            >
-                                Selecionar Gêneros
-                            </button>
-                        </div>
-                    </div>
-                    <div className={style.formGroup}>
-                        <label>Sinopse:</label>
-                        <textarea value={sinopse} placeholder="Digite a Sinopse da Obra"
-                        onChange={(e) => setSinopse(e.target.value)} required />
-                    </div>
-                    <div className={style.botao}>
-                        <button type="submit" className={style.submitButton}>
-                            {obraId ? "Salvar Alterações" : "Criar Obra"}
-                        </button>
-                    </div>
-                </form>
-                <ModalGenero
-                    isOpen={modalOpen}
-                    onClose={() => setModalOpen(false)}
-                    selecionaGenero={generoSelecionados
-                      .map((g) => {
-                        const generoEncontrado = generos.find((gen) => gen.nome === g); // Comparação correta
-                        return generoEncontrado?.id || ''; // Retorna ID
-                      })
-                      .filter((id) => id !== '')} // Remove IDs inválidos
-                    onSelectGenre={(selected) => {
-                      const selecionados = generos
-                        .filter((g) => selected.includes(g.id)) // Filtra objetos `Genero`
-                        .map((g) => g.nome); // Extrai nomes dos gêneros
-                      setGeneroSelecionados(selecionados); // Atualiza o estado
-                    }}
-                    generos={generos}
-                    />
-                {imagemModalAberto && (
-                    <div className={style.modal} onClick={() => setImagemModalAberto(false)} >
-                        <img src={capaPreview!} alt="Visualizar Capa" className={style.modalImage} />
-                    </div>
-                )}
+        <div className={style.container}>
+            <div className={style.titulo}>
+                <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
+                <h1>Criando Obra</h1>
             </div>
             <br />
-        </>
+            {error && (
+                <div role="alert" className="alert alert-error">
+                    <span>{error}</span>
+                </div>
+            )}
+            <br />
+            <form onSubmit={handleSubmit} className={style.form}>
+                <div className={style.formGroup}>
+                    <label>Título:</label>
+                    <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} required />
+                </div>
+                <div className={style.formGroup}>
+                    <label>Capa:</label>
+                    <input type="file" onChange={(e) => setCapa(e.target.files ? e.target.files[0] : null)} className={style.fileInputStyled}/>
+                </div>
+                <div className={style.formGroup}>
+                    <label>Sinopse:</label>
+                    <textarea value={sinopse} onChange={(e) => setSinopse(e.target.value)} required />
+                </div>
+                <div className={style.formGroup}>
+                    <label>Data de Publicação:</label>
+                    <input type="date" value={dataPublicacao} onChange={(e) => setDataPublicacao(e.target.value)} />
+                </div>
+                <div className={style.formGroup}>
+                    <label>Autor:</label>
+                    <input type="text" value={nomeAutor} disabled /> {/* Exibe o nome do autor */}
+                </div>
+                <div className={style.formGroup}>
+                    <label>Tipo:</label>
+                    <select value={tipoId} onChange={(e) => setTipoId(e.target.value)} required>
+                        <option value="">Selecione um tipo</option>
+                        {tipos.map((tipo) => (
+                            <option key={tipo.id} value={tipo.id}>{tipo.nome}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className={style.formGroup}>
+                    <label>Estado:</label>
+                    <select value={estadoId} onChange={(e) => setEstadoId(e.target.value)} required>
+                        <option value="">Selecione um estado</option>
+                        {estados.map((estado) => (
+                            <option key={estado.id} value={estado.id}>{estado.nome}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className={`${style.formGroup} ${style.generosContainer}`}>
+                    <label>Gêneros:</label>
+                    <button
+                        type="button"
+                        className={style.generosButton}
+                        onClick={() => setModalOpen(true)}
+                    >
+                        Selecionar Gêneros
+                    </button>
+                </div>
+                <button type="submit" className={style.submitButton}>Criar Obra</button>
+            </form>
+            <ModalGenero
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                selecionaGenero={generoSelecionados.map(g => g.id)}
+                onSelectGenre={(selected) => {
+                    const selecionados = generos.filter(g => selected.includes(g.id));
+                    setGeneroSelecionados(selecionados);
+                }}
+                generos={generos}
+            />
+        </div>
     );
 }
