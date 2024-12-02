@@ -2,7 +2,6 @@
     width: 100%;
     max-width: 800px;
     padding: 10px;
-    border-radius: 10px;
     color: var(--text-color);
 }
   
@@ -21,6 +20,7 @@
 
 .iconeUsuario {
     color: var(--text-color);
+    font-size: 35px;
 }
   
 .novoComentario textarea {
@@ -48,6 +48,7 @@
 .enviar {
     color: var(--text-color);
     cursor: pointer;
+    font-size: 25px;
 }
   
 .enviar:hover {
@@ -99,6 +100,7 @@
     align-items: flex-start;
     background-color: var(--box-color); /* Fundo dos comentários */
     padding: 10px;
+    font-size: 20px;
     border-radius: 15px;
     margin-bottom: 10px;
     position: relative;
@@ -116,6 +118,7 @@
 
 .usuario {
     font-weight: bold;
+    font-size: 23px;
     margin-bottom: 5px;
     color: var(--text-color);
 }
@@ -143,6 +146,7 @@
     z-index: 10;
     padding: 5px;
     list-style: none;
+    right: 1px;
 }
 
 .dropdown li {
@@ -152,4 +156,56 @@
     cursor: pointer;
     align-items: center;
     justify-content: space-between;
+}
+
+@media (max-width: 1024px) {
+    .comentarios {
+        width: 70%;
+    }
+
+    .comentarios h1 {
+        font-size: 45px;
+    }
+}
+
+@media (max-width: 768px) {
+    .comentarios {
+        width: 70%;
+    }
+
+    .comentarios h1 {
+        font-size: 30px;
+    }
+
+    .novoComentario {
+        margin-bottom: 15px;
+    }
+
+    .iconeUsuario {
+        font-size: 20px;
+    }
+
+    .novoComentario textarea {
+        font-size: 13px;
+    }
+
+    .novoComentario textarea::placeholder {
+        font-size: 15px;
+    }
+
+    .enviar {
+        font-size: 20px;
+    }
+
+    .inputEdicao {
+        font-size: 13px;
+    }
+
+    .comentario {
+        font-size: 12px;
+    }
+
+    .usuario {
+        font-size: 15px;
+    }
 }

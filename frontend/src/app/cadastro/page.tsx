@@ -152,7 +152,6 @@ export default function CadastroUsuario() {
                                     {mostrarSenha ? <IoEyeOff size={20} /> : <IoEye size={20} />}
                                 </span>
                             </div>
-                            <div className={style.formGroup}>
                                 <label htmlFor="fotoPerfil">Foto de Perfil</label>
                                 <input
                                     type="file"
@@ -161,7 +160,6 @@ export default function CadastroUsuario() {
                                     onChange={handleFotoChange}
                                     className={style.fileInputStyled}
                                 />
-                            </div>
                             <div className={style.rememberMe}>
                                 {perfis.map((perfil: any) => (
                                     <div key={perfil.id}>

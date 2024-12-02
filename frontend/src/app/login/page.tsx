@@ -102,15 +102,9 @@ export default function Login() {
                                     {mostrarSenha ? <IoEyeOff size={20} /> : <IoEye size={20} />}
                                 </span>
                             </div>
-                            <div className={style.rememberMe}>
-                                <input type="checkbox" id="remember" />
-                                <label htmlFor="remember">Lembre-se</label>
-                                <Link href="http://127.0.0.1:8000/forgot-password" legacyBehavior>
-                                    <a className={style.resgate}>Esqueceu sua senha?</a>
-                                </Link>
-
-                            </div>
-
+                            <Link href="http://127.0.0.1:8000/forgot-password" legacyBehavior>
+                                <a className={style.resgate}>Esqueceu sua senha?</a>
+                            </Link>
                             <button type="submit">Entrar</button>
                         </form>
                         <Link href="/home" legacyBehavior>

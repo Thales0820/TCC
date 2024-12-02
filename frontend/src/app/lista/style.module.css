@@ -25,10 +25,14 @@
 }
 
 .listaContainer {
+    justify-items: center;
+}
+
+.listagem {
     width: 600px;
     display: flex;
-    justify-content: center; /* Centraliza a div principal */
-    margin: 20px 230px 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .lista {
@@ -70,4 +74,38 @@
 .leitura p {
     font-size: 25px;
     font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        margin-top: 106px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 0; /* Menu ficará por cima no mobile */
+        margin-top: 50px;
+    }
+
+    .titulo {
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .icone {
+        font-size: 30px;
+    }
+
+    .titulo h1 {
+        font-size: 30px;
+    }
+
+    .listagem {
+        width: 100%;
+    }
+
+    .leitura p {
+        font-size: 20px;
+    }
 }

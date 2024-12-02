@@ -1,10 +1,14 @@
 .profileIcon {
     position: absolute;
-    top: 10px;
+    top: 8px;
     color: var(--text-color);
     right: 10px;
     cursor: pointer;
     z-index: 15;
+}
+
+.profileIcon svg {
+    font-size: 40px;
 }
 
 .modalOverlay {
@@ -133,4 +137,24 @@
 
 .opcoes svg {
     cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+    .profileIcon {
+        top: 5px;
+    }
+
+    .profileIcon svg {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .profileIcon {
+        top: 5px;
+    }
+    
+    .profileIcon svg {
+        font-size: 25px;
+    }
 }

@@ -5,15 +5,38 @@
   align-items: center;
   padding-left: calc(140px + 20px);
   font-family: "Comic Neue", system-ui;
-} 
+}
 
 .wrapper {
-  width: 100%;
-  max-width: 1024px;
-  margin-left: 65px;
+  margin-left: 50px;
 }
 
 .tema {
-  margin-top: 25px;
+  text-align: start;
+  margin-top: 20px;
+  margin-bottom: 10px;
   color: var(--text-color);
+}
+
+/* Para tablets (telas menores que 1024px) */
+@media (max-width: 1024px) {
+  .container {
+    padding-left: calc(130px + 20px);; /* Menor espaço para tablets */
+  }
+
+  .wrapper {
+    margin-left: 15px;
+  }
+}
+
+/* Para celulares (telas menores que 768px) */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 0; /* Menu ficará por cima no mobile */
+  }
+
+  .tema {
+    text-align: center;
+    font-size: 18px; /* Ajusta tamanho do texto */
+  }
 }

@@ -20,12 +20,17 @@
     flex-direction: column;
 }
 
+.informacoes h3 {
+    font-size: 25px;
+}
+
 .informacoes a {
     color: #007bff;
     font-size: 20px;
     text-decoration: none;
     width: fit-content;
 }
+
 
 .informacoes a:hover {
     text-decoration: underline;
@@ -67,20 +72,17 @@
 .pageContainer {
     width: 80%;
     display: flex;
-    align-items: center;
-    justify-content: center;
     position: relative;
 }
 
-.mangaPage {
+.capituloPage {
     width: 100%;
     height: auto; /* Aumentar a altura */
 }
 
 /* Navigation Buttons */
 .navigationButton {
-    font-size: 24px;
-    padding: 10px;
+    font-size: 50px;
     color: var(--text-color);
     position: fixed;
     top: 50%;
@@ -103,12 +105,13 @@
 }
 
 .navigationButton.disabled {
-    color: #ccc;
+    color: var(--elements);
     cursor: not-allowed;
 }
 
 .telaFull {
     padding: 10px;
+    font-size: 40px;
     color: var(--text-color);
     position: fixed;
     bottom: 1px;
@@ -116,4 +119,54 @@
     transition: color 0.3s;
     z-index: 1; /* Garantir que fique sobre a imagem */
     right: 5px;
+}
+
+@media (max-width: 768px) {
+    .informacoes h3 {
+        font-size: 13px;
+    }
+
+    .informacoes a {
+        font-size: 10px;
+    }
+
+    .header {
+        margin-bottom: 50px;
+    }
+
+    .header span {
+        font-size: 10px;
+    }
+
+    .select {
+        width: 100px;
+        padding: 10px;
+        font-size: 10px;
+        margin-right: 5px;
+        background-position: right 1px center;
+    }
+
+    .pageContainer {
+        width: 95%;
+    }
+
+    .navigationButton {
+        font-size: 35px;
+        color: #ffffff;
+        opacity: 50%;
+        filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.7)) 
+            drop-shadow(-2px -2px 5px rgba(0, 0, 0, 0.7));
+    }
+
+    .navigationButton.left {
+        left: 5px;
+    }
+    
+    .navigationButton.right {
+        right: 5px;
+    }
+
+    .telaFull {
+        font-size: 30px;
+    }
 }

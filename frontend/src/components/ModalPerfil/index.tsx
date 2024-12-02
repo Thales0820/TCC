@@ -80,7 +80,7 @@ export const ModalPerfil = () => {
     return (
         <>
             <div className={style.profileIcon} onClick={toggleModal}>
-                <FaUser size={35} />
+                <FaUser />
             </div>
             {isOpen && (
                 <div className={style.modalOverlay} onClick={toggleModal}>
