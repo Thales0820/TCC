@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import style from './style.module.css';
 
+// Defina a interface Genero
 interface Genero {
   id: string;
   nome: string;
@@ -9,49 +11,38 @@ interface Genero {
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selecionaGenero: string[]; // Gêneros selecionados passados como array de strings
-  onSelectGenre: (selected: string[]) => void; // Função para passar os gêneros selecionados de volta
-  generos: Genero[]; // Lista de gêneros disponíveis
+  selecionaGenero: string[];
+  onSelectGenre: (selected: string[]) => void;
+  generos: Genero[]; // Adicione esta linha para incluir generos
 }
 
-export const ModalGenero: React.FC<ModalProps> = ({
-  isOpen,
-  onClose,
-  selecionaGenero,
-  onSelectGenre,
-  generos,
-}) => {
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-
-  // Atualiza os gêneros selecionados ao abrir o modal
-  useEffect(() => {
-    if (isOpen) {
-      setSelectedGenres(selecionaGenero);
-    }
-  }, [isOpen, selecionaGenero]);
+export const ModalGenero: React.FC<ModalProps> = ({ isOpen, onClose, selecionaGenero, onSelectGenre, generos }) => {
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(selecionaGenero);
 
   const handleGenreToggle = (id: string) => {
-    setSelectedGenres((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter((g) => g !== id)
-        : [...prevSelected, id]
-    );
+    setSelectedGenres((prevSelected) => {
+      if (prevSelected.includes(id)) {
+        return prevSelected.filter(g => g !== id);
+      } else {
+        return [...prevSelected, id];
+      }
+    });
   };
 
   const handleConfirm = () => {
-    onSelectGenre(selectedGenres); // Passa os gêneros selecionados de volta para o componente pai
-    onClose(); // Fecha o modal
+    onSelectGenre(selectedGenres);
+    onClose();
   };
 
   const handleContentClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation(); // Impede o clique de fechar o modal ao clicar dentro do conteúdo
+    e.stopPropagation();
   };
 
   const limparGeneros = () => {
-    setSelectedGenres([]); // Limpa a seleção
+    setSelectedGenres([]);
   };
 
-  if (!isOpen) return null; // Não renderiza o modal se não estiver aberto
+  if (!isOpen) return null;
 
   return (
     <div className={style.modalFundo} onClick={onClose}>
@@ -70,7 +61,6 @@ export const ModalGenero: React.FC<ModalProps> = ({
             </label>
           ))}
         </div>
-        <br />
         <div className={style.controle}>
           <button onClick={handleConfirm} className={style.botao}>Confirmar</button>
           <button onClick={limparGeneros} className={style.botao}>Limpar</button>
@@ -78,4 +68,5 @@ export const ModalGenero: React.FC<ModalProps> = ({
       </div>
     </div>
   );
+  
 };

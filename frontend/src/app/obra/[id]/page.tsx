@@ -13,7 +13,7 @@ import { getCapitulosPorObra, getLista, getObraDetails } from '../../api/routes'
 import { useRouter } from 'next/navigation';
 import { PiBookOpenTextBold } from 'react-icons/pi';
 import { parseCookies } from 'nookies';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { ModalLeitura } from '@/components/ModalLeitura';
 import Link from 'next/link';
 import axios from 'axios';
@@ -39,7 +39,7 @@ interface ObraInfo {
 function getUserId(): string | null {
     const cookies = parseCookies();
     const token = cookies['obra.token'];
-  
+
     if (token) {
         try {
             const decodedToken = jwtDecode<TokenPayload>(token);
@@ -77,15 +77,15 @@ export default function Obra({ params }: { params: { id: string } }) {
         const fetchCapitulos = async () => {
             const capitulosData = await getCapitulosPorObra(parseInt(params.id));
             if (capitulosData) {
-                setCapitulos(capitulosData.map((cap: { id: number; numero: number; titulo: string; }) => ({ 
+                setCapitulos(capitulosData.map((cap: { id: number; numero: number; titulo: string; }) => ({
                     id: cap.id, // Adicionando id explicitamente
-                    numero: cap.numero, 
-                    titulo: cap.titulo, 
+                    numero: cap.numero,
+                    titulo: cap.titulo,
                     visualizado: false // Defina o valor inicial conforme necessário
                 })));
             }
         };
-        
+
 
         const fetchLeitura = async () => {
             if (userId) {
@@ -129,14 +129,14 @@ export default function Obra({ params }: { params: { id: string } }) {
         setCapitulos(novaOrdem);
         setOrdemCrescente(!ordemCrescente);
     };
-    
+
     const toggleVisualizacao = (numero: number) => {
         const capitulosAtualizados = capitulos.map((capitulo) =>
             capitulo.numero === numero ? { ...capitulo, visualizado: !capitulo.visualizado } : capitulo
         );
         setCapitulos(capitulosAtualizados);
     };
-    
+
 
     const handleOpenModal = () => { setIsModalOpen(true); };
     const handleCloseModal = () => { setIsModalOpen(false); };
@@ -182,9 +182,13 @@ export default function Obra({ params }: { params: { id: string } }) {
         setMostrarComentarios(!mostrarComentarios);
     };
 
+
+    return (
+
     console.log('Teste', like)
 
     return(
+
         <>
             <Menu />
             <Pesquisar />
@@ -194,7 +198,7 @@ export default function Obra({ params }: { params: { id: string } }) {
                     <div className={style.capa}>
                         <img src={obra?.capa} alt={`Capa de ${obra?.titulo}`} />
                     </div>
-                    <div className={style.informacoes}> 
+                    <div className={style.informacoes}>
                         <h1 className={style.titulo}>{obra?.titulo}</h1>
                         <div className={style.generos}>
                             {obra?.generos.map((genero, index) => (
@@ -221,11 +225,20 @@ export default function Obra({ params }: { params: { id: string } }) {
                         )}
                         <div className={style.icones}>
                             {obra && String(obra.autor_id) === String(userId) && (
+
+                                <Link href={`/editar-obra/${obra.id}`} legacyBehavior>
+                                    <FaRegEdit className={style.icone} size={45} title='Editar Obra' />
+                                </Link>
+                            )}
+
+                            <div onClick={toggleLike}>
+
                                 <Link href={`/criar-obra?id=${obra.id}`} legacyBehavior>
                                     <FaRegEdit className={style.icone} title='Editar Obra'/>
                                 </Link>
                             )}
                             <div onClick={handleLikeToggle}>
+
                                 <BiSolidLike size={45} className={like ? style.like : style.curtir} />
                                 {obra && obra.likes > 0 && (
                                     <span className={like ? style.curtido : style.likesCount}>{obra.likes}</span>
@@ -268,13 +281,13 @@ export default function Obra({ params }: { params: { id: string } }) {
                     )}
                 </div>
             </div>
-            <ModalLeitura 
-                isOpen={isModalOpen} 
+            <ModalLeitura
+                isOpen={isModalOpen}
                 onClose={handleCloseModal}
                 obraId={parseInt(params.id)}
                 usuarioId={userId ? parseInt(userId) : null}
-                listaId={leitura?.listaId}     
-                leituraAtual={leitura?.leituraId}  
+                listaId={leitura?.listaId}
+                leituraAtual={leitura?.leituraId}
             />
             <br />
         </>
