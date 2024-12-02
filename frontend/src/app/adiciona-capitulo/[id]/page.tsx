@@ -20,28 +20,46 @@ const SortableItem = ({
     onDragOver: (index: number) => void;
     onDrop: () => void;
     onImageClick: (image: string) => void;
-}) => (
-    <div
-        className={style.imageWrapper}
-        draggable
-        onDragStart={() => onDragStart(index)}
-        onDragOver={(e) => {
-            e.preventDefault();
-            onDragOver(index);
-        }}
-        onDrop={onDrop}
-        onClick={() => onImageClick(value)}
-    >
-        <img src={value} alt="Página" className={style.imageThumbnail} />
-    </div>
-);
+}) => {
+    const handleTouchStart = () => onDragStart(index);
+    const handleTouchMove = (e: React.TouchEvent) => {
+        const touch = e.touches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (target && target instanceof HTMLElement) {
+            const newIndex = parseInt(target.dataset.index || "-1", 10);
+            if (!isNaN(newIndex)) {
+                onDragOver(newIndex);
+            }
+        }
+    };
+    const handleTouchEnd = () => onDrop();
+
+    return (
+        <div
+            className={style.imageWrapper}
+            draggable
+            onDragStart={() => onDragStart(index)}
+            onDragOver={(e) => {
+                e.preventDefault();
+                onDragOver(index);
+            }}
+            onDrop={onDrop}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onClick={() => onImageClick(value)}
+            data-index={index}
+        >
+            <img src={value} alt="Página" className={style.imageThumbnail} />
+        </div>
+    );
+};
 
 export default function AdicionarCapitulo({ params }: { params: { id: string } }) {
     const { id } = params;
     const router = useRouter();
     const searchParams = useSearchParams();
     const obraNome = searchParams.get("obraNome") || "a obra";
-
     const [imagens, setImagens] = useState<File[]>([]);
     const [imagensURLs, setImagensURLs] = useState<string[]>([]);
     const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
@@ -159,28 +177,18 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
         <div className={style.container}>
             <div className={style.titulo}>
                 <FaArrowLeft onClick={() => router.back()} className={style.icone} title="Voltar" />
-                <h1>Adicionando Capítulo a {obraNome}</h1>
+                <h1>Adicionando Capítulo a Obra</h1>
             </div>
             <form className={style.form} onSubmit={handleSubmit}>
                 <div className={style.formGroup}>
                     <label htmlFor="titulo">Título:</label>
-                    <input
-                        type="text"
-                        id="titulo"
-                        name="titulo"
-                        value={formData.titulo}
-                        onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
-                        required
-                    />
+                    <input type="text" id="titulo" name="titulo" value={formData.titulo} required
+                        onChange={(e) => setFormData({ ...formData, titulo: e.target.value })} />
                 </div>
 
                 <div className={style.formGroup}>
                     <label htmlFor="numero">Número do Capítulo:</label>
-                    <input
-                        type="number"
-                        id="numero"
-                        name="numero"
-                        value={formData.numero}
+                    <input type="number" id="numero" name="numero" value={formData.numero} min="1" required
                         onChange={(e) => {
                             const value = e.target.value;
                             if (parseInt(value) < 1) {
@@ -188,58 +196,35 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
                             } else {
                                 setFormData({ ...formData, numero: value });
                             }
-                        }}
-                        min="1"
-                        required
-                    />
+                        }}/>
                 </div>
 
                 <div className={style.formGroup}>
                     <label htmlFor="data_publicacao">Data de Publicação:</label>
-                    <input
-                        type="date"
-                        id="data_publicacao"
-                        name="data_publicacao"
-                        value={formData.data_publicacao}
-                        onChange={(e) => setFormData({ ...formData, data_publicacao: e.target.value })}
-                        required
-                    />
+                    <input type="date" id="data_publicacao" name="data_publicacao" value={formData.data_publicacao}
+                        onChange={(e) => setFormData({ ...formData, data_publicacao: e.target.value })} required />
                 </div>
 
                 <div className={style.formGroup}>
                     <label htmlFor="imagens">Imagens do Capítulo:</label>
-                    <input
-                        type="file"
-                        id="imagens"
-                        name="imagens"
-                        onChange={handleImages}
-                        multiple
-                        accept="image/*"
-                        className={style.fileInputStyled}
-                    />
+                    <input type="file" id="imagens" name="imagens" onChange={handleImages} multiple
+                        accept="image/*" className={style.fileInputStyled}/>
                 </div>
 
                 <div className={style.imagesGrid}>
                     {imagensURLs.map((value, index) => (
-                        <SortableItem
-                            key={`item-${index}`}
-                            value={value}
-                            index={index}
-                            onDragStart={handleDragStart}
-                            onDragOver={handleDragOver}
-                            onDrop={handleDrop}
-                            onImageClick={handleImageClick}
-                        />
+                        <SortableItem key={`item-${index}`} value={value} index={index}
+                            onDragStart={handleDragStart} onDragOver={handleDragOver} onDrop={handleDrop}
+                            onImageClick={handleImageClick} />
                     ))}
                 </div>
-
                 <div className={style.divBotao}>
                     <button type="submit" disabled={isSubmitting} className={style.submitButton}>
                         {isSubmitting ? "Enviando..." : "Adicionar Capítulo"}
                     </button>
                 </div>
             </form>
-
+            <br />
             {modalOpen && (
                 <div className={style.modal} onClick={closeModal}>
                     <img src={imagemSelecionada!} alt="Página Ampliada" className={style.modalImage} />

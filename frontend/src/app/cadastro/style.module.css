@@ -199,11 +199,34 @@
     .content {
         flex-direction: column;
         text-align: center;
+        width: 90%;
     }
 
-    .login-form {
-        margin-left: 0;
-        width: 100%;
-        max-width: none;
+    .logo img {
+        max-width: 100px; /* Ajuste conforme necessário */
+        margin-bottom: 5px;
+    }
+
+    .imageSection {
+        width: 330px;
+        height: 230px;
+    }
+
+    .imageSection img {
+        border-radius: 15px 15px 0 0;
+    }
+
+    .loginForm {
+        width: 330px;
+        height: 500px;
+        border-radius: 0 0 15px 15px;
+    }
+
+    .loginForm h2 {
+        font-size: 40px;
+    }
+
+    .loginForm label {
+        text-align: start;
     }
 }

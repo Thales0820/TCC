@@ -200,15 +200,13 @@ export default function CapituloPage() {
                 </select>
             </div>
             <div className={style.pageContainer}>
-                <FaChevronLeft size={50} onClick={handlePreviousPage} title="Página anterior"
+                <FaChevronLeft onClick={handlePreviousPage} title="Página anterior"
                     className={`${style.navigationButton} ${style.left} ${currentPage === 0 ? style.disabled : ''}`}/>
-                <img
-                    src={`http://127.0.0.1:8000/${paginas[currentPage].imagem}`}
-                    alt={`Página ${currentPage + 1}`}
-                    className={style.mangaPage}/>
-                <FaChevronRight size={50} onClick={handleNextPage} title="Próxima página"
+                <img src={`http://127.0.0.1:8000/${paginas[currentPage].imagem}`} alt={`Página ${currentPage + 1}`}
+                    className={style.capituloPage}/>
+                <FaChevronRight onClick={handleNextPage} title="Próxima página"
                     className={`${style.navigationButton} ${style.right} ${currentPage === paginas.length - 1 ? style.disabled : ''}`}/>
-                <BsFullscreen size={40} className={style.telaFull} title="Abir Tela Cheia" 
+                <BsFullscreen className={style.telaFull} title="Abir Tela Cheia" 
                     onClick={toggleFullscreen}/>
             </div>
             <br />

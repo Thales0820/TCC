@@ -12,17 +12,18 @@ export default function CadastroUsuario() {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [fotoPerfil, setFotoPerfil] = useState<File | null>(null); // Arquivo da foto
+    const [fotoPerfil, setFotoPerfil] = useState<File | null>(null); // Foto de perfil
+    const [banner, setBanner] = useState<File | null>(null); // Arquivo do banner
     const [perfilId, setPerfilId] = useState(''); // ID do perfil
     const [perfis, setPerfis] = useState([]); // Lista de perfis a serem carregados da API
     const [error, setError] = useState(''); // Erros
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const router = useRouter();
-    const {theme} = useTheme()
+    const { theme } = useTheme()
 
-    const logoSrc = theme === "dark" 
-    ? "/images/logoDark.png" 
-    : "/images/logoLight.png";
+    const logoSrc = theme === "dark"
+        ? "/images/logoDark.png"
+        : "/images/logoLight.png";
 
     const toggleMostrarSenha = () => {
         setMostrarSenha(!mostrarSenha); // Alterna entre true e false
@@ -33,13 +34,20 @@ export default function CadastroUsuario() {
         if (e.target.files && e.target.files[0]) {
             setFotoPerfil(e.target.files[0]);
         }
-    }
+    };
+
+    // Manuseio de mudança do banner
+    const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setBanner(e.target.files[0]);
+        }
+    };
 
     // Função de envio do formulário
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError('');
-    
+
         const formData = new FormData();
         formData.append('nome', nome);
         formData.append('email', email);
@@ -47,34 +55,35 @@ export default function CadastroUsuario() {
         if (fotoPerfil) {
             formData.append('foto_perfil', fotoPerfil);
         }
+        if (banner) {
+            formData.append('banner', banner);
+        }
         formData.append('perfil_id', perfilId);
-    
+
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/v1/usuarios', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-    
+
             console.log('Usuário cadastrado com sucesso:', response.data);
-    
-            // Aqui você deve receber o token do servidor
-            const token = response.data.token; // Ajuste isso conforme a resposta do seu backend
+
+            const token = response.data.token;
             if (token) {
-                // Armazenar o token no localStorage ou cookies
-                localStorage.setItem('token', token); // Armazenando no localStorage
+                localStorage.setItem('token', token);
             }
-    
-            // Limpar os campos do formulário após sucesso
+
             setNome('');
             setEmail('');
             setSenha('');
             setFotoPerfil(null);
+            setBanner(null);
             setPerfilId('');
-            setError(''); // Limpar mensagens de erro
-    
+            setError('');
+
             (e.target as HTMLFormElement).reset();
-            router.push('/login'); // Redireciona para a página inicial após cadastro bem-sucedido
+            router.push('/login');
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
                 const message = error.response?.data.message || 'Erro ao cadastrar usuário';
@@ -85,7 +94,7 @@ export default function CadastroUsuario() {
             console.error('Erro ao cadastrar usuário:', error);
         }
     };
-    
+
     // Buscar os perfis disponíveis na API
     const fetchPerfis = async () => {
         try {
@@ -162,6 +171,16 @@ export default function CadastroUsuario() {
                                     className={style.fileInputStyled}
                                 />
                             </div>
+                            <div className={style.formGroup}>
+                                    <label htmlFor="banner">Banner</label>
+                                    <input
+                                        type="file"
+                                        id="banner"
+                                        accept="image/*"
+                                        onChange={handleBannerChange}
+                                        className={style.fileInputStyled}
+                                    />
+                                </div>
                             <div className={style.rememberMe}>
                                 {perfis.map((perfil: any) => (
                                     <div key={perfil.id}>

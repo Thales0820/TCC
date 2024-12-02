@@ -33,6 +33,7 @@
 .titulo {
     text-align: center;
     margin-bottom: 15px;
+    font-size: 25px;
 }
   
 .checklistContainer {
@@ -119,4 +120,24 @@
 
 .excluir {
     color: #CF0A0A;
+}
+
+@media (max-width: 768px) {
+    .modalFundo {
+        justify-content: center;
+    }
+
+    .modal {
+        width: 330px;
+        margin-left: -15px;
+    }
+
+    .titulo {
+        font-size: 20px;
+    }
+
+    .botao {
+        width: 130px;
+        font-size: 15px;
+    }
 }

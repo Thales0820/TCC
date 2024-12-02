@@ -48,3 +48,38 @@
     box-sizing: border-box; /* Fundo escuro translúcido para dar contraste ao texto */
     z-index: 2;
 }
+
+@media (max-width: 1024px) {
+    .cardsContainer {
+        margin-left: -35px;
+    }
+
+    .card {
+        height: 285px;
+    }
+
+    .card p {
+        font-size: 19px;
+    }
+}
+
+@media (max-width: 768px) {
+    .cardsContainer {
+        margin-left: 0px;
+        padding: 5px;
+    }
+
+    .card {
+        flex: 1 1 calc(25% - 5px); /* Permite até 5 cards por linha */
+        max-width: 25%;
+        height: 200px;
+    }
+
+    .card::after {
+        height: 50px;
+    }
+
+    .card p {
+        font-size: 13px;
+    }
+}

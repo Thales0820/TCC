@@ -73,14 +73,16 @@ export default function Lista() {
                     <h1>Lista de Leitura</h1>
                 </div>
                 <div className={style.listaContainer}>
-                  <div className={style.lista}>
-                        {leituras.map((leitura) => (
-                            <div key={leitura.id} onClick={() => handleLeituraClick(leitura.tipo)}
-                                className={`${style.leitura} ${selecioneLeitura === leitura.tipo ? style.selecionado : ''}`}>
-                                <p>{leitura.tipo}</p>
-                            </div>
-                        ))}
-                    </div>
+                  <div className={style.listagem}>
+                    <div className={style.lista}>
+                          {leituras.map((leitura) => (
+                              <div key={leitura.id} onClick={() => handleLeituraClick(leitura.tipo)}
+                                  className={`${style.leitura} ${selecioneLeitura === leitura.tipo ? style.selecionado : ''}`}>
+                                  <p>{leitura.tipo}</p>
+                              </div>
+                          ))}
+                      </div>
+                  </div>
                 </div>
                 <Cards data={filtrarLeitura}/>
             </div>
