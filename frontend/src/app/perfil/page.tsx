@@ -1,10 +1,13 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { getUserIdFromToken } from "@/utils/auth"; // Função para obter o ID do usuário autenticado
 import { useRouter } from "next/navigation"; // Navegação com Next.js
-import styles from "./style.module.css";
+import style from "./style.module.css";
+import { Menu } from "@/components/Menu";
+import Pesquisar from "@/components/Pesquisar";
+import { ModalPerfil } from "@/components/ModalPerfil";
+import { FaRegEdit } from "react-icons/fa";
 
 interface Perfil {
   id: number;
@@ -59,53 +62,39 @@ const PerfilPage = () => {
   }, []);
 
   if (loading) {
-    return <div className={styles.loading}>Carregando...</div>;
+    return <div className={style.loading}>Carregando...</div>;
   }
 
   if (error || !usuario) {
-    return <div className={styles.error}>{error || "Erro ao carregar perfil."}</div>;
+    return <div className={style.error}>{error || "Erro ao carregar perfil."}</div>;
   }
 
   const bannerUrl = getImageUrl(usuario.banner, "default-banner.jpg", "imageBanner");
   const fotoPerfilUrl = getImageUrl(usuario.foto_perfil, "default-profile.jpg", "imagesUser");
 
   return (
-    <div className={styles.container}>
-      {/* Banner */}
-      <div
-        className={styles.banner}
-        style={{
-          backgroundImage: `url(${bannerUrl})`,
-        }}
-      ></div>
-
-      {/* Informações do Perfil */}
-      <div className={styles.profileInfo}>
-        {/* Foto de Perfil */}
-        <div className={styles.profileImageContainer}>
-          <img
-            src={fotoPerfilUrl}
-            alt={`Foto de ${usuario.nome}`}
-            className={styles.profileImage}
-          />
-        </div>
-
-        {/* Detalhes do Usuário */}
-        <div className={styles.userDetails}>
-          <p className={styles.userName}>{usuario.nome}</p>
-          <p className={styles.profession}>{usuario.perfil.tipo}</p>
-          <p className={styles.email}>Email: {usuario.email}</p>
-        </div>
+    <>
+      <Menu />
+      <Pesquisar />
+      <ModalPerfil />
+      <div className={style.container}>
+          <div className={style.banner}>
+            <img src={bannerUrl} alt="Banner" />
+          </div>
+          <div className={style.profileInfo}>
+              <div className={style.profileImageContainer}>
+                  <img src={fotoPerfilUrl} alt={`Foto de ${usuario.nome}`} className={style.profileImage}/>
+              </div>
+              <div className={style.userDetails}>
+                <p className={style.userName}>{usuario.nome}</p>
+                <p className={style.profession}>{usuario.perfil.tipo}</p>
+              </div>
+          </div>
+          <button className={style.editButton} onClick={() => router.push(`/editar/${usuario.id}`)}>
+            <FaRegEdit />
+          </button>
       </div>
-
-      {/* Botão para editar o perfil */}
-      <button
-        className={styles.editButton}
-        onClick={() => router.push(`/editar/${usuario.id}`)}
-      >
-        Editar Perfil
-      </button>
-    </div>
+    </>
   );
 };
 

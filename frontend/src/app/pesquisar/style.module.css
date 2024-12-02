@@ -1,7 +1,6 @@
 .container {
     margin-top: 132px;
     min-height: 100vh;
-    background-color: var(--background);
     display: flex;
     flex-direction: column;
     padding-left: calc(180px + 60px);
@@ -26,6 +25,7 @@
 
 .pesquisaContainer {
     display: flex;
+    flex-wrap: wrap;
     justify-content: start;
     align-items: center;
     margin: 20px 0;
@@ -83,3 +83,74 @@
     cursor: pointer;
     font-weight: bold;
 }
+
+@media (max-width: 1024px) {
+    .container {
+        margin-top: 106px;
+    }
+
+    .pesquisaContainer {
+        margin-left: -35px;
+    }
+
+    .pesquisa {
+        width: 350px;
+        margin-right: 8px;
+    }
+
+    .select {
+        width: 130px;
+        font-size: 13px;
+        background-position: right 2px center;
+        margin-right: 8px;
+    }
+
+    .generos {
+        width: 150px;
+        font-size: 13px;
+    }
+}
+  
+  /* Para celulares (telas menores que 768px) */
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 0; /* Menu ficará por cima no mobile */
+      margin-top: 50px;
+    }
+
+    .titulo {
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .icone {
+        font-size: 30px;
+    }
+
+    .titulo h1 {
+        font-size: 30px;
+    }
+
+    .pesquisaContainer {
+        margin-left: 5px;
+    }
+
+    .pesquisa {
+        width: 340px;
+        margin-left: 5px;
+        margin-bottom: 10px;
+    }
+
+    .select {
+        width: 100px;
+        padding: 10px;
+        font-size: 10px;
+        margin-right: 5px;
+        background-position: right 1px center;
+    }
+
+    .generos {
+        width: 135px;
+        font-size: 10px;
+    }
+  }

@@ -44,4 +44,9 @@ class Obra extends Model
     {
         return $this->belongsTo(Usuario::class, 'autor_id');
     }
+
+    public function likes()
+    {
+        return $this->belongsToMany(Usuario::class, 'obra_likes', 'obra_id', 'usuario_id')->withTimestamps();
+    }
 }

@@ -21,7 +21,7 @@
     overflow-y: auto;
     z-index: 101;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    color: var(text-color);
+    color: var(--text-color);
     scrollbar-width: none; /* Para Firefox */
     -ms-overflow-style: none;
 }
@@ -33,6 +33,7 @@
 .titulo {
     text-align: center;
     margin-bottom: 15px;
+    font-size: 25px;
 }
   
 .checklistContainer {
@@ -81,7 +82,7 @@
 .checkboxItem input:checked::before {
     content: "✔";
     display: block;
-    color: var(text-color);
+    color: var(--text-color);
     text-align: center;
     line-height: 19px;
     font-size: 23px;
@@ -106,7 +107,7 @@
     width: 200px;
     font-size: 20px;
     background-color: var(--background);
-    color: var(text-color);
+    color: var(--text-color);
     border: none;
     border-radius: 15px;
     cursor: pointer;
@@ -119,4 +120,24 @@
 
 .excluir {
     color: #CF0A0A;
+}
+
+@media (max-width: 768px) {
+    .modalFundo {
+        justify-content: center;
+    }
+
+    .modal {
+        width: 330px;
+        margin-left: -15px;
+    }
+
+    .titulo {
+        font-size: 20px;
+    }
+
+    .botao {
+        width: 130px;
+        font-size: 15px;
+    }
 }

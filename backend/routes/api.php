@@ -42,8 +42,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('paginas/{id}',[PaginaController::class, 'show']);
     Route::post('usuario/login', [UsuarioController::class, 'login']);
     Route::post('/usuarios/{id}', [UsuarioController::class, 'update']);
-
-
+    Route::post('/obras/{id}/like', [ObraController::class, 'like']);
+    Route::get('/obras/{id}/like-status', [ObraController::class, 'getLikeStatus']);
 });
 
 Route::get('/', function () {

@@ -16,6 +16,7 @@ import { parseCookies } from 'nookies';
 import { jwtDecode } from 'jwt-decode';
 import { ModalLeitura } from '@/components/ModalLeitura';
 import Link from 'next/link';
+import axios from 'axios';
 
 interface TokenPayload {
     sub: string;
@@ -94,6 +95,21 @@ export default function Obra({ params }: { params: { id: string } }) {
             }
         };
 
+        const fetchLikeStatus = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/v1/obras/${params.id}/like-status`, {
+                    params: { userId },
+                });
+    
+                if (response.data?.liked) {
+                    setLike(true);
+                }
+            } catch (error) {
+                console.error("Erro ao buscar status de like:", error);
+            }
+        };
+    
+        fetchLikeStatus();
         fetchObra();
         fetchCapitulos();
         fetchLeitura();
@@ -134,11 +150,31 @@ export default function Obra({ params }: { params: { id: string } }) {
         return `${dia}/${mes}/${ano}`;
     };
 
-    const toggleLike = () => {
-        if (obra) {
+    const handleLikeToggle = async () => {
+        if (!obra) return;
+    
+        // Atualiza visualmente
+        setLike(!like);
+        const novoLike = like ? obra.likes - 1 : obra.likes + 1;
+        setObra({ ...obra, likes: novoLike });
+    
+        try {
+            // Chamada à API
+            const response = await axios.post(`http://127.0.0.1:8000/api/v1/obras/${obra.id}/like`, {
+                usuario_id: parseInt(userId ?? '0'), // Passe o ID do usuário logado, se necessário
+            });
+    
+            // Atualiza com os dados retornados pelo servidor
+            if (response.data) {
+                setObra({ ...obra, likes: response.data.likesCount });
+                setLike(response.data.status === "liked");
+            }
+        } catch (error) {
+            console.error("Erro ao atualizar like:", error);
+    
+            // Reverte a mudança visual em caso de erro
             setLike(!like);
-            const novoLike = like ? obra.likes - 1 : obra.likes + 1;
-            setObra({ ...obra, likes: novoLike });
+            setObra({ ...obra, likes: like ? obra.likes + 1 : obra.likes - 1 });
         }
     };
 
@@ -146,7 +182,13 @@ export default function Obra({ params }: { params: { id: string } }) {
         setMostrarComentarios(!mostrarComentarios);
     };
 
+
     return (
+
+    console.log('Teste', like)
+
+    return(
+
         <>
             <Menu />
             <Pesquisar />
@@ -175,59 +217,67 @@ export default function Obra({ params }: { params: { id: string } }) {
                 <div className={style.acoes}>
                     <div className={style.funcoes}>
                         {obra && String(obra.autor_id) === String(userId) ? (
-                            <button onClick={handleAddChapter}><FaPlus size={25} /> Adicionar Cap.</button>
+                            <button onClick={handleAddChapter}><FaPlus /> Adicionar Cap.</button>
                         ) : leitura ? (
                             <button onClick={handleOpenModal}>{leitura.tipo}</button>
                         ) : (
-                            <button onClick={handleOpenModal}><FaPlus size={25} /> Adicionar</button>
+                            <button onClick={handleOpenModal}><FaPlus /> Adicionar</button>
                         )}
                         <div className={style.icones}>
                             {obra && String(obra.autor_id) === String(userId) && (
+
                                 <Link href={`/editar-obra/${obra.id}`} legacyBehavior>
                                     <FaRegEdit className={style.icone} size={45} title='Editar Obra' />
                                 </Link>
                             )}
 
                             <div onClick={toggleLike}>
+
+                                <Link href={`/criar-obra?id=${obra.id}`} legacyBehavior>
+                                    <FaRegEdit className={style.icone} title='Editar Obra'/>
+                                </Link>
+                            )}
+                            <div onClick={handleLikeToggle}>
+
                                 <BiSolidLike size={45} className={like ? style.like : style.curtir} />
                                 {obra && obra.likes > 0 && (
                                     <span className={like ? style.curtido : style.likesCount}>{obra.likes}</span>
                                 )}
                             </div>
                             {mostrarComentarios ? (
-                                <PiBookOpenTextBold size={45} onClick={toggleComentarios} className={style.aberto} />
+                                <PiBookOpenTextBold onClick={toggleComentarios} className={style.aberto} />
                             ) : (
-                                <BsFillChatLeftTextFill size={45} onClick={toggleComentarios} className={style.aberto} />
+                                <BsFillChatLeftTextFill onClick={toggleComentarios} className={style.aberto} />
                             )}
                         </div>
                     </div>
                     {mostrarComentarios ? (
                         <Comentarios obraId={parseInt(params.id)} userId={userId ? parseInt(userId) : null} />
                     ) : (
-                        <div className={style.capitulosContainer}>
-                            <div className={style.topoCapitulos}>
-                                <h1>Capítulos: </h1>
-                                <div className={style.mudarOrdem}>
-                                    <BiArrowToBottom size={45} className={ordemCrescente ? style.selecionado : ''} onClick={toggleOrdem} />
-                                    <BiArrowFromBottom size={45} className={!ordemCrescente ? style.selecionado : ''} onClick={toggleOrdem} />
-                                </div>
-                            </div>
-                            <div className={style.capitulos}>
-                                {capitulos.map((cap) => (
-                                    <div className={style.capitulo} key={cap.numero}>
-                                        {cap.visualizado ? (
-                                            <IoEyeOff size={25} onClick={() => toggleVisualizacao(cap.numero)} />
-                                        ) : (
-                                            <IoEye size={25} onClick={() => toggleVisualizacao(cap.numero)} />
-                                        )}
-                                        <Link href={`/capitulo/${cap.id}`} legacyBehavior>
-                                            <span className={style.numero} title={`Ler o Capítulo ${cap.numero}`}> Cap. {cap.numero}</span>
-                                        </Link>
-                                        <span className={style.tituloCap}>{cap.titulo}</span>
-                                    </div>
-                                ))}
+                    <div className={style.capitulosContainer}>
+                        <div className={style.topoCapitulos}>
+                            <h1>Capítulos: </h1>
+                            <div className={style.mudarOrdem}>
+                                <BiArrowToBottom className={ordemCrescente ? style.selecionado : ''} onClick={toggleOrdem} />
+                                <BiArrowFromBottom className={!ordemCrescente ? style.selecionado : ''} onClick={toggleOrdem} />
                             </div>
                         </div>
+                        <div className={style.capitulos}>
+                            {capitulos.map((cap) => (
+                                <div className={style.capitulo} key={cap.numero}>
+                                    {cap.visualizado ? (
+                                        <IoEyeOff size={25} onClick={() => toggleVisualizacao(cap.numero)} />
+                                    ) : (
+                                        <IoEye size={25} onClick={() => toggleVisualizacao(cap.numero)} />
+                                    )}
+                                    <Link href={`/capitulo/${cap.id}`} legacyBehavior>
+                                        <span className={style.numero} title={`Ler o Capítulo ${cap.numero}`}> Cap. {cap.numero}</span>
+                                    </Link>
+                                    <span className={style.tituloCap}>{cap.titulo}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                     )}
                 </div>
             </div>

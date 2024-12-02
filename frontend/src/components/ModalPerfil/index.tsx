@@ -3,13 +3,13 @@ import style from './style.module.css';
 import { useState, useEffect } from "react";
 import { LuArrowLeftFromLine } from "react-icons/lu";
 import { MdWbSunny } from "react-icons/md";
-import { IoMdNotifications } from "react-icons/io";
 import { IoSettingsSharp } from "react-icons/io5";
 import Link from "next/link";
 import { parseCookies, destroyCookie } from 'nookies';
 import { jwtDecode } from "jwt-decode"; // Corrige para "jwtDecode"
 import { useTheme } from "@/hooks/useTheme";
 import { RiMoonClearFill } from "react-icons/ri";
+import { GrUpdate } from "react-icons/gr";
 
 // Interface do payload do token
 interface TokenPayload {
@@ -80,13 +80,15 @@ export const ModalPerfil = () => {
     return (
         <>
             <div className={style.profileIcon} onClick={toggleModal}>
-                <FaUser size={35} />
+                <FaUser />
             </div>
             {isOpen && (
                 <div className={style.modalOverlay} onClick={toggleModal}>
                     <div className={style.modalContent} onClick={e => e.stopPropagation()}>
                         <div className={style.perfil}>
-                            <FaUser size={35} />
+                            <Link href='/perfil' legacyBehavior>
+                                <FaUser size={35} />
+                            </Link>
                             <div className={style.texto}>
                                 {usuario ? (
                                     <>
@@ -109,7 +111,9 @@ export const ModalPerfil = () => {
                                     <Link href="/lista" legacyBehavior>
                                         <li><FaBookmark size={30} /> Lista de Leitura</li>
                                     </Link>
-                                    <li><IoMdNotifications size={30} /> Notificações</li>
+                                    <Link href="/atualizacoes" legacyBehavior>
+                                        <li><GrUpdate size={30} /> Atualizações</li>
+                                    </Link>
                                     <li><IoSettingsSharp size={30} /> Configuração</li>
                                 </ul>
                             ) : (

@@ -26,6 +26,6 @@
         @enderror
         <input type="password" name="password_confirmation" placeholder="Confirme sua Nova Senha">
 
-        <button type="submit">Enviar Link</button>
+        <button type="submit">Redefinir Senha</button>
     </form>
 </div>

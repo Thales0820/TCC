@@ -14,12 +14,16 @@
     justify-content: space-between;
     background-color: var(--background);
     border-color: var(--text-color);
-    height: 100%;
+    height: 100vh;
     border-radius: 0px 30px 30px 0px;
     position: fixed;    
     transition: all .5s;
     min-width: 160px;
-    z-index: 2;
+    z-index: 10;
+}
+
+.toggleButton {
+    display: none;
 }
 
 .divLogo {
@@ -63,4 +67,62 @@
     text-decoration: none; /* Remove o sublinhado */
     color: inherit; /* Herda a cor definida no li */
     font-weight: bold;
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+    .ul li {
+        font-size: 18px; /* Texto menor */
+        padding: 12px; /* Espaçamento reduzido */
+    }
+
+    .divLogo img {
+        width: 120px; /* Reduz o tamanho do logo */
+        height: 120px;
+    }
+
+    .toggleButton {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .menu {
+        position: fixed;
+        bottom: 0;
+        width: 0; /* Menu começa fechado */
+        height: auto;
+        overflow: hidden; /* Esconde o conteúdo do menu quando fechado */
+        transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out, visibility 0.5s ease-in-out; /* Animação suave ao abrir e fechar */
+        visibility: hidden;
+        opacity: 0;
+    }
+ 
+    .menuOpen {
+        visibility: visible;
+        opacity: 1;
+        width: 60%;
+        z-index: 10;
+    }
+
+    .divLogo img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .toggleButton {
+        display: block;
+        background-color: transparent;
+        color: var(--text-color);
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        position: fixed;
+        top: 5px;
+        left: 16px;
+        z-index: 11;
+    }
+
+    .ul li {
+        text-align: center;
+    }
 }

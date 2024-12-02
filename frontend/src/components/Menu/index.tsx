@@ -56,6 +56,7 @@ export const Menu = () => {
     const {theme} = useTheme()
     const [token, setToken] = useState<string | undefined>(undefined);
     const [usuario, setUsuario] = useState<Usuario | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
 
     const logoSrc = theme === "dark" 
     ? "/images/logoDark.png" 
@@ -77,7 +78,13 @@ export const Menu = () => {
 
     return (
         <div className={style.body}>
-            <nav className={style.menu}>
+            <button 
+                className={style.toggleButton} 
+                onClick={() => setIsOpen((prev) => !prev)}
+            >
+                ☰
+            </button>
+            <nav className={`${style.menu} ${isOpen ? style.menuOpen : ''}`}>
                 <div>
                     <div className={style.divLogo}>
                         <Link href="/home" legacyBehavior>

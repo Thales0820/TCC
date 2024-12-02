@@ -21,7 +21,7 @@
   overflow-y: auto;
   z-index: 101;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  color: var(text-color);
+  color: var(--text-color);
   scrollbar-width: none; /* Para Firefox */
   -ms-overflow-style: none;
 }
@@ -79,7 +79,7 @@
 .checkboxItem input:checked::before {
   content: "✔";
   display: block;
-  color: var(text-color);
+  color: var(--text-color);
   text-align: center;
   line-height: 19px;
   font-size: 23px;
@@ -104,7 +104,7 @@
   width: 210px;
   font-size: 16px;
   background-color: var(--background);
-  color: var(text-color);
+  color: var(--text-color);
   border: none;
   border-radius: 15px;
   cursor: pointer;
@@ -113,4 +113,30 @@
 
 .botao:hover {
   background-color: var(--elements);
+}
+
+@media (max-width: 768px) {
+
+  .modalFundo {
+      justify-content: center;
+  }
+
+  .modal {
+      width: 330px;
+      margin-left: -15px;
+  }
+
+  .checkboxItem {
+      width: 50%;
+      font-size: 15px;
+  }
+
+  .controle {
+      justify-content: center;
+      gap: 25px;
+  }
+
+  .botao {
+      width: 150px;
+  }
 }

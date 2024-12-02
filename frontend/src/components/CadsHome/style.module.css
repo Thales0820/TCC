@@ -9,8 +9,8 @@
 .cards {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 20px;
+  justify-content: space-between;
+  gap: 18px;
   margin-left: -35px;
 }
   
@@ -43,10 +43,50 @@
   font-size: 35px;
   color: var(--text-color);
   cursor: pointer;
-  z-index: 1;
+  z-index: 2;
 }
   
 .arrowButton:disabled {
   color: var(--box-color);
   cursor: not-allowed;
+}
+
+/* Para tablets */
+@media (max-width: 1024px) {
+
+  .cards {
+    margin-left: -25px;
+    gap: 30px;
+  }
+
+  .card {
+    flex-basis: calc(33.33% - 40px); /* Três cards por linha */
+    max-width: 190px;
+  }
+
+  .card p {
+    font-size: 18px; /* Ajusta o texto */
+  }
+}
+
+/* Para celulares */
+@media (max-width: 768px) {
+  .cards {
+    margin-left: -25px;
+    gap: 10px; 
+    justify-content: center;
+  }
+
+  .card {
+    max-width: 120px;
+    flex-basis: calc(50% - 40px); /* Dois cards por linha */
+  }
+
+  .card img {
+    height: 200px; /* Ajusta a altura da imagem */
+  }
+
+  .card p {
+    font-size: 16px; /* Texto menor */
+  }
 }
