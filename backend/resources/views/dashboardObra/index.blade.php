@@ -32,7 +32,7 @@
                 <tr>
                     <td>{{ $obra->titulo }}</td>
                     <td><img src="{{ $obra->capa }}" width="200px" height="auto"></td>
-                    <td>{{ $obra->usuario->nome}}</td>
+                    <td>{{ $obra->usuario->nome ?? "Nome não disponível"}}</td>
                     <td>{{ $obra->likes }}</td>
                     <td>{{ $obra->estado ? $obra->estado->nome : 'Estado desconhecido' }}</td>
                     <td>{{ $obra->tipo ? $obra->tipo->nome : 'Tipo desconhecido' }}</td>

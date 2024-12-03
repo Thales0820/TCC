@@ -8,7 +8,8 @@
 }
 
 .logo img {
-    max-width: 150px; /* Ajuste conforme necessário */
+    max-width: 150px;
+    /* Ajuste conforme necessário */
     margin-bottom: 10px;
 }
 
@@ -138,13 +139,27 @@
     text-decoration: underline;
 }
 
+.btn-activate {
+    background-color: green;
+    color: white;
+    padding: 10px 20px; /* Adiciona um pouco de espaçamento interno */
+    margin-top: 10px; /* Adiciona um espaçamento entre os botões */
+    margin-right: 10px; /* Adiciona um espaçamento à direita (caso haja outros elementos ao lado) */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+
+
 @media (max-width: 1024px) {
     .content {
         flex-direction: column;
     }
 
     .logo img {
-        max-width: 300px; /* Ajuste conforme necessário */
+        max-width: 300px;
+        /* Ajuste conforme necessário */
         margin-bottom: 5px;
     }
 
@@ -174,7 +189,8 @@
     }
 
     .logo img {
-        max-width: 100px; /* Ajuste conforme necessário */
+        max-width: 100px;
+        /* Ajuste conforme necessário */
         margin-bottom: 5px;
     }
 

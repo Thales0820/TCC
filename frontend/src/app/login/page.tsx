@@ -9,6 +9,7 @@ import { setCookie } from 'nookies';
 import { Loading } from '@/components/Loading';
 import { Toast } from '@/components/Toast';
 import { useTheme } from '@/hooks/useTheme';
+import { getUserIdFromToken } from '@/utils/auth';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -18,15 +19,30 @@ export default function Login() {
     const [toast, setToast] = useState(false);
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const router = useRouter();
-    const {theme} = useTheme()
+    const { theme } = useTheme()
 
-    const logoSrc = theme === "dark" 
-    ? "/images/logoDark.png" 
-    : "/images/logoLight.png";
+    const logoSrc = theme === "dark"
+        ? "/images/logoDark.png"
+        : "/images/logoLight.png";
 
     const toggleMostrarSenha = () => {
         setMostrarSenha(!mostrarSenha);
     };
+    // //metodo para ativar a conta
+    // const handleAccountActivation = async () => {
+    //     if (confirm("Tem certeza que deseja ativar sua conta novamente?")) {
+    //         try {
+    //             const userId = getUserIdFromToken();
+    //             await axios.put(`http://127.0.0.1:8000/api/v1/users/${userId}/activate`);
+    //             alert("Conta ativada com sucesso.");
+    //             router.push("/dashboard"); // Redireciona para o painel ou página inicial
+    //         } catch (error) {
+    //             console.error("Erro ao ativar a conta:", error);
+    //             alert("Ocorreu um erro ao tentar ativar a conta.");
+    //         }
+    //     }
+    // };
+    // //      
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -69,7 +85,7 @@ export default function Login() {
             />
             <div className={style.loginContainer}>
                 <div className={style.logo}>
-                    <img src={logoSrc} alt="Logo" title="Indie Comics" key={logoSrc}/>
+                    <img src={logoSrc} alt="Logo" title="Indie Comics" key={logoSrc} />
                 </div>
                 <div className={style.content}>
                     <div className={style.imageSection}>
@@ -107,6 +123,9 @@ export default function Login() {
                             </Link>
                             <button type="submit">Entrar</button>
                         </form>
+                        {/* <button onClick={handleAccountActivation} className="btn btn-activate">
+                            Ativar Conta
+                        </button> */}
                         <Link href="/home" legacyBehavior>
                             <a className={style.link}>Acesse nossa página!</a>
                         </Link>

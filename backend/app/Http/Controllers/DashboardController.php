@@ -13,7 +13,9 @@ class DashboardController extends Controller
     public function index()
     {
         // Recuperando todos os estados
-        $usuarios = Usuario::all();
+        $usuarios =  Usuario::withTrashed()->get();
+        //$usuarios = Usuario::all();//mostrar usuario com desativados
+
 
         // Passando os estados para a view
         return view('dashboard.index', compact('usuarios'));
