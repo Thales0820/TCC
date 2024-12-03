@@ -51,7 +51,7 @@ const UserSettings = () => {
         if (confirm("Tem certeza que deseja excluir sua conta? Essa ação é irreversível.")) {
             try {
                 const userId = getUserIdFromToken();
-                await axios.delete(`http://127.0.0.1:8000/api/v1/users/${userId}/disable`);
+                await axios.put(`http://127.0.0.1:8000/api/v1/users/${userId}/disable`);
                 alert("Conta excluída com sucesso.");
                 router.push("/home"); // Redireciona após excluir a conta
             } catch (error) {

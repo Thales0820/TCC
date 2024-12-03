@@ -238,6 +238,11 @@
     flex: 1;
     word-wrap: break-word;
 }
+.autorInativo {
+    color: #ff0000; /* Cor vermelha ou qualquer outra que você preferir */
+    font-style: italic;
+}
+
 
 @media (max-width: 1024px) {
     .containerObra {

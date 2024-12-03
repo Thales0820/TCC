@@ -178,9 +178,9 @@ class ObraController extends Controller
             'sinopse' => $obra->sinopse,
             'capa' => $obra->capa,
             'usuario' => [
-                'autor_id' => $obra->usuario->id,
-                'nome' => $obra->usuario->nome,
-                'foto_perfil' => $obra->usuario->foto_perfil,
+                'autor_id' => $obra->usuario->id ?? null, // Retorna null se $obra->usuario for null
+                'nome' => $obra->usuario->nome ?? null,   // Retorna null se $obra->usuario for null
+                'foto_perfil' => $obra->usuario->foto_perfil ?? null, // Retorna null se $obra->usuario for null
             ],
             'data_publicacao' => $obra->data_publicacao,
             'tipo' => $obra->tipo->nome,

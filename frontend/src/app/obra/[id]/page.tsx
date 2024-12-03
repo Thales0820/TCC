@@ -204,7 +204,7 @@ export default function Obra({ params }: { params: { id: string } }) {
                         </div>
                         <p>{obra?.sinopse}</p>
                         <div className={style.especificacao}>
-                            <p>{obra?.autor}</p>
+                            <p>{obra?.autor ?? "Autor Desconhecido"}</p>
                             <p>{obra?.tipo}</p>
                             <p>{obra?.estado}</p>
                             <p>{obra ? formatarData(obra.dataPublicacao) : ''}</p>
