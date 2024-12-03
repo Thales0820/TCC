@@ -163,4 +163,32 @@ class UsuarioController extends Controller
             return response()->json(['error' => 'Erro no servidor'], 500);
         }
     }
+
+    public function disableAccount($id)
+    {
+        $user = Usuario::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
+        $user->delete(); // Marca como "deletado"
+        return response()->json(['message' => 'Conta desativada com sucesso']);
+    }
+
+    public function activateAccount($id)
+    {
+        $usuario = Usuario::withTrashed()->find($id); // Inclui usuários desativados (soft-deleted)
+
+        if (!$usuario) {
+            return response()->json(['message' => 'Usuário não encontrado'], 404);
+        }
+
+        if ($usuario->trashed()) {
+            $usuario->restore(); // Restaura a conta
+            return response()->json(['message' => 'Conta ativada com sucesso.']);
+        }
+
+        return response()->json(['message' => 'A conta já está ativa.'], 400);
+    }
 }

@@ -1,0 +1,58 @@
+/* style.module.css */
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #0c001f;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    padding: 20px;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.user-info {
+    font-size: 1.2rem;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.user-info p {
+    margin: 10px 0;
+}
+
+.button {
+    width: 250px;
+    padding: 15px;
+    background-color: #00B5E2;
+    /* Exemplo de cor */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-disable {
+    background-color: #f6c23e;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.btn-delete {
+    background-color: #e74a3b;
+    color: white;
+    font-weight: bold;
+}

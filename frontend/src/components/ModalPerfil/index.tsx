@@ -114,7 +114,9 @@ export const ModalPerfil = () => {
                                     <Link href="/atualizacoes" legacyBehavior>
                                         <li><GrUpdate size={30} /> Atualizações</li>
                                     </Link>
+                                    <Link href={`/configuracao`}>
                                     <li><IoSettingsSharp size={30} /> Configuração</li>
+                                    </Link>
                                 </ul>
                             ) : (
                                 <div className={style.deslogado}>
