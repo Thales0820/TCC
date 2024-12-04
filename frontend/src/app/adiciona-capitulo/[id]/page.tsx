@@ -1,10 +1,11 @@
 "use client";
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import style from './style.module.css';
-import { FaArrowLeft } from 'react-icons/fa';
-import { isAuthenticated } from "@/utils/auth";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import axios from "axios";
+import { parseCookies } from "nookies";
+import { getUserIdFromToken, isAuthenticated } from "@/utils/auth";
+import style from "./style.module.css";
+import { FaArrowLeft } from "react-icons/fa";
 
 const SortableItem = ({
     value,
@@ -54,12 +55,12 @@ const SortableItem = ({
         </div>
     );
 };
-
 export default function AdicionarCapitulo({ params }: { params: { id: string } }) {
     const { id } = params;
     const router = useRouter();
     const searchParams = useSearchParams();
     const obraNome = searchParams.get("obraNome") || "a obra";
+
     const [imagens, setImagens] = useState<File[]>([]);
     const [imagensURLs, setImagensURLs] = useState<string[]>([]);
     const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
@@ -71,15 +72,47 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
         data_publicacao: new Date().toISOString().split("T")[0],
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [obraAutorizada, setObraAutorizada] = useState(false);
 
     useEffect(() => {
         if (!isAuthenticated()) {
             router.push("/login");
+            return;
         }
-        if (!id) {
-            router.push('/home');
+
+        const userId = getUserIdFromToken();
+        if (!userId) {
+            router.push("/login");
+            return;
         }
-    }, [id]);
+
+        const fetchObra = async () => {
+            try {
+                const cookies = parseCookies();
+                const token = cookies["obra.token"];
+
+                const obraRes = await axios.get(`http://127.0.0.1:8000/api/v1/obras/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const obraData = obraRes.data;
+
+                if (obraData.usuario.autor_id.toString() !== userId.toString()) {
+                    alert("Você não tem permissão para adicionar capítulos nesta obra.");
+                    router.push("/");
+                    return;
+                }
+
+                setObraAutorizada(true);
+            } catch (error) {
+                console.error("Erro ao verificar a obra:", error);
+                alert("Erro ao verificar a obra. Tente novamente.");
+                router.push("/");
+            }
+        };
+
+        fetchObra();
+    }, [id, router]);
 
     const handleImages = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -125,6 +158,7 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
         setModalOpen(false);
         setImagemSelecionada(null);
     };
+
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -173,6 +207,9 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
         }
     };
 
+    if (!obraAutorizada) {
+        return <p>Carregando...</p>;
+    }
     return (
         <div className={style.container}>
             <div className={style.titulo}>
@@ -196,7 +233,7 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
                             } else {
                                 setFormData({ ...formData, numero: value });
                             }
-                        }}/>
+                        }} />
                 </div>
 
                 <div className={style.formGroup}>
@@ -208,7 +245,7 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
                 <div className={style.formGroup}>
                     <label htmlFor="imagens">Imagens do Capítulo:</label>
                     <input type="file" id="imagens" name="imagens" onChange={handleImages} multiple
-                        accept="image/*" className={style.fileInputStyled}/>
+                        accept="image/*" className={style.fileInputStyled} />
                 </div>
 
                 <div className={style.imagesGrid}>
@@ -233,4 +270,3 @@ export default function AdicionarCapitulo({ params }: { params: { id: string } }
         </div>
     );
 }
-
