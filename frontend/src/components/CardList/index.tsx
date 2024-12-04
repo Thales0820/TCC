@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 interface Capitulo {
     id: number;
-    numero: string;
+    numero: number;
     titulo: string;
 }
 
