@@ -5,12 +5,15 @@ import { useRouter } from "next/navigation";
 import { isAuthenticated, getUserIdFromToken } from "@/utils/auth";
 import axios from "axios";
 import styles from './style.module.css'; // Importe o CSS
+import { Menu } from "@/components/Menu";
+import Pesquisar from "../pesquisar/page";
+import { ModalPerfil } from "@/components/ModalPerfil";
 
 // Definindo a interface para o usuário
 interface User {
     nome: string;
     email: string;
-    // Adicione outros campos conforme necessário
+
 }
 
 const UserSettings = () => {
@@ -62,7 +65,7 @@ const UserSettings = () => {
     };
 
     const handleAccountDisable = async () => {
-        if (confirm("Tem certeza que deseja desativar sua conta? Você pode reativá-la a qualquer momento.")) {
+        if (confirm("Tem certeza que deseja desativar sua conta? No momento não poderá mais reativar ela.")) {
             try {
                 const userId = getUserIdFromToken();
                 await axios.put(`http://127.0.0.1:8000/api/v1/users/${userId}/disable`);
@@ -75,26 +78,31 @@ const UserSettings = () => {
         }
     };
 
+
     return (
-        <div className={styles['settings-container']}>
-            {loading ? (
-                <p>Carregando dados do usuário...</p> // Mensagem de carregamento
-            ) : (
-                <>
-                    <h1 className={styles['title']}>Configurações da Conta</h1>
-                    <div className={styles['user-info']}>
-                        <p><strong>Nome:</strong> {userData?.nome}</p>
-                        <p><strong>Email:</strong> {userData?.email}</p>
-                    </div>
-                    <button onClick={handleAccountDisable} className={`${styles.button} ${styles['btn-disable']}`}>
-                        Desativar Conta
-                    </button>
-                    <button onClick={handleAccountDeletion} className={`${styles.button} ${styles['btn-delete']}`}>
-                        Excluir Conta
-                    </button>
-                </>
-            )}
-        </div>
+        <>
+            <Menu />
+            <div className={styles['settings-container']}>
+                {loading ? (
+                    <p>Carregando dados do usuário...</p> // Mensagem de carregamento
+                ) : (
+                    <>
+                        <ModalPerfil />
+                        <h1 className={styles['title']}>Configurações da Conta</h1>
+                        <div className={styles['user-info']}>
+                            <p><strong>Nome:</strong> {userData?.nome}</p>
+                            <p><strong>Email:</strong> {userData?.email}</p>
+                        </div>
+                        <button onClick={handleAccountDisable} className={`${styles.button} ${styles['btn-disable']}`}>
+                            Desativar Conta
+                        </button>
+                        <button onClick={handleAccountDeletion} className={`${styles.button} ${styles['btn-delete']}`}>
+                            Excluir Conta
+                        </button>
+                    </>
+                )}
+            </div>
+        </>
     );
 };
 

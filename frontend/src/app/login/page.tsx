@@ -67,7 +67,7 @@ export default function Login() {
             }
         } catch (error) {
             console.error('Erro ao fazer a solicitação:', error);
-            setErrorMessage('Erro de conexão. Tente novamente mais tarde.');
+            setErrorMessage('Senha ou Email Inválidos!.');
             setToast(true);
         } finally {
             setLoading(false);

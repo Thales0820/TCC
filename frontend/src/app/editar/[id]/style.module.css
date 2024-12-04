@@ -33,7 +33,8 @@
     margin-bottom: 5px;
 }
 
-.input, .fileInput {
+.input,
+.fileInput {
     font-size: 1rem;
     padding: 10px;
     color: var(--text-color);
@@ -53,7 +54,8 @@
 }
 
 .fileInput::-webkit-file-upload-button {
-    visibility: hidden; /* Oculta o botão padrão do input */
+    visibility: hidden;
+    /* Oculta o botão padrão do input */
 }
 
 .fileInput::before {
@@ -91,46 +93,59 @@
 }
 
 .previewImage {
-    width: 150px; /* Define a largura fixa */
-    height: 150px; /* Define a altura fixa */
-    object-fit: cover; /* Garante que a imagem seja cortada para se ajustar ao tamanho */
+    width: 150px;
+    /* Define a largura fixa */
+    height: 150px;
+    /* Define a altura fixa */
+    object-fit: cover;
+    /* Garante que a imagem seja cortada para se ajustar ao tamanho */
     margin-bottom: 10px;
-    border-radius: 5px; /* Bordas arredondadas para um visual mais limpo */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar a imagem */
-    border: 1px solid #ddd; /* Borda leve para separação */
+    border-radius: 5px;
+    /* Bordas arredondadas para um visual mais limpo */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra leve para destacar a imagem */
+    border: 1px solid #ddd;
+    /* Borda leve para separação */
 }
 
 .previewBanner {
-    height: 150px; /* Define a altura fixa */
-    object-fit: cover; /* Garante que a imagem seja cortada para se ajustar ao tamanho */
+    height: 150px;
+    /* Define a altura fixa */
+    object-fit: cover;
+    /* Garante que a imagem seja cortada para se ajustar ao tamanho */
     margin-bottom: 10px;
-    border-radius: 5px; /* Bordas arredondadas para um visual mais limpo */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar a imagem */
-    border: 1px solid #ddd; /* Borda leve para separação */
+    border-radius: 5px;
+    /* Bordas arredondadas para um visual mais limpo */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Sombra leve para destacar a imagem */
+    border: 1px solid #ddd;
+    /* Borda leve para separação */
 }
+
 .container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Garante que o contêiner ocupe a altura total da tela */
+    height: 100vh;
+    /* Garante que o contêiner ocupe a altura total da tela */
     text-align: center;
     padding: 20px;
-  }
-  
-  .errorTitle {
+}
+
+.errorTitle {
     color: red;
     font-size: 24px;
     margin-bottom: 10px;
-  }
-  
-  .errorMessage {
+}
+
+.errorMessage {
     font-size: 18px;
     margin-bottom: 20px;
     text-align: center;
-  }
-  
-  .homeButton {
+}
+
+.homeButton {
     background-color: #007bff;
     color: white;
     padding: 10px 20px;
@@ -138,12 +153,29 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-  }
-  
-  .homeButton:hover {
+    transition: background-color 0.3s ease;
+    display: block;
+    /* Garante que o botão seja tratado como bloco */
+    margin: 20px auto;
+    /* Centraliza horizontalmente */
+    text-align: center;
+}
+
+.homeButton:hover {
     background-color: #0056b3;
-  }
-  
+}
+
+.notOwnerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* Centraliza verticalmente */
+    text-align: center;
+}
+
+
 
 @media (max-width: 1024px) {
     .container {
