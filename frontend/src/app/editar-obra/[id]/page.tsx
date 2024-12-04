@@ -126,8 +126,8 @@ export default function EditarObra({ params }: { params: { id: string } }) {
             const formData = new FormData();
             if (obra.titulo?.trim()) formData.append("titulo", obra.titulo);
             if (obra.sinopse?.trim()) formData.append("sinopse", obra.sinopse);
-            if (obra.tipo) formData.append("tipo_id", obra.tipo.id.toString()); // Envia ID como string
-            if (obra.estado) formData.append("estado_id", obra.estado.id.toString()); // Envia ID como string
+            if (obra.tipo?.id) formData.append("tipo_id", obra.tipo.id.toString()); // Envia ID como string
+            if (obra.estado?.id) formData.append("estado_id", obra.estado.id.toString()); // Envia ID como string
             if (capa) formData.append("capa", capa);
 
             const response = await axios.post(

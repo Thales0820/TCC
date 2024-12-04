@@ -9,6 +9,7 @@ import { ModalGenero } from "@/components/ModalGenero";
 import Cookies from 'js-cookie';
 import { verificaTokenExpirado, isAuthenticated } from '@/utils/auth';
 import { parseCookies } from "nookies";
+import LoadingRedirect from "@/components/LoadingObra";
 
 interface Usuario {
     id: string;
@@ -53,6 +54,7 @@ export default function CriarObra() {
     const [error, setError] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [nomeAutor, setNomeAutor] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -123,6 +125,7 @@ export default function CriarObra() {
 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        setIsLoading(true);
         e.preventDefault();
         setError('');
 
@@ -148,9 +151,10 @@ export default function CriarObra() {
                     Authorization: `Bearer ${Cookies.get('obra.token')}`,
                 },
             });
-
+            setIsLoading(false);
             console.log('Obra criada com sucesso:', response.data);
             resetForm();
+            router.push("http://localhost:3000/minhas-obras"); 
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
                 setError('Erro ao criar obra: ' + (error.response.data.message || error.message));
@@ -175,7 +179,9 @@ export default function CriarObra() {
         router.back();
     };
 
-    return (
+    return isLoading ? (
+        <LoadingRedirect isLoading={isLoading} />
+    ) : (
         <div className={style.container}>
             <div className={style.titulo}>
                 <FaArrowLeft onClick={voltar} className={style.icone} title="Voltar" />
@@ -191,39 +197,68 @@ export default function CriarObra() {
             <form onSubmit={handleSubmit} className={style.form}>
                 <div className={style.formGroup}>
                     <label>Título:</label>
-                    <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} required />
+                    <input
+                        type="text"
+                        value={titulo}
+                        onChange={(e) => setTitulo(e.target.value)}
+                        required
+                    />
                 </div>
                 <div className={style.formGroup}>
                     <label>Capa:</label>
-                    <input type="file" onChange={(e) => setCapa(e.target.files ? e.target.files[0] : null)} className={style.fileInputStyled}/>
+                    <input
+                        type="file"
+                        onChange={(e) => setCapa(e.target.files ? e.target.files[0] : null)}
+                        className={style.fileInputStyled}
+                    />
                 </div>
                 <div className={style.formGroup}>
                     <label>Sinopse:</label>
-                    <textarea value={sinopse} onChange={(e) => setSinopse(e.target.value)} required />
+                    <textarea
+                        value={sinopse}
+                        onChange={(e) => setSinopse(e.target.value)}
+                        required
+                    />
                 </div>
                 <div className={style.formGroup}>
                     <label>Data de Publicação:</label>
-                    <input type="date" value={dataPublicacao} onChange={(e) => setDataPublicacao(e.target.value)} />
+                    <input
+                        type="date"
+                        value={dataPublicacao}
+                        onChange={(e) => setDataPublicacao(e.target.value)}
+                    />
                 </div>
                 <div className={style.formGroup}>
                     <label>Autor:</label>
-                    <input type="text" value={nomeAutor} disabled /> {/* Exibe o nome do autor */}
+                    <input type="text" value={nomeAutor} disabled />
                 </div>
                 <div className={style.formGroup}>
                     <label>Tipo:</label>
-                    <select value={tipoId} onChange={(e) => setTipoId(e.target.value)} required>
+                    <select
+                        value={tipoId}
+                        onChange={(e) => setTipoId(e.target.value)}
+                        required
+                    >
                         <option value="">Selecione um tipo</option>
                         {tipos.map((tipo) => (
-                            <option key={tipo.id} value={tipo.id}>{tipo.nome}</option>
+                            <option key={tipo.id} value={tipo.id}>
+                                {tipo.nome}
+                            </option>
                         ))}
                     </select>
                 </div>
                 <div className={style.formGroup}>
                     <label>Estado:</label>
-                    <select value={estadoId} onChange={(e) => setEstadoId(e.target.value)} required>
+                    <select
+                        value={estadoId}
+                        onChange={(e) => setEstadoId(e.target.value)}
+                        required
+                    >
                         <option value="">Selecione um estado</option>
                         {estados.map((estado) => (
-                            <option key={estado.id} value={estado.id}>{estado.nome}</option>
+                            <option key={estado.id} value={estado.id}>
+                                {estado.nome}
+                            </option>
                         ))}
                     </select>
                 </div>
@@ -237,14 +272,18 @@ export default function CriarObra() {
                         Selecionar Gêneros
                     </button>
                 </div>
-                <button type="submit" className={style.submitButton}>Criar Obra</button>
+                <button type="submit" className={style.submitButton}>
+                    Criar Obra
+                </button>
             </form>
             <ModalGenero
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
-                selecionaGenero={generoSelecionados.map(g => g.id)}
+                selecionaGenero={generoSelecionados.map((g) => g.id)}
                 onSelectGenre={(selected) => {
-                    const selecionados = generos.filter(g => selected.includes(g.id));
+                    const selecionados = generos.filter((g) =>
+                        selected.includes(g.id)
+                    );
                     setGeneroSelecionados(selecionados);
                 }}
                 generos={generos}
