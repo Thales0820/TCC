@@ -217,16 +217,16 @@ export default function EditarObra({ params }: { params: { id: string } }) {
                         accept="image/*"
                     />
                     {(capa || obra.capa) && (
-                        <div>
+                        <div className={style.capaPreview}>
                             <p>Preview da capa:</p>
                             <img
                                 src={capa ? URL.createObjectURL(capa) : obra.capa || ""}
                                 alt="Capa"
-                                className={style.preview}
                             />
                         </div>
                     )}
                 </div>
+
                 <button type="submit" className={style.submitButton} disabled={isLoading}>
                     {isLoading ? "Salvando..." : "Salvar Alterações"}
                 </button>
