@@ -152,6 +152,7 @@ export default function CadastroUsuario() {
                                 <input
                                     type={mostrarSenha ? "text" : "password"}
                                     id="senha"
+                                    minLength={8}
                                     value={senha}
                                     placeholder="Digite sua Senha"
                                     onChange={(e) => setSenha(e.target.value)}
