@@ -11,7 +11,7 @@ class historicoUsuario extends Model
     protected $fillable = [
         'usuario_id',
         'obra_id',
-        'pagina_id',
+        'capitulo_id',
         'viewed_at'
     ];
 
@@ -25,8 +25,8 @@ class historicoUsuario extends Model
         return $this->belongsTo(Obra::class);
     }
 
-    public function pagina()
+    public function Capitulo()
     {
-        return $this->belongsTo(Pagina::class);
+        return $this->belongsTo(Capitulo::class);
     }
 }

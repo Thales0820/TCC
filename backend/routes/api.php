@@ -31,19 +31,22 @@ Route::group(['prefix' => 'v1'], function () {
     Route::apiResource('comentarios', ComentarioController::class);
     Route::apiResource('obras', ObraController::class);
     Route::apiResource('generos', GeneroController::class);
-    Route::apiResource('historico', historicoUsuarioController::class);
+    //Route::apiResource('historico', HistoricoUsuarioController::class);
     Route::apiResource('obragenero', ObraGeneroController::class);
     Route::apiResource('obraslancadas', ObraController::class);
     Route::apiResource('listas', ListaController::class)->only(['index', 'store', 'destroy']);
 
     Route::put('/listas/{id}', [ListaController::class, 'update']);
-    //Route::get('/obras/{id}', [ObraController::class, 'show']);
     Route::post('/obras/{id}', [ObraController::class, 'update']);
     Route::get('paginas/{id}',[PaginaController::class, 'show']);
     Route::post('usuario/login', [UsuarioController::class, 'login']);
     Route::post('/usuarios/{id}', [UsuarioController::class, 'update']);
     Route::post('/obras/{id}/like', [ObraController::class, 'like']);
     Route::get('/obras/{id}/like-status', [ObraController::class, 'getLikeStatus']);
+    Route::get('/historico/', [HistoricoUsuarioController::class, 'index']);
+    Route::get('/historico/{usuarioId}', [HistoricoUsuarioController::class, 'getHistorico']);
+    Route::post('/historico', [HistoricoUsuarioController::class, 'addHistorico']);
+    Route::delete('/historico/{usuarioId}/{capituloId}', [HistoricoUsuarioController::class, 'removeHistorico']);
 });
 
 Route::get('/', function () {

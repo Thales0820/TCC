@@ -1,4 +1,3 @@
-
 "use client";
 import { Menu } from '@/components/Menu';
 import style from './style.module.css';
@@ -55,7 +54,8 @@ function getUserId(): string | null {
 
 export default function Obra({ params }: { params: { id: string } }) {
     const router = useRouter();
-    const [capitulos, setCapitulos] = useState<{ id: number; numero: number; titulo: string; visualizado: boolean }[]>([]);
+    const [capitulos, setCapitulos] = useState<{ id: number; numero: number; titulo: string; obra_id: number}[]>([]);
+    const [visualizados, setVisualizados] = useState<number[]>([]);
     const [ordemCrescente, setOrdemCrescente] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [like, setLike] = useState(false);
@@ -82,7 +82,6 @@ export default function Obra({ params }: { params: { id: string } }) {
                     id: cap.id, // Adicionando id explicitamente
                     numero: cap.numero,
                     titulo: cap.titulo,
-                    visualizado: false // Defina o valor inicial conforme necessário
                 })));
             }
         };
@@ -110,6 +109,18 @@ export default function Obra({ params }: { params: { id: string } }) {
             }
         };
 
+        const carregarHistorico = async () => {
+            try {
+                const usuarioId = userId; // Substitua pelo ID do usuário autenticado
+                const response = await axios.get(`http://127.0.0.1:8000/api/v1/historico/${usuarioId}`);
+                console.log(response.data)
+                setVisualizados(response.data); // Recebe apenas os IDs dos capítulos visualizados
+            } catch (error) {
+                console.error('Erro ao carregar o histórico:', error);
+            }
+        };
+
+        carregarHistorico();
         fetchLikeStatus();
         fetchObra();
         fetchCapitulos();
@@ -131,11 +142,30 @@ export default function Obra({ params }: { params: { id: string } }) {
         setOrdemCrescente(!ordemCrescente);
     };
 
-    const toggleVisualizacao = (numero: number) => {
-        const capitulosAtualizados = capitulos.map((capitulo) =>
-            capitulo.numero === numero ? { ...capitulo, visualizado: !capitulo.visualizado } : capitulo
-        );
-        setCapitulos(capitulosAtualizados);
+    const toggleVisualizacao = async (numero: number, capituloId: number, obraId: number) => {
+        if (visualizados.includes(capituloId)) {
+            // Remover do histórico
+            try {
+                const usuarioId = userId; // Substitua pelo ID do usuário autenticado
+                await axios.delete(`http://127.0.0.1:8000/api/v1/historico/${usuarioId}/${capituloId}`);
+                setVisualizados((prev) => prev.filter((id) => id !== capituloId));
+            } catch (error) {
+                console.error('Erro ao remover do histórico:', error);
+            }
+        } else {
+            // Adicionar ao histórico
+            try {
+                const usuarioId = userId; // Substitua pelo ID do usuário autenticado
+                await axios.post('http://127.0.0.1:8000/api/v1/historico', {
+                    usuario_id: usuarioId,
+                    obra_id: params.id,
+                    capitulo_id: capituloId,
+                });
+                setVisualizados((prev) => [...prev, capituloId]);
+            } catch (error) {
+                console.error('Erro ao adicionar ao histórico:', error);
+            }
+        }
     };
 
 
@@ -183,8 +213,6 @@ export default function Obra({ params }: { params: { id: string } }) {
         setMostrarComentarios(!mostrarComentarios);
     };
 
-    console.log('Teste', like)
-
     return (
         <>
             <Menu />
@@ -204,7 +232,7 @@ export default function Obra({ params }: { params: { id: string } }) {
                         </div>
                         <p>{obra?.sinopse}</p>
                         <div className={style.especificacao}>
-                            <p>{obra?.autor}</p>
+                            <p>{obra?.autor ?? "Autor Desconhecido"}</p>
                             <p>{obra?.tipo}</p>
                             <p>{obra?.estado}</p>
                             <p>{obra ? formatarData(obra.dataPublicacao) : ''}</p>
@@ -254,13 +282,34 @@ export default function Obra({ params }: { params: { id: string } }) {
                             <div className={style.capitulos}>
                                 {capitulos.map((cap) => (
                                     <div className={style.capitulo} key={cap.numero}>
-                                        {cap.visualizado ? (
-                                            <IoEyeOff size={25} onClick={() => toggleVisualizacao(cap.numero)} />
+                                        {visualizados.includes(cap.id) ? (
+                                            <IoEyeOff
+                                                size={25}
+                                                onClick={() => toggleVisualizacao(cap.numero, cap.id, cap.obra_id)}
+                                            />
                                         ) : (
-                                            <IoEye size={25} onClick={() => toggleVisualizacao(cap.numero)} />
+                                            <IoEye
+                                                size={25}
+                                                onClick={() => toggleVisualizacao(cap.numero, cap.id, cap.obra_id)}
+                                            />
                                         )}
                                         <Link href={`/capitulo/${cap.id}`} legacyBehavior>
-                                            <span className={style.numero} title={`Ler o Capítulo ${cap.numero}`}> Cap. {cap.numero}</span>
+                                            <span className={style.numero} title={`Ler o Capítulo ${cap.numero}`}
+                                                onClick={async () => {
+                                                    try {
+                                                        const usuarioId = userId;
+                                                        await axios.post('http://127.0.0.1:8000/api/v1/historico', {
+                                                            usuario_id: usuarioId,
+                                                            obra_id: params.id,
+                                                            capitulo_id: cap.id,
+                                                        });
+                                                        setVisualizados((prev) => [...prev, cap.id]);
+                                                    } catch (error) {
+                                                        console.error('Erro ao adicionar ao histórico ao acessar o capítulo:', error);
+                                                    }
+                                                }}
+                                            >  Cap. {cap.numero}
+                                            </span>
                                         </Link>
                                         <span className={style.tituloCap}>{cap.titulo}</span>
                                     </div>
