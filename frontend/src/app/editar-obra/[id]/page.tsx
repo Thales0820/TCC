@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
+import { getUserIdFromToken, isAuthenticated } from "@/utils/auth";
 import style from "./style.module.css";
 import Cookies from "js-cookie";
 
@@ -23,6 +24,11 @@ interface ObraInfo {
     capa: string | null;
     tipo: Tipo;
     estado: Estado;
+    usuario: {
+        autor_id: string;
+        nome: string;
+        foto_perfil: string;
+    };
 }
 
 export default function EditarObra({ params }: { params: { id: string } }) {
@@ -34,20 +40,35 @@ export default function EditarObra({ params }: { params: { id: string } }) {
     const router = useRouter();
 
     useEffect(() => {
-        const cookies = parseCookies();
-        const token = cookies["obra.token"];
+        if (!isAuthenticated()) {
+            router.push("/login");
+            return;
+        }
 
-        if (!token) {
+        const userId = getUserIdFromToken();
+        if (!userId) {
             router.push("/login");
             return;
         }
 
         const fetchData = async () => {
             try {
-                const [obraRes, tiposRes, estadosRes] = await Promise.all([
-                    axios.get(`http://127.0.0.1:8000/api/v1/obras/${params.id}`, {
-                        headers: { Authorization: `Bearer ${token}` },
-                    }),
+                const cookies = parseCookies();
+                const token = cookies["obra.token"];
+
+                const obraRes = await axios.get(`http://127.0.0.1:8000/api/v1/obras/${params.id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const obraData = obraRes.data;
+
+                if (obraData.usuario.autor_id.toString() !== userId.toString()) {
+                    alert("Você não tem permissão para acessar esta obra.");
+                    router.push("/");
+                    return;
+                }
+
+                const [tiposRes, estadosRes] = await Promise.all([
                     axios.get("http://127.0.0.1:8000/api/v1/tipos", {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
@@ -56,12 +77,13 @@ export default function EditarObra({ params }: { params: { id: string } }) {
                     }),
                 ]);
 
-                setObra(obraRes.data);
+                setObra(obraData);
                 setTipos(tiposRes.data);
                 setEstados(estadosRes.data);
             } catch (error: any) {
                 console.error("Erro ao carregar dados:", error.message || error);
                 alert("Erro ao carregar os dados. Tente novamente.");
+                router.push("/");
             }
         };
 
@@ -87,6 +109,7 @@ export default function EditarObra({ params }: { params: { id: string } }) {
         });
     };
 
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setCapa(e.target.files[0]);
@@ -103,8 +126,8 @@ export default function EditarObra({ params }: { params: { id: string } }) {
             const formData = new FormData();
             if (obra.titulo?.trim()) formData.append("titulo", obra.titulo);
             if (obra.sinopse?.trim()) formData.append("sinopse", obra.sinopse);
-            if (obra.tipo?.id) formData.append("tipo_id", obra.tipo.id.toString());
-            if (obra.estado?.id) formData.append("estado_id", obra.estado.id.toString());
+            if (obra.tipo) formData.append("tipo_id", obra.tipo.id.toString()); // Envia ID como string
+            if (obra.estado) formData.append("estado_id", obra.estado.id.toString()); // Envia ID como string
             if (capa) formData.append("capa", capa);
 
             const response = await axios.post(
@@ -130,6 +153,7 @@ export default function EditarObra({ params }: { params: { id: string } }) {
             setIsLoading(false);
         }
     };
+
 
     if (!obra) return <p>Carregando...</p>;
 
